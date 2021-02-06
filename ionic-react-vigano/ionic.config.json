@@ -1,0 +1,7 @@
+{
+  "name": "ionic-react-vigano",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
