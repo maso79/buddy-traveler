@@ -1,20 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
-  
+  const [isAuth, setIsAuth] = useState(false);
+
   useEffect(() => {
-    test()  
-  }, [])
+    console.log("useffect");
+    test();
+  }, []);
 
   async function test() {
-    fetch('/routest')
-      .then(response => response.json())
-      .then(res => console.log(res))
+    await fetch("/routest")
+      .then((response) => response.json())
+      .then((res) => setIsAuth(true));
   }
+
+  if (!isAuth)
+    return (
+      <div>
+        <h1>non autorizzato</h1>
+      </div>
+    );
 
   return (
     <div>
-      <h1>test</h1>
+      <h1>autorizzato</h1>
     </div>
   );
 };
