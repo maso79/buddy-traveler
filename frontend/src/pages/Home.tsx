@@ -4,27 +4,35 @@ const Home: React.FC = () => {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    console.log("useffect");
-    test();
+    testAuthorization();
   }, []);
 
-  async function test() {
+  async function testAuthorization() {
     await fetch("/routest")
       .then((response) => response.json())
       .then((res) => setIsAuth(true));
   }
 
-  if (!isAuth)
-    return (
-      <div>
-        <h1>non autorizzato</h1>
-      </div>
-    );
+  //**************** */
+
+  //Controllo per autorizzazione alla visualizzazione del contenuto
+  //commentato perche non so quale tra questo e il metodo sotto sia migliore
+  //apparentemente funzionano entrambe  
+
+  // if(!isAuth) {
+  //   return (
+  //     <h1>non autorizzato</h1>
+  //   )
+  // }
+
+  //***************** */
+
 
   return (
-    <div>
-      <h1>autorizzato</h1>
-    </div>
+    //Secondo modo per autorizzazione
+    <>
+      { isAuth ? <h1>autorizzato</h1> : <h1>non autorizzato</h1> }
+    </>
   );
 };
 
