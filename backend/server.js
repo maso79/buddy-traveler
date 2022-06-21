@@ -1,8 +1,10 @@
 const express = require("express");
-require("dotenv").config();
+const mongoose = require("mongoose");
 const app = express();
-const PORT = process.env.PORT;
 const auth = require("./routers/authorization");
+require("dotenv").config();
+
+const PORT = process.env.PORT;
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -21,6 +23,11 @@ app.get("/routest", (req, res) => {
   res.json("ok");
 });
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Listening on port ${PORT}`);
+    });
+  })
+
+
