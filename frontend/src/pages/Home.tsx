@@ -15,9 +15,9 @@ const Home: React.FC = () => {
 
   //**************** */
 
-  //Controllo per autorizzazione alla visualizzazione del contenuto
-  //commentato perche non so quale tra questo e il metodo sotto sia migliore
-  //apparentemente funzionano entrambe  
+  //Controllo per autorizzazione alla visualizzazione del contenuto commentato
+  //perche non so quale tra questo e il metodo sotto sia migliore apparentemente
+  //funzionano entrambe
 
   // if(!isAuth) {
   //   return (
@@ -27,12 +27,9 @@ const Home: React.FC = () => {
 
   //***************** */
 
-
   return (
     //Secondo modo per autorizzazione
-    <>
-      { isAuth ? <h1>autorizzato</h1> : <h1>non autorizzato</h1> }
-    </>
+    <>{isAuth ? <h1>autorizzato</h1> : <h1>non autorizzato</h1>}</>
   );
 };
 
