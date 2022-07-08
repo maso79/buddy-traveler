@@ -1,6 +1,7 @@
 # buddy-traveler
 
 <b>Libraries used:<b><br>
+<hr>
 `express`<br>
 `express-session`<br>
 `connect-mongodb-session`<br>
