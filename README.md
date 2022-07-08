@@ -1,6 +1,6 @@
 # buddy-traveler
 
-<b>Libraries used:<b><br><hr>
+<b>Libraries used:<b><br>
 `express`<br>
 `express-session`<br>
 `connect-mongodb-session`<br>
@@ -9,3 +9,4 @@
 `password-validator`<br>
 `dotenv`<br>
 `mongoose`<br>
+ <hr>
