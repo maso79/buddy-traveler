@@ -19,10 +19,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/auth", auth);
 
-app.get("/routest", (req, res) => {
-  res.json("ok");
-});
-
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     app.listen(PORT, () => {
