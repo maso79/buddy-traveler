@@ -1,6 +1,6 @@
 # buddy-traveler
 
-```<b>Libraries used:<b><br>
+<b>Libraries used:<b><br>
 <hr>
 express<br>
 express-session<br>
@@ -10,4 +10,4 @@ email-validator<br>
 password-validator<br>
 dotenv<br>
 mongoose<br>
-<hr>```
+<hr>
