@@ -4,7 +4,7 @@
 <hr>
 express<br>
 express-session<br>
-connect-mongodb-session`<br>
+connect-mongodb-session<br>
 bcryptjs<br>
 email-validator<br>
 password-validator<br>
