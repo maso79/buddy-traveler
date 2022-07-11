@@ -10,4 +10,5 @@ email-validator<br>
 password-validator<br>
 dotenv<br>
 mongoose<br>
+multer<br>
 <hr>
