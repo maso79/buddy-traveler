@@ -7,7 +7,7 @@ const User = require('../models/usermodel')
 const emailValidator = require("email-validator")
 const passwordValidator = require("password-validator")
 const multer = require("multer");
-const { application } = require("express");
+const { formatData } = require("../functions/snippets")
 require("dotenv").config();
 
 const store = new MongoDBSession({
@@ -42,19 +42,9 @@ const upload = multer({
   storage: Storage
 }).single('profileImage')
 
-// router.post('/upload', (req, res) => {
-//   upload(req, res, (err) => {
-//     if (err) {
-
-//     } else {
-//       const newImage = new 
-//     }
-//   })
-// })
-
 //Registrazione
 router.post("/signup", async (req, res) => {
-  const { email, password, cognome, nome, username, arrayPaesi, arrayGusti, arrayGruppi } = req.body
+  const { email, password, surname, name, username, arrayPaesi, arrayGusti, arrayGruppi } = req.body
 
   if (emailValidator.validate(email)) { //Controlla se l'email è valida
     const schema = new passwordValidator()
@@ -69,36 +59,45 @@ router.post("/signup", async (req, res) => {
       const salt = await bcrypt.genSalt(10)
       const hashPassword = await bcrypt.hash(password, salt)
 
-      const result = new User({
-        email,
-        password: hashPassword,
-        cognome,
-        nome,
-        username,
-        imageName: null,
-        image: {
-          data: null,
-          contentType: null
-        },
-        gusti: {
-          arrayGusti: ["gusto1", "gusto2", "gusto3"],
-          arrayPaesi: ["paese1", "paese2", "paese3"],
-          arrayGruppi: ["3persone", "2persone"]
-        }
-      })
-      
-      result.save()
-        .then(() => {
-          //email sender
-          res.status(200).json({ stato: "success" })
-        })
-        .catch(err => {
-          if (err.code == 11000) {
-            res.status(400).json({ stato: "duplicated" })
-          } else {
-            res.status(400).json({ stato: `error: ${err}` })
+      if (typeof name == "string" && typeof surname == "string") {
+
+        const formattedName = await formatData(name)
+        const formattedSurname = await formatData(surname)
+
+        const result = new User({
+          email,
+          password: hashPassword,
+          surname: formattedSurname,
+          name: formattedName,
+          username,
+          imageName: null,
+          image: {
+            data: null,
+            contentType: null
+          },
+          preferenceParameters: {
+            placesArray: ["Pub", "Museum", "Squares", "Parks"],
+            countriesArray: ["Italy", "Slovenia", "Nigeria"],
+            groupsArray: ["Group of 3 people", "Group of 2 people"]
           }
         })
+
+        result.save()
+          .then(() => {
+            //email sender
+            res.status(200).json({ stato: "success" })
+          })
+          .catch(err => {
+            if (err.code == 11000) {
+              res.status(400).json({ stato: "duplicated" })
+            } else {
+              res.status(400).json({ stato: `error: ${err}` })
+            }
+          })
+      } else {
+        res.status(400).json({ stato: "name or surname not valid" })
+      }
+
     } else {
       res.status(400).json({ stato: "password not valid" })
     }

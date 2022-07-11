@@ -16,7 +16,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: false,
     },
-    cognome: {
+    surname: {
+      type: String,
+      required: true,
+      unique: false
+    },
+    name: {
       type: String,
       required: true,
       unique: false
@@ -34,10 +39,10 @@ const userSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String
     },
-    gusti: {
-      arrayGusti: Array,
-      arrayPaesi: Array,
-      arrayGruppi: Array
+    preferenceParameters: {
+      placesArray: Array,
+      countriesArray: Array,
+      groupsArray: Array
     }
   },
   { timestamps: true }
