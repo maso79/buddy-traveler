@@ -33,6 +33,11 @@ const userSchema = new mongoose.Schema(
     image: {
       data: Buffer,
       contentType: String
+    },
+    gusti: {
+      arrayGusti: Array,
+      arrayPaesi: Array,
+      arrayGruppi: Array
     }
   },
   { timestamps: true }

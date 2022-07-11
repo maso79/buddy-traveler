@@ -54,7 +54,7 @@ const upload = multer({
 
 //Registrazione
 router.post("/signup", async (req, res) => {
-  const { email, password, cognome, nome, username, imageName, image } = req.body
+  const { email, password, cognome, nome, username, arrayPaesi, arrayGusti, arrayGruppi } = req.body
 
   if (emailValidator.validate(email)) { //Controlla se l'email è valida
     const schema = new passwordValidator()
@@ -68,36 +68,25 @@ router.post("/signup", async (req, res) => {
     if (schema.validate(password)) {
       const salt = await bcrypt.genSalt(10)
       const hashPassword = await bcrypt.hash(password, salt)
-      var result = {}
 
-      if (!image) {
-        result = new User({
-          email,
-          password: hashPassword,
-          cognome,
-          nome,
-          username,
-          imageName: null,
-          image: {
-            data: null,
-            contentType: null
-          }
-        })
-      } else {
-        result = new User({
-          email,
-          password: hashPassword,
-          cognome,
-          nome,
-          username,
-          imageName,
-          image: {
-            data: req.file.filename,
-            contentType: "image/png"
-          }
-        })
-      }
-
+      const result = new User({
+        email,
+        password: hashPassword,
+        cognome,
+        nome,
+        username,
+        imageName: null,
+        image: {
+          data: null,
+          contentType: null
+        },
+        gusti: {
+          arrayGusti: ["gusto1", "gusto2", "gusto3"],
+          arrayPaesi: ["paese1", "paese2", "paese3"],
+          arrayGruppi: ["3persone", "2persone"]
+        }
+      })
+      
       result.save()
         .then(() => {
           //email sender
