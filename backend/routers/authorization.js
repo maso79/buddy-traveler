@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs")
 const User = require('../models/usermodel')
 const emailValidator = require("email-validator")
 const passwordValidator = require("password-validator")
+const multer = require("multer");
+const { application } = require("express");
 require("dotenv").config();
 
 const store = new MongoDBSession({
@@ -29,9 +31,30 @@ router.use(
   })
 )
 
+const Storage = multer.diskStorage({
+  destination: "uploads",
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+
+const upload = multer({
+  storage: Storage
+}).single('profileImage')
+
+// router.post('/upload', (req, res) => {
+//   upload(req, res, (err) => {
+//     if (err) {
+
+//     } else {
+//       const newImage = new 
+//     }
+//   })
+// })
+
 //Registrazione
 router.post("/signup", async (req, res) => {
-  const { email, password, cognome, nome, username } = req.body
+  const { email, password, cognome, nome, username, imageName, image } = req.body
 
   if (emailValidator.validate(email)) { //Controlla se l'email è valida
     const schema = new passwordValidator()
@@ -45,14 +68,35 @@ router.post("/signup", async (req, res) => {
     if (schema.validate(password)) {
       const salt = await bcrypt.genSalt(10)
       const hashPassword = await bcrypt.hash(password, salt)
+      var result = {}
 
-      const result = new User({
-        email,
-        password: hashPassword,
-        cognome,
-        nome,
-        username
-      })
+      if (!image) {
+        result = new User({
+          email,
+          password: hashPassword,
+          cognome,
+          nome,
+          username,
+          imageName: null,
+          image: {
+            data: null,
+            contentType: null
+          }
+        })
+      } else {
+        result = new User({
+          email,
+          password: hashPassword,
+          cognome,
+          nome,
+          username,
+          imageName,
+          image: {
+            data: req.file.filename,
+            contentType: "image/png"
+          }
+        })
+      }
 
       result.save()
         .then(() => {
@@ -101,7 +145,7 @@ router.get("/logout", (req, res) => {
     if (err) {
       res.status(400).json({ stato: `error: ${err}` })
     } else {
-       res.status(200).json({ stato: "success" })
+      res.status(200).json({ stato: "success" })
     }
   })
 })
