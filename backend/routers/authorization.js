@@ -4,24 +4,12 @@ const bcrypt = require("bcryptjs")
 const User = require('../models/usermodel')
 const emailValidator = require("email-validator")
 const passwordValidator = require("password-validator")
-const multer = require("multer");
 const { formatData } = require("../functions/snippets")
 require("dotenv").config();
 
-const Storage = multer.diskStorage({
-  destination: "uploads",
-  filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  }
-})
-
-const upload = multer({
-  storage: Storage
-}).single('profileImage')
-
 //Registrazione
 router.post("/signup", async (req, res) => {
-  const { email, password, surname, name, username, arrayPaesi, arrayGusti, arrayGruppi } = req.body
+  const { email, password, surname, name, username, placesArray, countriesArray, groupsArray } = req.body
 
   if (emailValidator.validate(email)) { //Controlla se l'email è valida
     const schema = new passwordValidator()
