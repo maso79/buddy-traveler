@@ -1,4 +1,4 @@
-const formatData = async (string) => {
+async function formatData(string) {
   var iniziale = string[0].toUpperCase()
   var restoFrase = ""
   var data = ""

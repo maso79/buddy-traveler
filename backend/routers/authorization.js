@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express();
-const session = require("express-session")
-const MongoDBSession = require("connect-mongodb-session")(session)
 const bcrypt = require("bcryptjs")
 const User = require('../models/usermodel')
 const emailValidator = require("email-validator")
@@ -9,27 +7,6 @@ const passwordValidator = require("password-validator")
 const multer = require("multer");
 const { formatData } = require("../functions/snippets")
 require("dotenv").config();
-
-const store = new MongoDBSession({
-  uri: process.env.DB_URI,
-  collection: "Sessions"
-})
-
-store.on("error", (error) => {
-  console.log(error)
-})
-
-router.use(
-  require("express-session")({
-    secret: process.env.SECRET_TOKEN,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, //Una settimana
-    },
-    store: store,
-    resave: true,
-    saveUninitialized: true
-  })
-)
 
 const Storage = multer.diskStorage({
   destination: "uploads",
@@ -59,7 +36,7 @@ router.post("/signup", async (req, res) => {
       const salt = await bcrypt.genSalt(10)
       const hashPassword = await bcrypt.hash(password, salt)
 
-      if (typeof name == "string" && typeof surname == "string") {
+      if (typeof name == "string" && typeof surname == "string" && name.length >= 3 && surname.length >= 3) {
 
         const formattedName = await formatData(name)
         const formattedSurname = await formatData(surname)
@@ -120,6 +97,7 @@ router.post("/signin", (req, res) => {
         (err, resp) => {
           if (!resp) res.status(400).json({ stato: `error: ${err}` })
           req.session.isAuth = true
+          req.session.email = email
           res.status(200).json({ stato: "success" })
         }
       )
@@ -129,6 +107,8 @@ router.post("/signin", (req, res) => {
 
 //Logout
 router.get("/logout", (req, res) => {
+  console.log(req.session)
+
   req.session.destroy(err => {
     if (err) {
       res.status(400).json({ stato: `error: ${err}` })
