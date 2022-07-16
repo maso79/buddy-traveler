@@ -41,9 +41,9 @@ router.post("/signup", async (req, res) => {
             contentType: null
           },
           preferenceParameters: {
-            placesArray: ["Pub", "Museum", "Squares", "Parks"],
-            countriesArray: ["Italy", "Slovenia", "Nigeria"],
-            groupsArray: ["Group of 3 people", "Group of 2 people"]
+            placesArray,
+            countriesArray,
+            groupsArray
           }
         })
 

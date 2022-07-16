@@ -12,9 +12,26 @@
 }
 
 .img-round{
-    border-radius: 5% !important;
+    border-radius: 10px;
 }
 
 .vertical-center{
     vertical-align: middle !important;
+}
+
+.landing-top{
+    padding-top: 15%;
+}
+
+.text-muted{
+    color: rgb(146, 146, 146) !important;
+}
+
+.bottom{
+    bottom: 0px !important;
+}
+
+.spazio-lato{
+    padding-left: 3%;
+    padding-right: 3%;
 }

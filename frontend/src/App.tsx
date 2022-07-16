@@ -33,6 +33,7 @@ import './theme/variables.css';
 import { useEffect, useState } from 'react';
 import getItemLocalStorage from './logic/getItemLocalStorage';
 import Introduction from './pages/Introduction';
+import Signup from './pages/Signup';
 
 setupIonicReact();
 
@@ -54,6 +55,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/introduction">
               <Introduction />
+            </Route>
+            <Route exact path="/signup">
+              <Signup />
             </Route>
           </Switch>
         }
