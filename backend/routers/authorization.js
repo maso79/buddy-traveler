@@ -83,10 +83,14 @@ router.post("/signin", (req, res) => {
         password,
         data.password,
         (err, resp) => {
-          if (!resp) res.status(400).json({ stato: `error: ${err}` })
-          req.session.isAuth = true
-          req.session.email = email
-          res.status(200).json({ stato: "success" })
+          if (!resp) {
+            res.status(400).json({ stato: `error: ${err}` })
+          }
+          else{
+            req.session.isAuth = true
+            req.session.email = email
+            res.status(200).json({ stato: "success" })
+          }
         }
       )
     }
@@ -104,6 +108,12 @@ router.get("/logout", (req, res) => {
       res.status(200).json({ stato: "success" })
     }
   })
+})
+
+//Check authorized
+router.get("/authorized", (req, res) => {
+  if (req.session.isAuth == true) res.status(200).json({"stato": true})
+  else res.status(401).json({"stato": false})
 })
 
 module.exports = router;
