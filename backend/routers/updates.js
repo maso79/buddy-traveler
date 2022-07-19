@@ -9,11 +9,15 @@ require("dotenv").config();
 
 //Valori modificabili:
 // Nome x
-// Email x
 // Cognome x
 // Username x
+
 // Password
+
 // Foto profilo
+
+//email
+
 // Gusti { [],[],[] } x
 
 const storage = multer.diskStorage({
@@ -47,7 +51,7 @@ router.post('/profile', upload.single("profileImage"), async (req, res) => {
   //I valori di imageName e image se non sono presenti devono essere inviati di default come null
 
   const userEmail = req.session.email
-  
+
   var formattedName = ""
   var formattedSurname = ""
 
