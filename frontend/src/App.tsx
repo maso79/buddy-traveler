@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { home, library, map, people, personCircle } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -36,17 +36,36 @@ import Introduction from './pages/Introduction';
 import Signup from './pages/Signup';
 import SignIn from './pages/SignIn';
 import IsAuthorized from './components/IsAuthorized';
-import Disconnected from './pages/Disconnected';
+import Profile from './pages/Profile';
+import Home from './pages/Home';
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const [configurato,setConfigurato]=useState(false)
+  const [autorizzato,setAutorizzato]=useState(Boolean)
 
   useEffect(()=>{
     setConfigurato(getItemLocalStorage("configurato"))
-    console.log(window.location.href)
-  },[window.location.href])
+    console.log(document.cookie)
+
+    fetch("/auth/authorized",{
+      method: "GET"
+    })
+    .then(result=>result.json())
+    .then(result=>{
+        if (result.stato==true) {
+            console.log("ok")
+            setAutorizzato(true)
+        }
+        else {
+            setAutorizzato(false)
+        }
+    })
+    .catch(err=>{
+        setAutorizzato(false)
+    })
+  },[])
 
   return(  
     <IonApp>
@@ -64,47 +83,49 @@ const App: React.FC = () => {
               <Signup />
             </Route>
             <Route exact path="/signin">
-              <SignIn setConfigurato={setConfigurato} />
+              <SignIn setConfigurato={setConfigurato} setAutorizzato={setAutorizzato} />
             </Route>
           </Switch>
         }
         {
-          configurato === true &&
-          <>
-            <IsAuthorized>
+          configurato === true && autorizzato &&
               <IonTabs>
                 <IonRouterOutlet>
                   <Switch>
-                      <Route exact path="/tab1">
-
+                      <Route exact path="/home">
+                        <Home />
+                      </Route>
+                      <Route exact path="/profile">
+                        <Profile />  
                       </Route>
                       <Route exact path="/">
-                        <Redirect to="/tab1" />
+                        <Redirect to="/home" />
                       </Route>
                   </Switch>
                 </IonRouterOutlet>
                 <IonTabBar slot="bottom">
-                  <IonTabButton tab="tab1" href="/tab1">
-                    <IonIcon icon={triangle} />
-                    <IonLabel>Tab 1</IonLabel>
+                  <IonTabButton tab="home" href="/home">
+                    <IonIcon icon={home} />
+                    <IonLabel>Home</IonLabel>
                   </IonTabButton>
-                  <IonTabButton tab="tab2" href="/tab2">
-                    <IonIcon icon={ellipse} />
-                    <IonLabel>Tab 2</IonLabel>
+                  <IonTabButton tab="diary" href="/diary">
+                    <IonIcon icon={library} />
+                    <IonLabel>Diary</IonLabel>
                   </IonTabButton>
-                  <IonTabButton tab="tab3" href="/tab3">
-                    <IonIcon icon={square} />
-                    <IonLabel>Tab 3</IonLabel>
+                  <IonTabButton tab="people" href="/people">
+                    <IonIcon icon={people} />
+                    <IonLabel>People</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="places" href="/places">
+                    <IonIcon icon={map} />
+                    <IonLabel>Places</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="profile" href="/profile">
+                    <IonIcon icon={personCircle} />
+                    <IonLabel>Profile</IonLabel>
                   </IonTabButton>
                 </IonTabBar>
               </IonTabs>
-            </IsAuthorized>
-            <Switch>
-              <Route exact path="/disconnected">
-                <Disconnected setConfigurato={setConfigurato} />
-              </Route>
-            </Switch>
-          </>
         }
       </IonReactRouter>
     </IonApp>

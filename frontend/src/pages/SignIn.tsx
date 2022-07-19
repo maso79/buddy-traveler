@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import setItemLocalStorage from '../logic/setItemLocalStorage';
 import placeholder_logo from '../pictures/placeholder-logo.png'
 
-const SignIn: React.FC<{ setConfigurato: Function }>=(props)=>{
+const SignIn: React.FC<{ setConfigurato: Function, setAutorizzato: Function }>=(props)=>{
     const history=useHistory()
     const [email,setEmail]=React.useState("")
     const [password,setPassword]=React.useState("")
@@ -31,6 +31,9 @@ const SignIn: React.FC<{ setConfigurato: Function }>=(props)=>{
             if (result.stato==="success"){
                 setItemLocalStorage("configurato",true)
                 props.setConfigurato(true)
+                console.log("cookies:")
+                console.log(document.cookie)
+                props.setAutorizzato(true)
                 history.push("/home")
             }
             if (result.stato==="error: null"){

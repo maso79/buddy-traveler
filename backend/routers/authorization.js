@@ -112,6 +112,7 @@ router.get("/logout", (req, res) => {
 
 //Check authorized
 router.get("/authorized", (req, res) => {
+  console.log(req.session.isAuth)
   if (req.session.isAuth == true) res.status(200).json({"stato": true})
   else res.status(401).json({"stato": false})
 })
