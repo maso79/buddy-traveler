@@ -71,10 +71,37 @@ router.post("/password", (req, res) => {
 //Email
 router.post("/email", (req, res) => {
   //email da inviare al nuovo indirizzo per capire se l'indirizzo email selezionato esiste ed è dell'utente che lo ha aggiunto
+  const { email } = req.body
+  const userEmail = req.session.email
+
+  if (emailValidator.validate(email)) {
+    User.findOneAndUpdate({ email: userEmail }, { email }, (err, data) => {
+      if (!data) {
+        res.status(400).json({ stato: "Ouch! Something went wrong, maybe the email selected is alredy taken!" })
+      } else {
+        //operazione andata a buon fine
+        //req.session.email = email
+        res.status(200).json({ stato: "success" })
+      }
+    })
+  }
 })
 
 //Gusti { [],[],[] } 
 router.post("/preferences", (req, res) => {
+  const { placesArray, countriesArray, groupsArray } = req.body
+  const userEmail = req.session.email
+
+  //le preferenze di base non possono essere nulle, almeno una preferenza per ogni tipologia deve esserci
+  User.findOneAndUpdate({ email: userEmail }, { preferenceParameters: { placesArray, countriesArray, groupsArray } }, (err, data) => {
+    if (!data) {
+      res.status(400).json({ stato: "Ouch! Something went wrong!" })
+    } else {
+      //operazione andata a buon fine
+      res.status(200).json({ stato: "success" })
+    }
+  })
+
 
 })
 
@@ -94,7 +121,7 @@ const uploadFilter = function (req, file, cb) {
   var typeArray = file.mimetype.split('/')
   var fileType = typeArray[1]
 
-  if (fileType == 'jpg' || fileType == 'png') {
+  if (fileType == 'jpg' || fileType == 'png' || fileType == 'jpeg') {
     cb(null, true)
   } else {
     cb(null, false)
@@ -105,7 +132,12 @@ const upload = multer({ storage: storage, fileFilter: uploadFilter })
 
 //Foto profilo
 router.post("/profileimage", upload.single("profileImage"), async (req, res) => {
-
+  console.log(req.file)
+  if (!req.file) {
+    res.status(400).json({ stato: "Ouch! Something went wrong, no image found!" })
+  } else {
+    res.status(200).json({ stato: "success" })
+  }
 })
 
 module.exports = router
