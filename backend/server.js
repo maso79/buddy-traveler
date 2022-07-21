@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const auth = require("./routers/authorization");
-const updates = require("./routers/updates")
+const update = require("./routers/updates")
+const diary = require("./routers/diary")
 const session = require("express-session")
 const MongoDBSession = require("connect-mongodb-session")(session)
 const morgan = require("morgan")
@@ -43,8 +44,10 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use("/update", updates)
+app.use("/update", update)
 app.use("/auth", auth);
+app.use("/diary", diary)
+
 app.use(morgan("dev"))
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })

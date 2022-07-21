@@ -86,7 +86,9 @@ router.post("/signin", (req, res) => {
           if (!resp) {
             res.status(400).json({ stato: `error: ${err}` })
           }
-          else{
+          else {
+            let objectIdData = data._id
+            req.session.userId = objectIdData.toString()
             req.session.isAuth = true
             req.session.email = email
             res.status(200).json({ stato: "success" })
