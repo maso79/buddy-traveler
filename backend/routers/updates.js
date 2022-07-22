@@ -4,6 +4,7 @@ const emailValidator = require("email-validator")
 const { formatData } = require("../functions/snippets")
 const User = require("../models/usermodel")
 const multer = require("multer");
+const bcrypt = require("bcryptjs")
 const passwordValidator = require("password-validator")
 //const upload = multer({ dest: './uploads' })
 require("dotenv").config();
@@ -40,9 +41,10 @@ router.post("/userinfo", async (req, res) => {
 })
 
 //Password
-router.post("/password", (req, res) => {
+router.post("/password", async (req, res) => {
   //email da inviare all'utente per verificare che sia veramente tu a cambiare l'email
   const { password } = req.body
+  const userEmail = req.session.email
 
   const schema = new passwordValidator()
 
@@ -53,8 +55,10 @@ router.post("/password", (req, res) => {
       .has().not().spaces() //Non deve contenere spazi
   
   if (schema.validate(password)) {
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(password, salt)
     //mandare email
-    User.findOneAndUpdate({ email: userEmail }, { password }, (err, data) => {
+    User.findOneAndUpdate({ email: userEmail }, { password: hashPassword }, (err, data) => {
       if (!data) {
         res.status(400).json({ stato: "Ouch! Something went wrong!" })
       } else {
