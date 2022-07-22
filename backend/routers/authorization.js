@@ -88,7 +88,8 @@ router.post("/signin", (req, res) => {
           }
           else {
             let objectIdData = data._id
-            req.session.userId = objectIdData.toString()
+            console.log(objectIdData)
+            req.session.userId = data._id
             req.session.isAuth = true
             req.session.email = email
             res.status(200).json({ stato: "success" })
