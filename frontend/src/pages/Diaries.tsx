@@ -1,13 +1,15 @@
-import { IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItemDivider, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonItemDivider, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import { add } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
+import CardDiaryList from '../components/CardDiaryList';
 import CardNoDiaries from '../components/CardNoDiaries';
 import DiaryCreate from '../components/DiaryCreate';
 import placeholder from '../pictures/placeholder.png'
 
 const Diaries: React.FC=()=>{
     const [isLoading,setIsLoading]=React.useState(true)
+    const [diaries,setDiaries]=React.useState([{name: "", destination: "", startDate: "", endDate: "", thumbnail: placeholder}])
     const [diariesNumber,setDiariesNumber]=React.useState(0)
     const [modal,setModal]=React.useState(-1)
 
@@ -21,6 +23,7 @@ const Diaries: React.FC=()=>{
         .then(result=>{
             console.log(result)
             if (result.diaries){
+                setDiaries(result.diaries)
                 setDiariesNumber(result.diaries.length)
                 setIsLoading(false)
             }
@@ -28,7 +31,7 @@ const Diaries: React.FC=()=>{
         .catch(err=>{
             console.log(err)
         })
-    })
+    },[modal])
 
     return(
         <IonPage>
@@ -60,6 +63,16 @@ const Diaries: React.FC=()=>{
                                     <IonText className="text-muted spazio-lato">No diaries here</IonText>
                                 </div>
                             </>
+                        }
+                        {
+                            diariesNumber > 0 &&
+                            <IonList>
+                                {
+                                    diaries.map((diary,i)=>(
+                                        <CardDiaryList key={i} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={placeholder} />
+                                    ))
+                                }
+                            </IonList>
                         }
                         <IonFab vertical="bottom" horizontal="end" slot="fixed">
                             <IonFabButton onClick={()=>setModal(0)}>
