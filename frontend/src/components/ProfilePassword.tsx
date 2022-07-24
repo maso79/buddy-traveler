@@ -63,7 +63,7 @@ const ProfilePassword: React.FC<{ setModal: Function }>=(props)=>{
                         </IonCol>
                         <IonCol size="12">
                             <br />
-                            <IonButton color="primary" expand="block" onClick={update}>Update email</IonButton>
+                            <IonButton color="primary" expand="block" onClick={update}>Update password</IonButton>
                         </IonCol>
                         <IonCol size="12">
                             <IonButton color="primary" fill="clear" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>

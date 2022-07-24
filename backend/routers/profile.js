@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express()
 const User = require("../models/usermodel")
+const Diary = require("../models/diarymodel")
 
 router.get("/picture",async (req,res)=>{
     //TODO: trovare un modo per trasferire le foto al frontend
@@ -8,7 +9,6 @@ router.get("/picture",async (req,res)=>{
 
 router.get("/all",async (req,res)=>{
     const userId=req.session.userId
-    console.log("user id "+userId)
     User.findOne({
         _id: userId
     },{
@@ -22,7 +22,6 @@ router.get("/all",async (req,res)=>{
 
 router.get("/personal-information",async (req,res)=>{
     const userId=req.session.userId
-    console.log("user id "+userId)
     User.findOne({
         _id: userId
     },{
@@ -38,7 +37,6 @@ router.get("/personal-information",async (req,res)=>{
 
 router.get("/email",async (req,res)=>{
     const userId=req.session.userId
-    console.log("user id "+userId)
     User.findOne({
         _id: userId
     },{
@@ -46,6 +44,20 @@ router.get("/email",async (req,res)=>{
         email: 1
     },(err,data)=>{
         if (data) res.status(200).json({user: data})
+        else res.status(400).json({stato: err})
+    })
+})
+
+router.get("/diaries",async (req,res)=>{
+    const userId=req.session.userId
+    Diary.find({
+        userId: userId
+    },{
+        _id: 0,
+        userId: 0,
+        __v: 0
+    },(err,data)=>{
+        if (data) res.status(200).json({diaries: data})
         else res.status(400).json({stato: err})
     })
 })

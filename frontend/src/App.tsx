@@ -38,6 +38,7 @@ import SignIn from './pages/SignIn';
 import IsAuthorized from './components/IsAuthorized';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
+import Diaries from './pages/Diaries';
 
 setupIonicReact();
 
@@ -95,6 +96,9 @@ const App: React.FC = () => {
                       <Route exact path="/home">
                         <Home />
                       </Route>
+                      <Route exact path="/diaries">
+                        <Diaries />
+                      </Route>
                       <Route exact path="/profile">
                         <Profile />  
                       </Route>
@@ -108,9 +112,9 @@ const App: React.FC = () => {
                     <IonIcon icon={home} />
                     <IonLabel>Home</IonLabel>
                   </IonTabButton>
-                  <IonTabButton tab="diary" href="/diary">
+                  <IonTabButton tab="diaries" href="/diaries">
                     <IonIcon icon={library} />
-                    <IonLabel>Diary</IonLabel>
+                    <IonLabel>Diaries</IonLabel>
                   </IonTabButton>
                   <IonTabButton tab="people" href="/people">
                     <IonIcon icon={people} />
