@@ -5,6 +5,7 @@ const auth = require("./routers/authorization");
 const update = require("./routers/updates")
 const diary = require("./routers/diary")
 const profile = require("./routers/profile")
+const activity = require("./routers/activity")
 const session = require("express-session")
 const MongoDBSession = require("connect-mongodb-session")(session)
 const morgan = require("morgan")
@@ -48,7 +49,8 @@ app.use(express.json());
 app.use("/update", update)
 app.use("/auth", auth);
 app.use("/diary", diary)
-app.use("/profile",profile)
+app.use("/profile", profile)
+app.use("/activity", activity)
 
 app.use(morgan("dev"))
 

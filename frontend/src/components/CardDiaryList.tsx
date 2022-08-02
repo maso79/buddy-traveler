@@ -2,7 +2,7 @@ import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonImg,
 import { location } from 'ionicons/icons';
 import * as React from 'react';
 
-const CardDiaryList: React.FC<{ name: String, destination: String, startDate: String, endDate: String, thumbnail: String }>=(props)=>{
+const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, startDate: String, endDate: String, thumbnail: String }>=(props)=>{
     return(
         <IonCard button>
             <IonImg src={""+props.thumbnail} />

@@ -9,7 +9,7 @@ import placeholder from '../pictures/placeholder.png'
 
 const Diaries: React.FC=()=>{
     const [isLoading,setIsLoading]=React.useState(true)
-    const [diaries,setDiaries]=React.useState([{name: "", destination: "", startDate: "", endDate: "", thumbnail: placeholder}])
+    const [diaries,setDiaries]=React.useState([{_id:"", name: "", destination: "", startDate: "", endDate: "", thumbnail: placeholder}])
     const [diariesNumber,setDiariesNumber]=React.useState(0)
     const [modal,setModal]=React.useState(-1)
 
@@ -68,8 +68,8 @@ const Diaries: React.FC=()=>{
                             diariesNumber > 0 &&
                             <IonList>
                                 {
-                                    diaries.map((diary,i)=>(
-                                        <CardDiaryList key={i} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={placeholder} />
+                                        diaries.map((diary, i) => (
+                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={placeholder} />
                                     ))
                                 }
                             </IonList>
