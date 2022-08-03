@@ -78,6 +78,8 @@ router.post("/email", (req, res) => {
   const { email } = req.body
   const userEmail = req.session.email
 
+  console.log(userEmail)
+
   if (emailValidator.validate(email)) {
     User.findOneAndUpdate({ email: userEmail }, { email }, (err, data) => {
       if (!data) {
@@ -136,12 +138,21 @@ const upload = multer({ storage: storage, fileFilter: uploadFilter })
 
 //Foto profilo
 router.post("/profileimage", upload.single("profileImage"), async (req, res) => {
-  console.log(req.file)
-  if (!req.file) {
-    res.status(400).json({ stato: "Ouch! Something went wrong, no image found!" })
-  } else {
-    res.status(200).json({ stato: "success" })
-  }
+  const userEmail = req.session
+  const fileName = req.file.filename
+  console.log(req.session)
+
+  User.findOneAndUpdate({ email: userEmail }, { imageName: fileName }, (err, data) => {
+    if (!data) {
+      res.status(400).json({ stato: "Ouch! Something went wrong!" })
+    } else {
+      if (!req.file) {
+        res.status(400).json({ stato: "Ouch! Something went wrong, no image found!" })
+      } else {
+        res.status(200).json({ stato: "success" })
+      }
+    }
+  })
 })
 
 module.exports = router

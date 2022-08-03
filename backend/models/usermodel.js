@@ -35,10 +35,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false
     },
-    image: {
-      data: Buffer,
-      contentType: String
-    },
     preferenceParameters: {
       placesArray: Array,
       countriesArray: Array,
