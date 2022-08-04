@@ -13,7 +13,7 @@ require("dotenv").config();
 router.post("/userinfo", async (req, res) => {
   const { name, surname, username } = req.body
   const userEmail = req.session.email
-
+  console.log(userEmail)
   var formattedName = ""
   var formattedSurname = ""
 
@@ -48,12 +48,12 @@ router.post("/password", async (req, res) => {
 
   const schema = new passwordValidator()
 
-    schema
-      .is().min(8) //Lunghezza minima di 8 caratteri
-      .has().uppercase(1) //Deve contenere al minimo un carattere maiuscolo
-      .has().digits(1) //Deve contenere al minimo una cifra
-      .has().not().spaces() //Non deve contenere spazi
-  
+  schema
+    .is().min(8) //Lunghezza minima di 8 caratteri
+    .has().uppercase(1) //Deve contenere al minimo un carattere maiuscolo
+    .has().digits(1) //Deve contenere al minimo una cifra
+    .has().not().spaces() //Non deve contenere spazi
+
   if (schema.validate(password)) {
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(password, salt)
@@ -69,7 +69,7 @@ router.post("/password", async (req, res) => {
   } else {
     res.status(400).json({ stato: "Password syntax is not valid!" })
   }
-  
+
 })
 
 //Email
@@ -78,15 +78,13 @@ router.post("/email", (req, res) => {
   const { email } = req.body
   const userEmail = req.session.email
 
-  console.log(userEmail)
-
   if (emailValidator.validate(email)) {
     User.findOneAndUpdate({ email: userEmail }, { email }, (err, data) => {
       if (!data) {
         res.status(400).json({ stato: "Ouch! Something went wrong, maybe the email selected is alredy taken!" })
       } else {
         //operazione andata a buon fine
-        //req.session.email = email
+        req.session.email = email
         res.status(200).json({ stato: "success" })
       }
     })
@@ -107,8 +105,6 @@ router.post("/preferences", (req, res) => {
       res.status(200).json({ stato: "success" })
     }
   })
-
-
 })
 
 //storage foto profilo
@@ -137,10 +133,9 @@ const uploadFilter = function (req, file, cb) {
 const upload = multer({ storage: storage, fileFilter: uploadFilter })
 
 //Foto profilo
-router.post("/profileimage", upload.single("profileImage"), async (req, res) => {
-  const userEmail = req.session
+router.post("/profileimage", upload.single("profileImage"), (req, res) => {
+  const userEmail = req.session.email
   const fileName = req.file.filename
-  console.log(req.session)
 
   User.findOneAndUpdate({ email: userEmail }, { imageName: fileName }, (err, data) => {
     if (!data) {
