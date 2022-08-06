@@ -36,10 +36,6 @@ router.post("/signup", async (req, res) => {
           name: formattedName,
           username,
           imageName: null,
-          image: {
-            data: null,
-            contentType: null
-          },
           preferenceParameters: {
             placesArray,
             countriesArray,
@@ -87,7 +83,6 @@ router.post("/signin", (req, res) => {
             res.status(400).json({ stato: `error: ${err}` })
           }
           else {
-            let objectIdData = data._id
             req.session.userId = data._id
             req.session.isAuth = true
             req.session.email = email

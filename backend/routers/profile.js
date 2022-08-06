@@ -2,9 +2,24 @@ const express = require("express");
 const router = express()
 const User = require("../models/usermodel")
 const Diary = require("../models/diarymodel")
+const fs = require("fs")
 
-router.get("/picture",async (req,res)=>{
-    //TODO: trovare un modo per trasferire le foto al frontend
+router.get("/picture", async (req, res) => {
+    const userEmail = req.session.email
+
+    User.findOne({ email: userEmail }, (err, data) => {
+        if (!data) {
+            res.status(400).json({ stato: "Sorry an error occurred!" })
+        } else {
+            fs.readdir("uploads", (err, files) => {
+                files.forEach(filename => {
+                    if (filename === data.imageName) {
+                        res.status(200).json({ data: filename })
+                    }
+                });
+            })
+        }
+    })
 })
 
 router.get("/all",async (req,res)=>{
