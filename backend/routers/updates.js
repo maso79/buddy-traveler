@@ -25,7 +25,7 @@ router.post("/userinfo", async (req, res) => {
       //nome cognome e username sono impostati correttamente
       User.findOneAndUpdate({ email: userEmail }, { name: formattedName, surname: formattedSurname, username }, (err, data) => {
         if (!data) {
-          res.status(400).json({ stato: "Ouch! Something went wrong, maybe the username selected is alredy taken!" })
+          res.status(400).json({ stato: "Ouch! Something went wrong, maybe the username selected is already taken!" })
         } else {
           //operazione andata a buon fine
           res.status(200).json({ stato: "success" })
@@ -81,7 +81,7 @@ router.post("/email", (req, res) => {
   if (emailValidator.validate(email)) {
     User.findOneAndUpdate({ email: userEmail }, { email }, (err, data) => {
       if (!data) {
-        res.status(400).json({ stato: "Ouch! Something went wrong, maybe the email selected is alredy taken!" })
+        res.status(400).json({ stato: "Ouch! Something went wrong, maybe the email selected is already taken!" })
       } else {
         //operazione andata a buon fine
         req.session.email = email
