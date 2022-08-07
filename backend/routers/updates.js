@@ -134,6 +134,7 @@ const upload = multer({ storage: storage, fileFilter: uploadFilter })
 
 //Foto profilo
 router.post("/profileimage", upload.single("profileImage"), (req, res) => {
+  console.log(req.file)
   const userEmail = req.session.email
   const fileName = req.file.filename
 
@@ -144,7 +145,7 @@ router.post("/profileimage", upload.single("profileImage"), (req, res) => {
       if (!req.file) {
         res.status(400).json({ stato: "Ouch! Something went wrong, no image found!" })
       } else {
-        res.status(200).json({ stato: "success" })
+        res.status(200).redirect("/profile")
       }
     }
   })

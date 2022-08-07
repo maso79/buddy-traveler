@@ -43,6 +43,7 @@ app.use(
     saveUninitialized: true
   })
 )
+app.use(morgan("dev"))
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -52,7 +53,6 @@ app.use("/diary", diary)
 app.use("/profile", profile)
 app.use("/activity", activity)
 
-app.use(morgan("dev"))
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

@@ -1,10 +1,11 @@
-import { IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
-import { atCircle, key, lockClosed } from 'ionicons/icons';
+import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { atCircle, camera, key, lockClosed } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
 import ProfileEmail from '../components/ProfileEmail';
 import ProfilePassword from '../components/ProfilePassword';
 import ProfilePersonalInfo from '../components/ProfilePersonalInfo';
+import ProfilePictures from '../components/ProfilePicture';
 import placeholder_profile from '../pictures/placeholder-profile.png'
 
 const items=[
@@ -19,6 +20,10 @@ const items=[
     {
         title: "Your password",
         icon: key
+    },
+    {
+        title: "Profile picture",
+        icon: camera
     },
 ]
 
@@ -66,7 +71,9 @@ const Profile: React.FC=()=>{
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="6" offset="3">
-                                    <IonImg src={placeholder_profile} alt="picture" />
+                                    <IonCard button onClick={()=>setModal(3)}>
+                                        <IonImg src={placeholder_profile} alt="picture" />
+                                    </IonCard>
                                 </IonCol>
                                 <IonCol size="12" className="text-center">
                                     <IonText><h1>Hi, {name}</h1></IonText>
@@ -92,6 +99,9 @@ const Profile: React.FC=()=>{
                         </IonModal>
                         <IonModal trigger="modalPassword" isOpen={modal === 2}>
                             <ProfilePassword setModal={setModal} />
+                        </IonModal>
+                        <IonModal trigger="modalPicture" isOpen={modal === 3}>
+                            <ProfilePictures setModal={setModal} />
                         </IonModal>
                     </>
                 }
