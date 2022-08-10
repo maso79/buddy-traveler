@@ -2,29 +2,6 @@ const express = require("express");
 const router = express()
 const User = require("../models/usermodel")
 const Diary = require("../models/diarymodel")
-const fs = require("fs")
-
-// router.get("/picture", async (req, res) => {
-//     //FIXME: problema ricezione file
-//     const userEmail = req.session.email
-
-//     User.findOne({ email: userEmail }, (err, data) => {
-//         if (!data) {
-//             console.log(err)
-//             res.status(400).json({ stato: "Sorry an error occurred!" })
-//         } else {
-//             if (data.imageName === null || data.imageName === "") res.status(200).json({ stato: "no data" })
-
-//             fs.readdir("uploads", (err, files) => {
-//                 files.forEach(filename => {
-//                     if (filename === data.imageName) {
-//                         res.status(200).json({ data: filename })
-//                     }
-//                 });
-//             })
-//         }
-//     })
-// })
 
 router.get("/all",async (req,res)=>{
     const userId=req.session.userId

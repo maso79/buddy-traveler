@@ -25,26 +25,35 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
 
     React.useEffect(()=>{
         console.log("richiesta")
-        fetch("/profile/picture",{
+        fetch("/update/s3Url",{
             method: "GET"
         })
         .then(result=>result.json())
-        .then(result=>{
-            //FIXME: problema della ricezione foto
-            console.log(result)
-            if (result.stato === "no data"){
-                setPath("https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg")
+            .then(result => {
+                console.log(result)
                 setIsLoading(false)
-            }
-            else{
-                setPath("/backend/uploads/"+result.data)
-                setIsLoading(false)
-            }
         })
         .catch(err=>{
             console.log(err)
         })
-    },[])
+    }, [])
+    
+    const putDataOnS3 = async () => {
+        const file = document.querySelector("input").files[0]
+        const { url } = await fetch("/update/s3Url")
+            .then(res => res.json())
+
+        await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: file
+        })
+
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
+    }
 
     return(
         <IonPage>
@@ -72,10 +81,10 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                                 <IonCol size="12" className="text-center">
                                     <IonText>Choose a picture</IonText>
                                     <br /><br />
-                                    <form action="/update/profileimage" method="post" encType="multipart/form-data">
+                                    <form>
                                         <input type="file" name="profileImage" id="" />
                                         <br /><br />
-                                        <IonButton type="submit" color="primary">Upload picture</IonButton>
+                                        <IonButton onClick={putDataOnS3} color="primary">Upload picture</IonButton>
                                     </form>
                                 </IonCol>
                                 <IonCol size="12">

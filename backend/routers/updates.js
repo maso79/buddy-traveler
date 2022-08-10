@@ -12,7 +12,7 @@ require("dotenv").config();
 
 router.get("/s3Url", async (req, res) => {
   const url = await generateUploadURL()
-  res.send({url})
+  res.status(200).json({ url })
 })
 
 //Nome Cognome Username
@@ -112,49 +112,5 @@ router.post("/preferences", (req, res) => {
     }
   })
 })
-
-// //storage foto profilo
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads')
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-//     cb(null, file.fieldname + '-' + uniqueSuffix)
-//   }
-// })
-
-// //Filtri controllo immagine
-// const uploadFilter = function (req, file, cb) {
-//   var typeArray = file.mimetype.split('/')
-//   var fileType = typeArray[1]
-
-//   if (fileType == 'jpg' || fileType == 'png' || fileType == 'jpeg') {
-//     cb(null, true)
-//   } else {
-//     cb(null, false)
-//   }
-// }
-
-// const upload = multer({ storage: storage, fileFilter: uploadFilter })
-
-// //Foto profilo
-// router.post("/profileimage", upload.single("profileImage"), (req, res) => {
-//   console.log(req.file)
-//   const userEmail = req.session.email
-//   const fileName = req.file.filename
-
-//   User.findOneAndUpdate({ email: userEmail }, { imageName: fileName }, (err, data) => {
-//     if (!data) {
-//       res.status(400).json({ stato: "Ouch! Something went wrong!" })
-//     } else {
-//       if (!req.file) {
-//         res.status(400).json({ stato: "Ouch! Something went wrong, no image found!" })
-//       } else {
-//         res.status(200).redirect("/profile")
-//       }
-//     }
-//   })
-// })
 
 module.exports = router
