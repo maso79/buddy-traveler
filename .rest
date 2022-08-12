@@ -1,0 +1,2 @@
+GET http://localhost:8080/profile/all
+Cookie: connect.sid=s%3ABp8BPeZbFSJaCQn0oWpP53E-uPp2A4M6.Zjwjfm8vo9kk%2FZ8WLZCfJTKEhgXEIkkuhFINrZg70iw
