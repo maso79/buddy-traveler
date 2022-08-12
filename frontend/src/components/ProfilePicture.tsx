@@ -23,21 +23,21 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
     const [isLoading,setIsLoading]=React.useState(true)
     const [alertUpload,setAlertUpload]=React.useState(false)
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
+        //qui è dove si dovrebbe fare la richiesta all'endpoint che restituisce l'immagine
         console.log("richiesta")
-        fetch("/update/s3Url",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-            .then(result => {
-                console.log(result)
-                setIsLoading(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        retriveImage()
     }, [])
     
+    const retriveImage = async () => {
+        const { url } = await fetch("/update/profileimage")
+            .then(res => res.json())
+
+        console.log(url)
+        
+        setIsLoading(false)
+    }
+
     const putDataOnS3 = async () => {
         const file = document.querySelector("input").files[0]
         const { url } = await fetch("/update/s3Url")

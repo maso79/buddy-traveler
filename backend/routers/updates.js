@@ -3,15 +3,19 @@ const router = express()
 const emailValidator = require("email-validator")
 const { formatData } = require("../functions/snippets")
 const User = require("../models/usermodel")
-const multer = require("multer");
 const bcrypt = require("bcryptjs")
 const passwordValidator = require("password-validator")
-const generateUploadURL = require("./s3")
-//const upload = multer({ dest: './uploads' })
+const { generateUploadURL, generateRetriveURL } = require("./s3")
 require("dotenv").config();
 
 router.get("/s3Url", async (req, res) => {
-  const url = await generateUploadURL()
+  const url = await generateUploadURL(req.session.email)
+  res.status(200).json({ url })
+})
+
+router.get("/profileimage", async (req, res) => {
+  const url = await generateRetriveURL(req.session.email)
+  console.log(url)
   res.status(200).json({ url })
 })
 
