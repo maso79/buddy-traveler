@@ -15,7 +15,6 @@ router.get("/s3Url", async (req, res) => {
 
 router.get("/profileimage", async (req, res) => {
   const url = await generateRetriveURL(req.session.email)
-  console.log(url)
   res.status(200).json({ url })
 })
 

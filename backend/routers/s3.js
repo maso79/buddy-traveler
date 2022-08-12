@@ -30,14 +30,15 @@ const generateUploadURL = async (email) => {
 
   const uploadURL = await s3.getSignedUrlPromise('putObject', params)
 
-  User.findOneAndUpdate({ email }, {imageName}, (err, data) => {
-    if (!data) return { stato: "error" } 
+  User.findOneAndUpdate({ email }, { imageName }, (err, data) => {
+    if (!data) return { stato: "error" }
   })
 
   return uploadURL
 }
 
 const generateRetriveURL = async (email) => {
+
   try {
     aws.config.setPromisesDependency()
     aws.config.update({
@@ -46,23 +47,19 @@ const generateRetriveURL = async (email) => {
       region: "eu-central-1"
     })
 
-    User.findOne({ email })
-      .then(response => {
-        if (!response.email) {
-          return { stato: "error" }
-        } else {
-          var params = { Bucket: "buddytraveler-s3-bucket", Key: response.imageName }
-          var promise = s3.getSignedUrlPromise('getObject', params)
-          promise.then((url) => {
-          console.log(url)
-          return url
-        })
-        }
-    })
+    var x = User.findOne({ email })
 
-  } catch {
-    return { stato: "error" }
+    x = await x.clone()
+
+    var params = { Bucket: "buddytraveler-s3-bucket", Key: x.imageName }
+    var url = await s3.getSignedUrlPromise('getObject', params)
+
+    return url
+
+  } catch (err) {
+    return err
   }
+
 }
 
 module.exports = { generateUploadURL, generateRetriveURL }

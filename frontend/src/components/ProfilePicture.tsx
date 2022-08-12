@@ -32,8 +32,12 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
     const retriveImage = async () => {
         const { url } = await fetch("/update/profileimage")
             .then(res => res.json())
-
-        console.log(url)
+        
+        await fetch(url, {
+            method: "GET"
+        })
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
         
         setIsLoading(false)
     }
