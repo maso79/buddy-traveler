@@ -89,9 +89,9 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                                     <IonText>Choose a picture</IonText>
                                     <br /><br />
                                     <form>
-                                        <input type="file" name="profileImage" id="" />
+                                        <input type="file" name="profileImage" id="" onChange={putDataOnS3} />
                                         <br /><br />
-                                        <IonButton onClick={putDataOnS3} color="primary">Upload picture</IonButton>
+                                        <IonButton color="primary">Upload picture</IonButton>
                                     </form>
                                 </IonCol>
                                 <IonCol size="12">
