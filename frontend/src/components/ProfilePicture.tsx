@@ -33,9 +33,6 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
         const { url } = await fetch("/update/profileimage")
             .then(res => res.json())
         
-        await fetch(url, {
-            method: "GET"
-        })
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
         
@@ -44,19 +41,25 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
 
     const putDataOnS3 = async () => {
         const file = document.querySelector("input").files[0]
-        const { url } = await fetch("/update/s3Url")
+        console.log(file)
+        if (file != undefined) {
+            const { url } = await fetch("/update/s3Url")
             .then(res => res.json())
 
-        await fetch(url, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            body: file
-        })
+            await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                body: file
+            })
 
-        const imageUrl = url.split('?')[0]
-        setPath(imageUrl)
+            const imageUrl = url.split('?')[0]
+            setPath(imageUrl)
+        } else {
+            console.log("Seleziona un file")
+        }
+        
     }
 
     return(
