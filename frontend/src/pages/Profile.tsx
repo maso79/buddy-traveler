@@ -31,9 +31,12 @@ const Profile: React.FC=()=>{
     const [isLoading,setIsLoading]=React.useState(true)
     const [name,setName]=React.useState("")
     const [modal,setModal]=React.useState(-1)
+    const [path,setPath]=React.useState(placeholder_profile)
 
     React.useEffect(()=>{
         console.log("use effect")
+
+        retriveImage()
 
         fetch("/profile/all",{
             method: "GET"
@@ -49,6 +52,19 @@ const Profile: React.FC=()=>{
             console.log(err)
         })
     })
+
+    const retriveImage = async () => {
+        const { url } = await fetch("/update/profileimage")
+            .then(res => res.json())
+        
+        await fetch(url, {
+            method: "GET"
+        })
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
+        
+        setIsLoading(false)
+    }
 
     return(
         <IonPage>
@@ -72,7 +88,7 @@ const Profile: React.FC=()=>{
                             <IonRow>
                                 <IonCol size="6" offset="3">
                                     <IonCard button onClick={()=>setModal(3)}>
-                                        <IonImg src={placeholder_profile} alt="picture" />
+                                        <IonImg src={path} alt="picture" />
                                     </IonCard>
                                 </IonCol>
                                 <IonCol size="12" className="text-center">

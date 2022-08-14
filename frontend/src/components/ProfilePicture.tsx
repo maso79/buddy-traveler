@@ -99,14 +99,14 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                                         <IonLabel>Or</IonLabel>
                                     </IonItemDivider>
                                 </IonCol>
-                                <IonCol size="6">
-                                    <IonButton color="secondary" expand="block">
+                                <IonCol size="12">
+                                    <IonButton color="light" expand="block">
                                         <IonIcon slot="start" icon={camera} />
                                         <IonText>Take picture</IonText>
                                     </IonButton>
                                 </IonCol>
-                                <IonCol size="6">
-                                    <IonButton color="tertiary" expand="block">
+                                <IonCol size="12">
+                                    <IonButton color="light" expand="block">
                                         <IonIcon slot="start" icon={removeCircle} />
                                         <IonText>Remove</IonText>
                                     </IonButton>
