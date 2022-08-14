@@ -1,6 +1,7 @@
-import { IonButton, IonCol, IonContent, IonDatetime, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonToast } from '@ionic/react';
+import { IonAlert, IonButton, IonCol, IonContent, IonDatetime, IonGrid, IonInput, IonItem, IonLabel, IonModal, IonPage, IonRow, IonText, IonToast } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
+import DateSelect from './DateSelect';
 
 const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
     const [name,setName]=React.useState("")
@@ -10,6 +11,8 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
     const [toastSuccess,setToastSuccess]=React.useState(false)
     const [toastError,setToastError]=React.useState(false)
     const [toastErrorText,setToastErrorText]=React.useState("")
+    const [modalStartDate,setModalStartDate]=React.useState(false)
+    const [modalEndDate,setModalEndDate]=React.useState(false)
 
     const create=()=>{
         fetch("/diary/createone",{
@@ -61,20 +64,23 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
                             </IonItem>
                         </IonCol>
                         <IonCol size="12">
-                            <IonLabel className="spazio-lato">Start date</IonLabel>
-                            <IonDatetime
-                                firstDayOfWeek={1}
-                                value={startDate} onIonChange={e=>setStartDate(e.detail.value!)} 
-                            />
+                            <IonLabel>Start date</IonLabel>
+                            <IonButton color="light" expand="block" onClick={()=>setModalStartDate(true)}>Select date</IonButton>
+                            {
+                                startDate !== "" &&
+                                <IonText className="text-muted">Selected date: {new Date(""+startDate).toLocaleDateString()}</IonText>
+                            }
                         </IonCol>
                         <IonCol size="12">
-                            <IonLabel className="spazio-lato">End date</IonLabel>
-                            <IonDatetime
-                                firstDayOfWeek={1}
-                                value={endDate} onIonChange={e=>setEndDate(e.detail.value!)} 
-                            />
+                        <IonLabel>End date</IonLabel>
+                            <IonButton color="light" expand="block" onClick={()=>setModalEndDate(true)}>Select date</IonButton>
+                            {
+                                endDate !== "" &&
+                                <IonText className="text-muted">Selected date: {new Date(""+endDate).toLocaleDateString()}</IonText>
+                            }
                        </IonCol>
                         <IonCol size="12">
+                            <br />
                            <IonButton color="primary" expand="block" onClick={create}>Create diary</IonButton>
                        </IonCol>
                        <IonCol size="12">
@@ -82,6 +88,16 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
                        </IonCol>
                    </IonRow>
                </IonGrid>
+
+
+                <IonModal isOpen={modalStartDate} trigger="modalStartDate" onDidDismiss={()=>setModalStartDate(false)}>
+                    <DateSelect date={startDate} setDate={setStartDate} setModal={setModalStartDate} />
+                </IonModal>
+                <IonModal isOpen={modalEndDate} trigger="modalEndDate" onDidDismiss={()=>setModalEndDate(false)}>
+                    <DateSelect date={endDate} setDate={setEndDate} setModal={setModalEndDate} />
+                </IonModal>
+
+
                <IonToast
                     isOpen={toastSuccess}
                     onDidDismiss={()=>setToastSuccess(false)}

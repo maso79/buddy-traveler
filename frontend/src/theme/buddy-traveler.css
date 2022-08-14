@@ -39,3 +39,11 @@
 .landing-half{
     padding-top: 50%;
 }
+
+.padding-right-minimum{
+    padding-right: 5px !important;
+}
+
+.text-white{
+    color: white !important;
+}
