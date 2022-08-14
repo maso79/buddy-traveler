@@ -22,6 +22,7 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
     const [path,setPath]=React.useState("")
     const [isLoading,setIsLoading]=React.useState(true)
     const [alertUpload,setAlertUpload]=React.useState(false)
+    const [uploading,setUploading]=React.useState(false)
 
     React.useEffect(() => {
         //qui è dove si dovrebbe fare la richiesta all'endpoint che restituisce l'immagine
@@ -40,6 +41,7 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
     }
 
     const putDataOnS3 = async () => {
+        setUploading(true)
         const file = document.querySelector("input").files[0]
         console.log(file)
         if (file != undefined) {
@@ -56,6 +58,7 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
 
             const imageUrl = url.split('?')[0]
             setPath(imageUrl)
+            setUploading(false)
         } else {
             console.log("Seleziona un file")
         }
@@ -83,7 +86,21 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="6" offset="3">
-                                    <IonImg src={path} />
+                                    {
+                                        uploading === true &&
+                                        <IonGrid className="landing-half">
+                                        <IonRow>
+                                            <IonCol size="12" className="text-center">
+                                                <IonSpinner name="crescent" /><br />
+                                                <IonText>Uploading picture...</IonText>
+                                            </IonCol>
+                                        </IonRow>
+                                    </IonGrid>
+                                    }
+                                    {
+                                        uploading === false &&
+                                        <IonImg src={path} />
+                                    }
                                 </IonCol>
                                 <IonCol size="12" className="text-center">
                                     <IonText>Choose a picture</IonText>
@@ -91,7 +108,6 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                                     <form>
                                         <input type="file" name="profileImage" id="" onChange={putDataOnS3} />
                                         <br /><br />
-                                        <IonButton color="primary">Upload picture</IonButton>
                                     </form>
                                 </IonCol>
                                 <IonCol size="12">

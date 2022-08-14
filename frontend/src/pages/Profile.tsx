@@ -32,6 +32,7 @@ const Profile: React.FC=()=>{
     const [name,setName]=React.useState("")
     const [modal,setModal]=React.useState(-1)
     const [path,setPath]=React.useState(placeholder_profile)
+    const [loadingPicture,setLoadingPicture]=React.useState(true)
 
     React.useEffect(()=>{
         console.log("use effect")
@@ -57,13 +58,11 @@ const Profile: React.FC=()=>{
         const { url } = await fetch("/update/profileimage")
             .then(res => res.json())
         
-        await fetch(url, {
-            method: "GET"
-        })
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
         
         setIsLoading(false)
+        setLoadingPicture(false)
     }
 
     return(
@@ -87,9 +86,23 @@ const Profile: React.FC=()=>{
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="6" offset="3">
-                                    <IonCard button onClick={()=>setModal(3)}>
-                                        <IonImg src={path} alt="picture" />
-                                    </IonCard>
+                                    {
+                                        loadingPicture === true &&
+                                        <IonGrid className="landing-half">
+                                            <IonRow>
+                                                <IonCol size="12" className="text-center">
+                                                    <IonSpinner name="crescent" /><br />
+                                                    <IonText>Loading profile picture...</IonText>
+                                                </IonCol>
+                                            </IonRow>
+                                        </IonGrid>
+                                    }
+                                    {
+                                        loadingPicture === false &&
+                                        <IonCard button onClick={()=>setModal(3)}>
+                                            <IonImg src={path} alt="picture" />
+                                        </IonCard>
+                                    }
                                 </IonCol>
                                 <IonCol size="12" className="text-center">
                                     <IonText><h1>Hi, {name}</h1></IonText>
