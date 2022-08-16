@@ -58,6 +58,11 @@ const Profile: React.FC=()=>{
         const { url } = await fetch("/update/profileimage")
             .then(res => res.json())
         
+        if (url.url == "not found") {
+            setLoadingPicture(false)            
+           return
+        }
+        
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
         

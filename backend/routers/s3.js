@@ -18,6 +18,43 @@ const s3 = new aws.S3({
   signatureVersion: "v4"
 })
 
+const deleteFile = async (email) => {
+  var x = User.findOne({ email })
+
+  x = await x.clone()
+
+  if (x.imageName != "") {
+    const params = { Bucket: bucketName, Key: x.imageName }
+  
+    s3.deleteObject(params, (err, data) => {
+      if (err) return err
+      else console.log(data)
+    })
+  }
+  
+}
+
+const removeOldProfilePicture = async (email) => {
+  var x = User.findOne({ email })
+
+  x = await x.clone()
+
+  if (x.imageName != "") {
+    const params = { Bucket: bucketName, Key: x.imageName }
+  
+    s3.deleteObject(params, (err, data) => {
+      if (err) return err
+      else console.log(data)
+    })
+  } else {
+    return { stato: "You got to have an image before you can delete it -.- " }
+  }
+
+  User.findOneAndUpdate({ email }, { imageName: "" }, (err, data) => {
+      if (!data) return { stato: "error" }
+    })
+}
+
 const generateUploadURL = async (email) => {
   const rawBytes = await randomBytes(16)
   const imageName = rawBytes.toString('hex') //valore da salvare come imageName nel modello dell'utente 
@@ -27,6 +64,8 @@ const generateUploadURL = async (email) => {
     Key: imageName,
     Expires: 60
   })
+
+  deleteFile(email)
 
   const uploadURL = await s3.getSignedUrlPromise('putObject', params)
 
@@ -51,6 +90,10 @@ const generateRetriveURL = async (email) => {
 
     x = await x.clone()
 
+    if (x.imageName == "") {
+      return { url: "not found" }
+    } 
+
     var params = { Bucket: "buddytraveler-s3-bucket", Key: x.imageName }
     var url = await s3.getSignedUrlPromise('getObject', params)
 
@@ -62,4 +105,4 @@ const generateRetriveURL = async (email) => {
 
 }
 
-module.exports = { generateUploadURL, generateRetriveURL }
+module.exports = { generateUploadURL, generateRetriveURL, removeOldProfilePicture }

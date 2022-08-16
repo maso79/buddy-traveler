@@ -2,6 +2,7 @@ import { IonAlert, IonButton, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonI
 import { camera, cloudUpload, removeCircle } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
+import placeholder_profile from '../pictures/placeholder-profile.png'
 
 const options=[
     {
@@ -19,7 +20,7 @@ const options=[
 ]
 
 const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
-    const [path,setPath]=React.useState("")
+    const [path,setPath]=React.useState(placeholder_profile)
     const [isLoading,setIsLoading]=React.useState(true)
     const [alertUpload,setAlertUpload]=React.useState(false)
     const [uploading,setUploading]=React.useState(false)
@@ -33,6 +34,11 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
     const retriveImage = async () => {
         const { url } = await fetch("/update/profileimage")
             .then(res => res.json())
+        
+        if (url.url == "not found") {
+            setIsLoading(false)            
+           return
+        }
         
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
@@ -63,6 +69,12 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
             console.log("Seleziona un file")
         }
         
+    }
+
+    const removeImage = async () => {
+        const data = await fetch("/update/removeimage")
+        
+        console.log(data)
     }
 
     return(
@@ -99,7 +111,7 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                                     }
                                     {
                                         uploading === false &&
-                                        <IonImg src={path} />
+                                        <IonImg src={path} alt="picture"/>
                                     }
                                 </IonCol>
                                 <IonCol size="12" className="text-center">
@@ -122,7 +134,7 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
                                     </IonButton>
                                 </IonCol>
                                 <IonCol size="12">
-                                    <IonButton color="light" expand="block">
+                                    <IonButton color="light" expand="block" onClick={removeImage}>
                                         <IonIcon slot="start" icon={removeCircle} />
                                         <IonText>Remove</IonText>
                                     </IonButton>

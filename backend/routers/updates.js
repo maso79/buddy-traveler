@@ -5,7 +5,7 @@ const { formatData } = require("../functions/snippets")
 const User = require("../models/usermodel")
 const bcrypt = require("bcryptjs")
 const passwordValidator = require("password-validator")
-const { generateUploadURL, generateRetriveURL } = require("./s3")
+const { generateUploadURL, generateRetriveURL, removeOldProfilePicture } = require("./s3")
 require("dotenv").config();
 
 router.get("/s3Url", async (req, res) => {
@@ -16,6 +16,11 @@ router.get("/s3Url", async (req, res) => {
 router.get("/profileimage", async (req, res) => {
   const url = await generateRetriveURL(req.session.email)
   res.status(200).json({ url })
+})
+
+router.get("/removeimage", async(req, res) => {
+  const data = await removeOldProfilePicture(req.session.email)
+  res.status(200).json({ data })
 })
 
 //Nome Cognome Username
