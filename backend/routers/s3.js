@@ -18,6 +18,7 @@ const s3 = new aws.S3({
   signatureVersion: "v4"
 })
 
+//funzione importata per eliminare la vecchia foto prima dell'upload della nuova
 const deleteFile = async (email) => {
   var x = User.findOne({ email })
 
@@ -34,6 +35,7 @@ const deleteFile = async (email) => {
   
 }
 
+//rimozione foto profilo corrente
 const removeOldProfilePicture = async (email) => {
   var x = User.findOne({ email })
 
@@ -55,6 +57,7 @@ const removeOldProfilePicture = async (email) => {
     })
 }
 
+//upload foto
 const generateUploadURL = async (email) => {
   const rawBytes = await randomBytes(16)
   const imageName = rawBytes.toString('hex') //valore da salvare come imageName nel modello dell'utente 
@@ -76,6 +79,7 @@ const generateUploadURL = async (email) => {
   return uploadURL
 }
 
+//ottieni foto
 const generateRetriveURL = async (email) => {
 
   try {

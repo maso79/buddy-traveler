@@ -35,12 +35,16 @@ router.post("/signup", async (req, res) => {
           surname: formattedSurname,
           name: formattedName,
           username,
-          imageName: null,
+          imageName: "",
+          diariesNumber: 0,
+          numberOfFollowers: 0,
+          numberOfFollowing: 0,
           preferenceParameters: {
             placesArray,
             countriesArray,
             groupsArray
-          }
+          },
+          userLevel: 0
         })
 
         result.save()
@@ -96,8 +100,6 @@ router.post("/signin", (req, res) => {
 
 //Logout
 router.get("/logout", (req, res) => {
-  console.log(req.session)
-
   req.session.destroy(err => {
     if (err) {
       res.status(400).json({ stato: `error: ${err}` })

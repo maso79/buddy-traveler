@@ -35,10 +35,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false
     },
+    diariesNumber: {
+      type: Number,
+      required: true
+    },
+    numberOfFollowers: {
+      type: Number,
+      required: true
+    },
+    numberOfFollowing: {
+      type: Number,
+      required: true
+    },
     preferenceParameters: {
       placesArray: Array,
       countriesArray: Array,
       groupsArray: Array
+    },
+    userLevel: {
+      type: Number,
+      required: true
     }
   },
   { timestamps: true }
