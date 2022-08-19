@@ -16,7 +16,7 @@ const Diaries: React.FC=()=>{
     React.useEffect(()=>{
         console.log("use effect")
 
-        fetch("/profile/diaries",{
+        fetch("/diary/diaries",{
             method: "GET"
         })
         .then(result=>result.json())

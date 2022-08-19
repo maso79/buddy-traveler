@@ -1,2 +1,11 @@
-GET http://localhost:8080/profile/all
+
+# POST http://localhost:8080/profilestats/addfollower
+# Cookie: connect.sid=s%3AmLEwY7EfTDtVftEK4KV3oBSG6DeIplS2.%2BynUxkdxTQ0ITF4EBU2QlUCA9R4muSyk0BKeLomLQNU
+# Content-Type: application/json
+
+# {
+#   "usernameUser":"tiarossi"
+# }
+
+GET http://localhost:8080/profilestats/followingnumber
 Cookie: connect.sid=s%3AmLEwY7EfTDtVftEK4KV3oBSG6DeIplS2.%2BynUxkdxTQ0ITF4EBU2QlUCA9R4muSyk0BKeLomLQNU

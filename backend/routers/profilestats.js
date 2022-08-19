@@ -2,7 +2,7 @@ const express = require("express")
 const router = express()
 const User = require("../models/usermodel")
 
-router.get("/diaries", (req, res) => {
+router.get("/diariesnumber", (req, res) => {
   const email = req.session.email
 
   User.findOne({ email }, (err, data) => {
@@ -14,19 +14,19 @@ router.get("/diaries", (req, res) => {
   })
 })
 
-router.get("/followers", (req, res) => {
+router.get("/followersnumber", (req, res) => {
   const email = req.session.email
 
   User.findOne({ email }, (err, data) => {
     if (!data) {
       res.status(400).json({ stato: "error" })
     } else {
-      res.status(200).json({ stato: "success", data: data.numberOfFollowers })
+      res.status(200).json({ stato: "successo", data: data.numberOfFollowers })
     }
   })
 })
 
-router.get("/following", (req, res) => {
+router.get("/followingnumber", (req, res) => {
   const email = req.session.email
 
   User.findOne({ email }, (err, data) => {
@@ -43,11 +43,12 @@ router.post("/addfollower", (req, res) => {
   const { usernameUser } = req.body
   const email = req.session.email
 
-  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: 1 } }, (err, data) => {
+  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: 1 }, $push: { followingUserList: usernameUser } }, (err, data) => {
     if (!data) {
-      res.status(400).json({ stato: "error" })
+      res.status(400).json({ stato: "error" })      
     } else {
-      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: 1 } }, (err, data) => {
+      var currentUserUsername = data.username
+      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: 1 }, $push: { followersUserList: currentUserUsername }}, (err, data) => {
         if (!data) {
           res.status(400).json({ stato: "error" })
         } else {
@@ -63,11 +64,12 @@ router.post("/removefollow", (req, res) => {
   const { usernameUser } = req.body
   const email = req.session.email
 
-  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: -1 } }, (err, data) => {
+  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: -1 }, $pull: { followingUserList: { $in: [usernameUser] } } }, (err, data) => {
     if (!data) {
       res.status(400).json({ stato: "error" })
     } else {
-      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: -1 } }, (err, data) => {
+      var currentUserUsername = data.username
+      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: -1 }, $pull: { followersUserList: { $in: [currentUserUsername] } } }, (err, data) => {
         if (!data) {
           res.status(400).json({ stato: "error" })
         } else {

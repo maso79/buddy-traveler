@@ -6,6 +6,7 @@ const update = require("./routers/updates")
 const diary = require("./routers/diary")
 const profile = require("./routers/profile")
 const activity = require("./routers/activity")
+const profilestats = require("./routers/profilestats")
 const session = require("express-session")
 const MongoDBSession = require("connect-mongodb-session")(session)
 const morgan = require("morgan")
@@ -52,6 +53,7 @@ app.use("/auth", auth);
 app.use("/diary", diary)
 app.use("/profile", profile)
 app.use("/activity", activity)
+app.use("/profilestats", profilestats)
 
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })

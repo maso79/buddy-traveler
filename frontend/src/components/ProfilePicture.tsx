@@ -50,31 +50,33 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
         setUploading(true)
         const file = document.querySelector("input").files[0]
         console.log(file)
-        if (file != undefined) {
-            const { url } = await fetch("/update/s3Url")
-            .then(res => res.json())
+        if (file != undefined || file.type == "image/jpg" || file.type == "image/jpeg" || file.type == "image/png") {
+            if (file.size < 100000) {
+                const { url } = await fetch("/update/s3Url")
+                .then(res => res.json())
 
-            await fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                },
-                body: file
-            })
+                await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
+                    body: file
+                })
 
-            const imageUrl = url.split('?')[0]
-            setPath(imageUrl)
-            setUploading(false)
+                const imageUrl = url.split('?')[0]
+                setPath(imageUrl)
+                setUploading(false)
+            } else {
+                console.log("Seleziona un immagine piu piccola")
+            }
         } else {
-            console.log("Seleziona un file")
+            console.log("Seleziona un immagine valida")
         }
         
     }
 
     const removeImage = async () => {
-        const data = await fetch("/update/removeimage")
-        
-        console.log(data)
+        await fetch("/update/removeimage")
     }
 
     return(

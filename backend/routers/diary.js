@@ -23,4 +23,17 @@ router.post("/createone", (req, res) => {
     })
 })
 
+router.get("/diaries",async (req,res)=>{
+    const userId=req.session.userId
+    Diary.find({
+        userId: userId
+    }, {
+        userId: 0,
+        __v: 0
+    }, (err, data) => {
+        if (data) res.status(200).json({diaries: data})
+        else res.status(400).json({stato: err})
+    })
+})
+
 module.exports = router

@@ -47,6 +47,14 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
+    followingUserList: {
+      type: Array,
+      required: true
+    },
+    followersUserList: {
+      type: Array,
+      required: true
+    },
     preferenceParameters: {
       placesArray: Array,
       countriesArray: Array,
