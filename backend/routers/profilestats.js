@@ -39,16 +39,22 @@ router.get("/followingnumber", (req, res) => {
 })
 
 //Aggiungi 1 ai miei following e aggiungo 1 ai suoi follower
-router.post("/addfollower", (req, res) => {
+router.post("/addfollower", async (req, res) => {
   const { usernameUser } = req.body
   const email = req.session.email
 
-  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: 1 }, $push: { followingUserList: usernameUser } }, (err, data) => {
+  var userData = User.findOne({ username: usernameUser })
+
+  userData = await userData.clone()
+  var userImageName = userData.imageName
+
+  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: 1 }, $push: { followingUserList: { username: usernameUser, imageName: userImageName } } }, (err, data) => {
     if (!data) {
       res.status(400).json({ stato: "error" })      
     } else {
       var currentUserUsername = data.username
-      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: 1 }, $push: { followersUserList: currentUserUsername }}, (err, data) => {
+      var currentUserImageName = data.imageName
+      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: 1 }, $push: { followersUserList: { username: currentUserUsername, imageName: currentUserImageName } }}, (err, data) => {
         if (!data) {
           res.status(400).json({ stato: "error" })
         } else {
@@ -59,17 +65,17 @@ router.post("/addfollower", (req, res) => {
   })
 })
 
-//Rimouovo 1 ai miei following e rimuovo 1 ai suoi follower
+//Rimuovo 1 ai miei following e rimuovo 1 ai suoi follower
 router.post("/removefollow", (req, res) => {
   const { usernameUser } = req.body
   const email = req.session.email
 
-  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: -1 }, $pull: { followingUserList: { $in: [usernameUser] } } }, (err, data) => {
+  User.findOneAndUpdate({ email }, { $inc: { numberOfFollowing: -1 }, $pull: { followingUserList: { $in: [username] } } }, false, (err, data) => {
     if (!data) {
       res.status(400).json({ stato: "error" })
     } else {
       var currentUserUsername = data.username
-      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: -1 }, $pull: { followersUserList: { $in: [currentUserUsername] } } }, (err, data) => {
+      User.findOneAndUpdate({ username: usernameUser }, { $inc: { numberOfFollowers: -1 }, $pull: { followersUserList: { $in: [currentUserUsername] } } }, false, (err, data) => {
         if (!data) {
           res.status(400).json({ stato: "error" })
         } else {
