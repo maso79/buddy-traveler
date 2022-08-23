@@ -1,11 +1,18 @@
-import { IonAlert, IonButton, IonCol, IonContent, IonDatetime, IonGrid, IonInput, IonItem, IonLabel, IonModal, IonPage, IonRow, IonText, IonToast } from '@ionic/react';
+import { IonAlert, IonButton, IonCol, IonContent, IonDatetime, IonGrid, IonIcon, IonInput, IonItem, IonLabel, IonModal, IonPage, IonRow, IonText, IonToast } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 import DateSelect from './DateSelect';
+import PlacesAutocomplete,{
+    geocodeByAddress,
+    getLatLng
+} from "react-places-autocomplete"
+import DiaryCreateDestination from './DiaryCreateDestinatio';
+import { search } from 'ionicons/icons';
 
 const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
     const [name,setName]=React.useState("")
     const [destination,setDestination]=React.useState("")
+    const [query,setQuery]=React.useState("")
     const [startDate,setStartDate]=React.useState("")
     const [endDate,setEndDate]=React.useState("")
     const [toastSuccess,setToastSuccess]=React.useState(false)
@@ -13,6 +20,24 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
     const [toastErrorText,setToastErrorText]=React.useState("")
     const [modalStartDate,setModalStartDate]=React.useState(false)
     const [modalEndDate,setModalEndDate]=React.useState(false)
+    const [destinationId,setDestinationId]=React.useState("")
+    const [chosenDestination,setChosenDestination]=React.useState("")
+    const [buttonDisabled,setButtonDisabled]=React.useState(true)
+    
+    const search_places=()=>{
+        fetch(`/places/getplace/${destination}`,{
+            method: "GET"
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            setChosenDestination(result.stato[0].name)
+            setDestinationId(result.stato[0].id)
+            setButtonDisabled(false)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
 
     const create=()=>{
         fetch("/diary/createone",{
@@ -22,7 +47,7 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
             },
             body: JSON.stringify({
                 name,
-                destination,
+                destination: destinationId,
                 startDate,
                 endDate
             })
@@ -57,31 +82,44 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
                                <IonInput value={name} onIonChange={e=>setName(e.detail.value!)} />
                             </IonItem>
                         </IonCol>
-                        <IonCol size="12">
+                        <IonCol size="10">
                             <IonItem>
-                               <IonLabel position="floating">Destination</IonLabel>
-                               <IonInput value={destination} onIonChange={e=>setDestination(e.detail.value!)} />
+                                <IonLabel position="floating">Destination</IonLabel>
+                                <IonInput onIonChange={e=>setDestination(e.detail.value)} value={destination} />
                             </IonItem>
+                        </IonCol>
+                        <IonCol size="2">
+                            <IonButton color="primary" onClick={search_places}>
+                                <IonIcon icon={search} />
+                            </IonButton>
+                        </IonCol>
+                        <IonCol size="12">
+                            {
+                                chosenDestination != "" &&
+                                <IonText className="text-muted">Destination chosen: {chosenDestination}</IonText>
+                            }
                         </IonCol>
                         <IonCol size="12">
                             <IonLabel>Start date</IonLabel>
-                            <IonButton color="light" expand="block" onClick={()=>setModalStartDate(true)}>Select date</IonButton>
+                            <br />
                             {
                                 startDate !== "" &&
                                 <IonText className="text-muted">Selected date: {new Date(""+startDate).toLocaleDateString()}</IonText>
                             }
+                            <IonButton color="light" expand="block" onClick={()=>setModalStartDate(true)}>Select date</IonButton>
                         </IonCol>
                         <IonCol size="12">
-                        <IonLabel>End date</IonLabel>
-                            <IonButton color="light" expand="block" onClick={()=>setModalEndDate(true)}>Select date</IonButton>
+                            <IonLabel>End date</IonLabel>
+                            <br />
                             {
                                 endDate !== "" &&
                                 <IonText className="text-muted">Selected date: {new Date(""+endDate).toLocaleDateString()}</IonText>
                             }
+                            <IonButton color="light" expand="block" onClick={()=>setModalEndDate(true)}>Select date</IonButton>
                        </IonCol>
                         <IonCol size="12">
                             <br />
-                           <IonButton color="primary" expand="block" onClick={create}>Create diary</IonButton>
+                           <IonButton color="primary" expand="block" onClick={create} disabled={buttonDisabled}>Create diary</IonButton>
                        </IonCol>
                        <IonCol size="12">
                            <IonButton color="primary" fill="clear" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>
@@ -96,7 +134,6 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
                 <IonModal isOpen={modalEndDate} trigger="modalEndDate" onDidDismiss={()=>setModalEndDate(false)}>
                     <DateSelect date={endDate} setDate={setEndDate} setModal={setModalEndDate} />
                 </IonModal>
-
 
                <IonToast
                     isOpen={toastSuccess}

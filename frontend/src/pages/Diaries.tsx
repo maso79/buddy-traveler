@@ -23,6 +23,10 @@ const Diaries: React.FC=()=>{
         .then(result=>{
             console.log(result)
             if (result.diaries){
+                // for (let i=0;i<result.diaries.length;i++){
+                //     fetch("/")
+                // }
+
                 setDiaries(result.diaries)
                 setDiariesNumber(result.diaries.length)
                 setIsLoading(false)
@@ -54,14 +58,13 @@ const Diaries: React.FC=()=>{
                         {
                             diariesNumber === 0 &&
                             <>
-                                <CardNoDiaries />
-                                <br />
-                                <IonItemDivider  />
                                 <IonImg className="spazio-lato" src={placeholder} alt="no diaries" />
-                                <br />
                                 <div className="text-center">
                                     <IonText className="text-muted spazio-lato">No diaries here</IonText>
                                 </div>
+                                <br />
+                                <IonItemDivider  />
+                                <CardNoDiaries />
                             </>
                         }
                         {
