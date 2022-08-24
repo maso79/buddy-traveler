@@ -25,8 +25,8 @@ router.post("/createone", (req, res) => {
 
 })
 
-router.get("/getactivities", (req, res) => {
-  const { diaryId } = req.body
+router.get("/getactivities/:diaryId", (req, res) => {
+  const { diaryId } = req.params
 
   Activity.find({ diaryId }).sort('startDate').exec((err, data) => {
     res.json({ data: data })

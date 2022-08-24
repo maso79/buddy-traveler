@@ -5,6 +5,7 @@ import BTHeader from '../components/BTHeader';
 import CardDiaryList from '../components/CardDiaryList';
 import CardNoDiaries from '../components/CardNoDiaries';
 import DiaryCreate from '../components/DiaryCreate';
+import DiaryView from '../components/DiaryView';
 import placeholder from '../pictures/placeholder.png'
 
 const Diaries: React.FC=()=>{
@@ -12,6 +13,7 @@ const Diaries: React.FC=()=>{
     const [diaries,setDiaries]=React.useState([{_id:"", name: "", destination: "", startDate: "", endDate: "", thumbnail: placeholder}])
     const [diariesNumber,setDiariesNumber]=React.useState(0)
     const [modal,setModal]=React.useState(-1)
+    const [modalDiaries,setModalDiaries]=React.useState("null")
 
     React.useEffect(()=>{
         console.log("use effect")
@@ -72,10 +74,19 @@ const Diaries: React.FC=()=>{
                             <IonList>
                                 {
                                         diaries.map((diary, i) => (
-                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={placeholder} />
+                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={placeholder} setModalDiaries={setModalDiaries} />
                                     ))
                                 }
                             </IonList>
+                        }
+                        {
+                            diariesNumber > 0 &&
+
+                            diaries.map((diary, i) => (
+                                <IonModal trigger={""+diary._id} isOpen={modalDiaries === diary._id}>
+                                    <DiaryView key={i} diaryId={diary._id} title={diary.name} setModal={setModalDiaries}/>
+                                </IonModal>
+                            ))
                         }
                         <IonFab vertical="bottom" horizontal="end" slot="fixed">
                             <IonFabButton onClick={()=>setModal(0)}>

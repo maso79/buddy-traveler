@@ -2,9 +2,9 @@ import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonIcon,
 import { calendar, location } from 'ionicons/icons';
 import * as React from 'react';
 
-const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, startDate: String, endDate: String, thumbnail: String }>=(props)=>{
+const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, startDate: String, endDate: String, thumbnail: String, setModalDiaries: Function }>=(props)=>{
     return(
-        <IonCard button>
+        <IonCard button onClick={()=>props.setModalDiaries(props._id)}>
             <IonImg src={""+props.thumbnail} />
             <IonCardHeader>
                 <IonCardTitle>{props.name}</IonCardTitle>
