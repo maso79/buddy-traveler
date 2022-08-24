@@ -9,8 +9,11 @@ const diarySchema = new mongoose.Schema(
     },
     destination: {
       type: String,
-      required: true,
-      unique: false
+      required: true
+    },
+    thumbnail: {
+      type: String,
+      required: false
     },
     startDate: {
       type: Date,

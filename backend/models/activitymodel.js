@@ -6,13 +6,18 @@ const activityModel = new mongoose.Schema(
       type: String,
       required: true
     },
+    description: {
+      type: String,
+      required: true
+    },
     place: {
       type: String,
       required: true
     },
     pics: {
       //array strutturato tipo ["","",""]
-      arrayPics: Array
+      arrayPics: Array,
+      required: false
     },
     startDate: {
       type: Date,

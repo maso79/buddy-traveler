@@ -5,8 +5,17 @@ const { formatData } = require("../functions/snippets")
 const User = require("../models/usermodel")
 const bcrypt = require("bcryptjs")
 const passwordValidator = require("password-validator")
-const { generateUploadURL, generateRetriveURL, removeOldProfilePicture } = require("./s3")
+const {
+  generateUploadURL,
+  generateRetriveURL,
+  removeOldProfilePicture,
+  genereateUploadDiaryURL,
+  removeOldDiaryPicture,
+  generateRetriveDiaryURL } = require("./s3");
 require("dotenv").config();
+
+// *************** INIZIO PROFILE ENDPOINT ***************
+
 
 router.get("/s3Url", async (req, res) => {
   const url = await generateUploadURL(req.session.email)
@@ -18,10 +27,35 @@ router.get("/profileimage", async (req, res) => {
   res.status(200).json({ url })
 })
 
-router.get("/removeimage", async(req, res) => {
+router.get("/removeprofileimage", async(req, res) => {
   const data = await removeOldProfilePicture(req.session.email)
   res.status(200).json({ data })
 })
+
+
+// *************** INIZIO DIARY ENDPOINT ***************
+
+router.post("/diaryimage", async (req, res) => {
+  const { diaryId } = req.body
+
+  const url = await genereateUploadDiaryURL(diaryId)
+  res.status(200).json({ url })
+})
+
+router.post("/removediaryimage", async (req, res) => {
+  const { diaryId } = req.body
+
+  const data = await removeOldDiaryPicture(diaryId)
+  res.status(200).json({ data })
+})
+
+router.post("/showdiaryimage", async (req, res) => {
+  const { diaryId } = req.body
+
+  const url = await generateRetriveDiaryURL(diaryId)
+  res.status(200).json({ url })
+})
+
 
 //Nome Cognome Username
 router.post("/userinfo", async (req, res) => {

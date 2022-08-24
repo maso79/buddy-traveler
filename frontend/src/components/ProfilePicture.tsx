@@ -76,7 +76,7 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
     }
 
     const removeImage = async () => {
-        await fetch("/update/removeimage")
+        await fetch("/update/removeprofileimage")
     }
 
     return(

@@ -1,11 +1,12 @@
+GET http://localhost:8080/activity/getactivities
 
-POST http://localhost:8080/profilestats/removefollow
-Cookie: connect.sid=s%3AmLEwY7EfTDtVftEK4KV3oBSG6DeIplS2.%2BynUxkdxTQ0ITF4EBU2QlUCA9R4muSyk0BKeLomLQNU
-Content-Type: application/json
+# POST http://localhost:8080/profilestats/removefollow
+# Cookie: connect.sid=s%3AmLEwY7EfTDtVftEK4KV3oBSG6DeIplS2.%2BynUxkdxTQ0ITF4EBU2QlUCA9R4muSyk0BKeLomLQNU
+# Content-Type: application/json
 
-{
-  "usernameUser":"tiarossi"
-}
+# {
+#   "usernameUser":"tiarossi"
+# }
 
 # POST http://localhost:8080/profilestats/addfollower
 # Cookie: connect.sid=s%3AmLEwY7EfTDtVftEK4KV3oBSG6DeIplS2.%2BynUxkdxTQ0ITF4EBU2QlUCA9R4muSyk0BKeLomLQNU

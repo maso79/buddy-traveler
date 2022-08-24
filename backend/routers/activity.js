@@ -3,7 +3,34 @@ const router = express()
 const Activity = require('../models/activitymodel')
 
 router.post("/createone", (req, res) => {
-  const { name, place, pics, startDate, endDate } = req.body
+  const { name, description, place, startDate, endDate, diaryId } = req.body
+
+  const result = new Activity({
+    name, 
+    description,
+    place,
+    pics: [],
+    startDate,
+    endDate,
+    diaryId
+  })
+
+  result.save()
+    .then(() => {
+      res.status(200),json({ stato: "success" })
+    })
+    .catch(err => {
+      res.status(400).json({ stato: "Error" + err })
+    })
+
+})
+
+router.get("/getactivities", (req, res) => {
+  const { diaryId } = req.body
+
+  Activity.find({ diaryId }).sort('startDate').exec((err, data) => {
+    res.json({ data: data })
+  })
 
 })
 
