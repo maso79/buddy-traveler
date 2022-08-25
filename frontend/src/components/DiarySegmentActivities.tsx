@@ -1,4 +1,5 @@
-import { IonImg, IonList, IonText } from '@ionic/react';
+import { IonFab, IonFabButton, IonIcon, IonImg, IonList, IonText } from '@ionic/react';
+import { add, addCircle } from 'ionicons/icons';
 import * as React from 'react';
 import placeholder from '../pictures/placeholder.png'
 

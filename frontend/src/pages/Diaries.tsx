@@ -83,8 +83,8 @@ const Diaries: React.FC=()=>{
                             diariesNumber > 0 &&
 
                             diaries.map((diary, i) => (
-                                <IonModal trigger={""+diary._id} isOpen={modalDiaries === diary._id}>
-                                    <DiaryView key={i} diaryId={diary._id} title={diary.name} setModal={setModalDiaries}/>
+                                <IonModal trigger={""+diary._id} isOpen={modalDiaries === diary._id} key={i}>
+                                    <DiaryView diaryId={diary._id} title={diary.name} setModal={setModalDiaries}/>
                                 </IonModal>
                             ))
                         }
