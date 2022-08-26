@@ -1,31 +1,32 @@
 import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonIcon, IonImg, IonRow, IonText } from '@ionic/react';
 import { calendar, location } from 'ionicons/icons';
+import placeholder from '../pictures/placeholder.png'
 import * as React from 'react';
 
 const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, startDate: String, endDate: String, thumbnail , setModalDiaries: Function }>=(props)=>{
     
-    const getThumbnail = async (diaryId) => {
-        const data = { diaryId }
-        const { url } = await fetch("/update/showdiaryimage", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
+    // const getThumbnail = async (diaryId) => {
+    //     const data = { diaryId }
+    //     const { url } = await fetch("/update/showdiaryimage", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(data)
+    //     })
+    //     .then(res => res.json())
         
-        if (url.url == "not found") {           
-           return
-        }
+    //     if (url.url == "not found") {           
+    //        return
+    //     }
         
-        const imageUrl = url.split('?')[0]
-        return imageUrl
-    }
+    //     const imageUrl = url.split('?')[0]
+    //     return imageUrl
+    // }
 
     return (
         <IonCard button onClick={()=>props.setModalDiaries(props._id)}>
-            <IonImg src={""+getThumbnail(props._id)} />
+            <IonImg src={props.thumbnail !== "" ? ""+props.thumbnail : placeholder} />
             <IonCardHeader>
                 <IonCardTitle>{props.name}</IonCardTitle>
                 <br />

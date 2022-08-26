@@ -10,7 +10,7 @@ import placeholder from '../pictures/placeholder.png'
 
 const Diaries: React.FC=()=>{
     const [isLoading,setIsLoading]=React.useState(true)
-    const [diaries,setDiaries]=React.useState([{_id:"", name: "", destination: "", startDate: "", endDate: "", thumbnail: placeholder}])
+    const [diaries,setDiaries]=React.useState([{_id:"", name: "", destination: "", startDate: "", endDate: "", imageName: placeholder}])
     const [diariesNumber,setDiariesNumber]=React.useState(0)
     const [modal,setModal]=React.useState(-1)
     const [modalDiaries, setModalDiaries] = React.useState("null")
@@ -27,6 +27,8 @@ const Diaries: React.FC=()=>{
                 // for (let i=0;i<result.diaries.length;i++){
                 //     fetch("/")
                 // }
+
+                console.log(diaries)
 
                 setDiaries(result.diaries)
                 setDiariesNumber(result.diaries.length)
@@ -74,7 +76,7 @@ const Diaries: React.FC=()=>{
                             <IonList>
                                 {
                                         diaries.map((diary, i) => (
-                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail="" setModalDiaries={setModalDiaries} />
+                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={diary.imageName} setModalDiaries={setModalDiaries} />
                                     ))
                                 }
                             </IonList>
