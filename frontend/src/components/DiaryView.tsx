@@ -8,7 +8,7 @@ import DiaryEdit from './DiaryEdit';
 import ActivityCreate from './ActivityCreate';
 import placeholder_profile from '../pictures/placeholder.png'
 
-const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=(props)=>{
+const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, update: number, setUpdate: Function}>=(props)=>{
     const [diary,setDiary]=React.useState({
         _id: "",
         destination: "",
@@ -37,7 +37,7 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=
         })
 
         getThumbnail()
-    },[])
+    },[props.update])
 
     const getThumbnail = async () => {
         const data = { diaryId: props.diaryId }
@@ -170,7 +170,7 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=
                         </IonFab>
 
                         <IonModal trigger="modalSettings" isOpen={modal === 1}>
-                            <DiaryEdit setModal={setModal} diaryId={props.diaryId} />
+                            <DiaryEdit setModal={setModal} diaryId={props.diaryId} update={props.update} setUpdate={props.setUpdate} />
                         </IonModal>
                         <IonModal trigger="modalCreateActivity" isOpen={modal === 2}>
                             <ActivityCreate setModal={setModal} />

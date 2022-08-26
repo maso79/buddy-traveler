@@ -14,6 +14,7 @@ const Diaries: React.FC=()=>{
     const [diariesNumber,setDiariesNumber]=React.useState(0)
     const [modal,setModal]=React.useState(-1)
     const [modalDiaries, setModalDiaries] = React.useState("null")
+    const [update,setUpdate]=React.useState(0)
  
     React.useEffect(()=>{
         console.log("use effect")
@@ -39,7 +40,7 @@ const Diaries: React.FC=()=>{
             console.log(err)
         })
 
-    },[modal])
+    },[modal, update])
 
     return(
         <IonPage>
@@ -86,7 +87,7 @@ const Diaries: React.FC=()=>{
 
                             diaries.map((diary, i) => (
                                 <IonModal trigger={""+diary._id} isOpen={modalDiaries === diary._id} key={i}>
-                                    <DiaryView diaryId={diary._id} title={diary.name} setModal={setModalDiaries}/>
+                                    <DiaryView diaryId={diary._id} title={diary.name} setModal={setModalDiaries} update={update} setUpdate={setUpdate} />
                                 </IonModal>
                             ))
                         }

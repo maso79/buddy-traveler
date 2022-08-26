@@ -5,7 +5,7 @@ import BTHeaderModal from './BTHeaderModal';
 import { search } from 'ionicons/icons';
 import placeholder_profile from '../pictures/placeholder.png'
 
-const DiaryEdit: React.FC<{ setModal: Function, diaryId: String }>=(props)=>{
+const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number, setUpdate: Function }>=(props)=>{
     const [diary,setDiary]=React.useState({
         _id: "",
         destination: "",
@@ -84,6 +84,7 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String }>=(props)=>{
 
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
+        props.setUpdate(props.update+1)
     }
 
     return(
