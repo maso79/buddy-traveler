@@ -126,6 +126,7 @@ const deleteDiaryOldImage = async (diaryId) => {
   var x = Diary.findOne({ _id: diaryId })
 
   x = await x.clone()
+  console.log(x)
 
   if (x.imageName != "") {
     const params = { Bucket: bucketName, Key: x.imageName }

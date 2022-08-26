@@ -36,6 +36,7 @@ router.get("/removeprofileimage", async(req, res) => {
 // *************** INIZIO DIARY ENDPOINT ***************
 
 router.post("/diaryimage", async (req, res) => {
+  console.log(req.body)
   const { diaryId } = req.body
 
   const url = await genereateUploadDiaryURL(diaryId)

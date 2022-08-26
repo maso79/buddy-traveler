@@ -6,6 +6,7 @@ import { add, calendar, checkbox, cog, home, location, newspaper, pencil, people
 import DiarySegmentActivites from './DiarySegmentActivities';
 import DiaryEdit from './DiaryEdit';
 import ActivityCreate from './ActivityCreate';
+import placeholder_profile from '../pictures/placeholder.png'
 
 const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=(props)=>{
     const [diary,setDiary]=React.useState({
@@ -18,7 +19,8 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=
     })
     const [segment,setSegment]=React.useState("activities")
     const [modal,setModal]=React.useState(-1)
-    const [loading,setLoadig]=React.useState(true)
+    const [loading, setLoadig] = React.useState(true)
+    const [path,setPath]=React.useState(placeholder_profile)
 
     React.useEffect(()=>{
         fetch(`/diary/getdiary/${props.diaryId}`,{
@@ -33,7 +35,29 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=
         .catch(err=>{
             console.log(err)
         })
+
+        getThumbnail()
     },[])
+
+    const getThumbnail = async () => {
+        const data = { diaryId: props.diaryId }
+        const { url } = await fetch("/update/showdiaryimage", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        
+        console.log(url)
+        if (url.url == "not found") {           
+           return
+        }
+        
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
+    }
 
     return(
         <IonPage>
@@ -65,7 +89,7 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function}>=
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="12">
-                                    <IonImg src={placeholder} alt="Placeholder" />
+                                    <IonImg src={path} alt="Placeholder" />
                                 </IonCol>
                                 <IonCol size="12">
                                     <IonCard button onClick={()=>setModal(1)}>

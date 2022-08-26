@@ -1,8 +1,9 @@
 import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInput, IonItem, IonItemDivider, IonLabel, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
-import path from '../pictures/placeholder.png'
+//import path from '../pictures/placeholder.png'
 import { search } from 'ionicons/icons';
+import placeholder_profile from '../pictures/placeholder.png'
 
 const DiaryEdit: React.FC<{ setModal: Function, diaryId: String }>=(props)=>{
     const [diary,setDiary]=React.useState({
@@ -17,7 +18,8 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String }>=(props)=>{
     const [name,setName]=React.useState("")
     const [destination,setDestionation]=React.useState("")
     const [startDate,setStartDate]=React.useState("")
-    const [endDate,setEndDate]=React.useState("")
+    const [endDate, setEndDate] = React.useState("")
+    const [path,setPath]=React.useState(placeholder_profile)
 
     React.useEffect(()=>{
         fetch(`/diary/getdiary/${props.diaryId}`,{
@@ -36,7 +38,53 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String }>=(props)=>{
         .catch(err=>{
             console.log(err)
         })
+        getThumbnail()
     },[])
+
+    const getThumbnail = async () => {
+        const data = { diaryId: props.diaryId }
+        const { url } = await fetch("/update/showdiaryimage", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        
+        if (url.url == "not found") {           
+           return
+        }
+        
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
+    }
+
+    const uploadThumbnail = async () => {
+        const file = document.querySelector("input").files[0]
+        console.log(file)
+        const data = { diaryId: props.diaryId }
+    
+        const { url } = await fetch("/update/diaryimage", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+
+        await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: file
+        })
+
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
+    }
 
     return(
         <IonPage>
@@ -64,7 +112,7 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String }>=(props)=>{
                                 <IonText>Choose a picture</IonText>
                                 <br /><br />
                                 <form>
-                                    <input type="file" name="profileImage" id="" />
+                                    <input type="file" name="profileImage" id="" onChange={uploadThumbnail}/>
                                     <br /><br />
                                 </form>
                             </IonCol>

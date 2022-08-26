@@ -13,8 +13,8 @@ const Diaries: React.FC=()=>{
     const [diaries,setDiaries]=React.useState([{_id:"", name: "", destination: "", startDate: "", endDate: "", thumbnail: placeholder}])
     const [diariesNumber,setDiariesNumber]=React.useState(0)
     const [modal,setModal]=React.useState(-1)
-    const [modalDiaries,setModalDiaries]=React.useState("null")
-
+    const [modalDiaries, setModalDiaries] = React.useState("null")
+ 
     React.useEffect(()=>{
         console.log("use effect")
 
@@ -23,7 +23,6 @@ const Diaries: React.FC=()=>{
         })
         .then(result=>result.json())
         .then(result=>{
-            console.log(result)
             if (result.diaries){
                 // for (let i=0;i<result.diaries.length;i++){
                 //     fetch("/")
@@ -37,6 +36,7 @@ const Diaries: React.FC=()=>{
         .catch(err=>{
             console.log(err)
         })
+
     },[modal])
 
     return(
@@ -74,7 +74,7 @@ const Diaries: React.FC=()=>{
                             <IonList>
                                 {
                                         diaries.map((diary, i) => (
-                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={placeholder} setModalDiaries={setModalDiaries} />
+                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail="" setModalDiaries={setModalDiaries} />
                                     ))
                                 }
                             </IonList>

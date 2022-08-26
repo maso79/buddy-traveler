@@ -11,7 +11,7 @@ const diarySchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    thumbnail: {
+    imageName: {
       type: String,
       required: false
     },
