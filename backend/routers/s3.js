@@ -4,6 +4,7 @@ const crypto = require('crypto')
 const { promisify } = require("util")
 const User = require("../models/usermodel")
 const Diary = require("../models/diarymodel")
+const Activity = require("../models/activitymodel")
 const randomBytes = promisify(crypto.randomBytes)
 dotenv.config()
 
@@ -30,13 +31,13 @@ const deleteProfileOldImage = async (email) => {
 
   if (x.imageName != "") {
     const params = { Bucket: bucketName, Key: x.imageName }
-  
+
     s3.deleteObject(params, (err, data) => {
       if (err) return err
       else console.log(data)
     })
   }
-  
+
 }
 
 //rimozione foto profilo corrente
@@ -47,7 +48,7 @@ const removeOldProfilePicture = async (email) => {
 
   if (x.imageName != "") {
     const params = { Bucket: bucketName, Key: x.imageName }
-  
+
     s3.deleteObject(params, (err, data) => {
       if (err) return err
       else console.log(data)
@@ -57,8 +58,8 @@ const removeOldProfilePicture = async (email) => {
   }
 
   User.findOneAndUpdate({ email }, { imageName: "" }, (err, data) => {
-      if (!data) return { stato: "error" }
-    })
+    if (!data) return { stato: "error" }
+  })
 }
 
 //upload foto profilo
@@ -100,9 +101,9 @@ const generateRetriveURL = async (email) => {
 
     if (x.imageName == "") {
       return { url: "not found" }
-    } 
+    }
 
-    var params = { Bucket: "buddytraveler-s3-bucket", Key: x.imageName }
+    var params = { Bucket: bucketName, Key: x.imageName }
     var url = await s3.getSignedUrlPromise('getObject', params)
 
     return url
@@ -130,13 +131,13 @@ const deleteDiaryOldImage = async (diaryId) => {
 
   if (x.imageName != "") {
     const params = { Bucket: bucketName, Key: x.imageName }
-  
+
     s3.deleteObject(params, (err, data) => {
       if (err) return err
-      else console.log(data)
+      else console.log("old removed" + data)
     })
   }
-  
+
 }
 
 //upload copertina diario
@@ -170,7 +171,7 @@ const removeOldDiaryPicture = async (diaryId) => {
 
   if (x.imageName != "") {
     const params = { Bucket: bucketName, Key: x.imageName }
-  
+
     s3.deleteObject(params, (err, data) => {
       if (err) return err
       else console.log(data)
@@ -180,8 +181,8 @@ const removeOldDiaryPicture = async (diaryId) => {
   }
 
   Diary.findOneAndUpdate({ _id: diaryId }, { imageName: "" }, (err, data) => {
-      if (!data) return { stato: "error" }
-    })
+    if (!data) return { stato: "error" }
+  })
 }
 
 //ottieni foto diario
@@ -201,9 +202,9 @@ const generateRetriveDiaryURL = async (userId) => {
 
     if (x.imageName == "") {
       return { url: "not found" }
-    } 
+    }
 
-    var params = { Bucket: "buddytraveler-s3-bucket", Key: x.imageName }
+    var params = { Bucket: bucketName, Key: x.imageName }
     var url = await s3.getSignedUrlPromise('getObject', params)
 
     return url
@@ -214,11 +215,113 @@ const generateRetriveDiaryURL = async (userId) => {
 
 }
 
+
+// ************** FINE FUNZIONI DIARIO **************
+
+
+
+
+// ************** INIZIO FUNZIONI ATTIVITA **************
+
+//upload foto attivita
+const genereateUploadActivityURL = async (activityId) => {
+  const rawBytes = await randomBytes(16)
+  const imageName = rawBytes.toString('hex')
+
+  const params = ({
+    Bucket: bucketName,
+    Key: imageName,
+    Expires: 60
+  })
+
+  const uploadURL = await s3.getSignedUrlPromise('putObject', params)
+
+  Activity.findOneAndUpdate({ _id: activityId }, { $push: { pics: imageName } }, (err, data) => {
+    if (!data) return { stato: "error" }
+  })
+
+  return uploadURL
+
+}
+
+//ottieni foto attivita
+const generateRetriveActivityURL = async (activityId) => {
+
+  try {
+    aws.config.setPromisesDependency()
+    aws.config.update({
+      accesKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: "eu-central-1"
+    })
+
+    var x = Activity.findOne({ _id: activityId })
+
+    x = await x.clone()
+
+    if (x.pics == []) {
+      return { url: "not found" }
+    }
+
+    let key = ""
+
+    x.pics.foreach(element => {
+      if (element == activityId) {
+        key = element
+      }
+    })
+
+    var params = { Bucket: bucketName, Key: key }
+    var url = await s3.getSignedUrlPromise('getObject', params)
+
+    return url
+
+  } catch (err) {
+    return err
+  }
+
+}
+
+//rimozione foto attivita
+const removeOldActivityPics = async (activityId) => {
+  var x = Diary.findOne({ _id: activityId })
+
+  x = await x.clone()
+
+  if (x.pics != []) {
+
+    let key = ""
+
+    x.pics.foreach(element => {
+      if (element == activityId) {
+        key = element
+      }
+    })
+
+    const params = { Bucket: bucketName, Key: key }
+
+    s3.deleteObject(params, (err, data) => {
+      if (err) return err
+      else console.log(data)
+    })
+  } else {
+    return { stato: "You got to have an image before you can delete it -.- " }
+  }
+
+  Diary.findOneAndUpdate({ _id: activityId }, { $pull: { pics: { $in: [key] } } }, (err, data) => {
+    if (!data) return { stato: "error" }
+  })
+}
+
+
 module.exports = {
   generateUploadURL,
   generateRetriveURL,
   removeOldProfilePicture,
   genereateUploadDiaryURL,
   removeOldDiaryPicture,
-  generateRetriveDiaryURL
+  generateRetriveDiaryURL,
+  genereateUploadActivityURL,
+  generateRetriveActivityURL,
+  removeOldActivityPics
 }

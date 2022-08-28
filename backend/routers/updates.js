@@ -11,7 +11,11 @@ const {
   removeOldProfilePicture,
   genereateUploadDiaryURL,
   removeOldDiaryPicture,
-  generateRetriveDiaryURL } = require("./s3");
+  generateRetriveDiaryURL,
+  genereateUploadActivityURL,
+  generateRetriveActivityURL,
+  removeOldActivityPics
+} = require("./s3");
 require("dotenv").config();
 
 // *************** INIZIO PROFILE ENDPOINT ***************
@@ -27,7 +31,7 @@ router.get("/profileimage", async (req, res) => {
   res.status(200).json({ url })
 })
 
-router.get("/removeprofileimage", async(req, res) => {
+router.get("/removeprofileimage", async (req, res) => {
   const data = await removeOldProfilePicture(req.session.email)
   res.status(200).json({ data })
 })
@@ -35,11 +39,19 @@ router.get("/removeprofileimage", async(req, res) => {
 
 // *************** INIZIO DIARY ENDPOINT ***************
 
+
 router.post("/diaryimage", async (req, res) => {
   console.log(req.body)
   const { diaryId } = req.body
 
   const url = await genereateUploadDiaryURL(diaryId)
+  res.status(200).json({ url })
+})
+
+router.post("/showdiaryimage", async (req, res) => {
+  const { diaryId } = req.body
+
+  const url = await generateRetriveDiaryURL(diaryId)
   res.status(200).json({ url })
 })
 
@@ -50,12 +62,31 @@ router.post("/removediaryimage", async (req, res) => {
   res.status(200).json({ data })
 })
 
-router.post("/showdiaryimage", async (req, res) => {
-  const { diaryId } = req.body
 
-  const url = await generateRetriveDiaryURL(diaryId)
+// *************** INIZIO ACTIVITY ENDPOINT ***************
+
+
+router.post("/activityimage", async (req, res) => {
+  const { activityId } = req.body
+
+  const url = await genereateUploadActivityURL(activityId)
   res.status(200).json({ url })
 })
+
+router.post("/showactivityimages", async (req, res) => {
+  const { activityId } = req.body
+
+  const url = await generateRetriveActivityURL(activityId)
+  res.status(200).json({ url })
+})
+
+router.post("/removeactivitypic", async (req, res) => {
+  const { activityId } = req.body
+
+  const data = await removeOldActivityPics(activityId)
+  res.status(200).json({ data })
+})
+
 
 
 //Nome Cognome Username

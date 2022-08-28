@@ -16,14 +16,14 @@ const activityModel = new mongoose.Schema(
     },
     pics: {
       //array strutturato tipo ["","",""]
-      arrayPics: Array,
+      type: Array,
       required: false
     },
-    startDate: {
+    startTime: {
       type: Date,
       required: true
     },
-    endDate: {
+    endTime: {
       type: Date,
       required: true
     },

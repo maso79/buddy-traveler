@@ -3,21 +3,21 @@ const router = express()
 const Activity = require('../models/activitymodel')
 
 router.post("/createone", (req, res) => {
-  const { name, description, place, startDate, endDate, diaryId } = req.body
+  const { name, description, place, startTime, endTime, diaryId } = req.body
 
   const result = new Activity({
-    name, 
+    name,
     description,
     place,
     pics: [],
-    startDate,
-    endDate,
+    startTime,
+    endTime,
     diaryId
   })
 
   result.save()
     .then(() => {
-      res.status(200),json({ stato: "success" })
+      res.status(200).json({ stato: "success" })
     })
     .catch(err => {
       res.status(400).json({ stato: "Error" + err })
