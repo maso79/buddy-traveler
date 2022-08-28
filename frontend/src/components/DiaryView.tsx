@@ -1,8 +1,6 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonFab, IonFabButton, IonFabList, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonModal, IonPage, IonRow, IonSegment, IonSegmentButton, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import * as React from 'react';
-import BTHeaderModal from './BTHeaderModal';
-import placeholder from '../pictures/placeholder.png'
-import { add, calendar, checkbox, cog, home, location, newspaper, pencil, people } from 'ionicons/icons';
+import { add, calendar, checkbox, cog, home, location, newspaper, people } from 'ionicons/icons';
 import DiarySegmentActivites from './DiarySegmentActivities';
 import DiaryEdit from './DiaryEdit';
 import ActivityCreate from './ActivityCreate';
@@ -21,6 +19,8 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, u
     const [modal,setModal]=React.useState(-1)
     const [loading, setLoadig] = React.useState(true)
     const [path,setPath]=React.useState(placeholder_profile)
+    const [updateActivities,setUpdateActivities]=React.useState(0)
+    const [activitiesNumber,setActivitiesNumber]=React.useState(0)
 
     React.useEffect(()=>{
         fetch(`/diary/getdiary/${props.diaryId}`,{
@@ -114,7 +114,7 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, u
                                             <br />
                                             <IonText>
                                                 <IonIcon icon={newspaper} className="padding-right-minimum" />
-                                                0 activities
+                                                {activitiesNumber} activities
                                             </IonText>
                                             <br />
                                             <IonText>
@@ -147,7 +147,7 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, u
                                 <IonCol size="12">
                                     {
                                         segment === "activities" &&
-                                        <DiarySegmentActivites diaryId={props.diaryId} />
+                                        <DiarySegmentActivites diaryId={props.diaryId} update={updateActivities} setActivitiesNumber={setActivitiesNumber} />
                                     }
                                 </IonCol>
                             </IonRow>
@@ -173,7 +173,7 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, u
                             <DiaryEdit setModal={setModal} diaryId={props.diaryId} update={props.update} setUpdate={props.setUpdate} />
                         </IonModal>
                         <IonModal trigger="modalCreateActivity" isOpen={modal === 2}>
-                            <ActivityCreate setModal={setModal} />
+                            <ActivityCreate setModal={setModal} diaryId={diary._id} update={updateActivities} setUpdate={setUpdateActivities} />
                         </IonModal>
                     </>
                 }

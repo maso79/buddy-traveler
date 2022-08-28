@@ -1,9 +1,10 @@
-import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInput, IonItem, IonItemDivider, IonLabel, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInput, IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 //import path from '../pictures/placeholder.png'
 import { search } from 'ionicons/icons';
 import placeholder_profile from '../pictures/placeholder.png'
+import DateSelect from './DateSelect';
 
 const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number, setUpdate: Function }>=(props)=>{
     const [diary,setDiary]=React.useState({
@@ -20,6 +21,8 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
     const [startDate,setStartDate]=React.useState("")
     const [endDate, setEndDate] = React.useState("")
     const [path,setPath]=React.useState(placeholder_profile)
+    const [modalStartDate,setModalStartDate]=React.useState(false)
+    const [modalEndDate,setModalEndDate]=React.useState(false)
 
     React.useEffect(()=>{
         fetch(`/diary/getdiary/${props.diaryId}`,{
@@ -144,7 +147,7 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                                     startDate !== "" &&
                                     <IonText className="text-muted">Selected date: {new Date(""+startDate).toLocaleDateString()}</IonText>
                                 }
-                                <IonButton color="light" expand="block">Select date</IonButton>
+                                <IonButton color="light" expand="block" onClick={()=>setModalStartDate(true)}>Select date</IonButton>
                             </IonCol>
                             <IonCol size="12">
                                 <IonLabel>End date</IonLabel>
@@ -153,7 +156,7 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                                     endDate !== "" &&
                                     <IonText className="text-muted">Selected date: {new Date(""+endDate).toLocaleDateString()}</IonText>
                                 }
-                                <IonButton color="light" expand="block">Select date</IonButton>
+                                <IonButton color="light" expand="block" onClick={()=>setModalEndDate(true)}>Select date</IonButton>
                             </IonCol>
                             <IonCol size="12">
                                 <IonItemDivider />
@@ -167,6 +170,13 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                         </IonRow>
                     </IonGrid>
                 }
+
+                <IonModal isOpen={modalStartDate} trigger="modalStartDate" onDidDismiss={()=>setModalStartDate(false)}>
+                    <DateSelect date={startDate} setDate={setStartDate} setModal={setModalStartDate} />
+                </IonModal>
+                <IonModal isOpen={modalEndDate} trigger="modalEndDate" onDidDismiss={()=>setModalEndDate(false)}>
+                    <DateSelect date={endDate} setDate={setEndDate} setModal={setModalEndDate} />
+                </IonModal>
             </IonContent>
         </IonPage>
     )

@@ -2,8 +2,9 @@ import { IonFab, IonFabButton, IonIcon, IonImg, IonList, IonText } from '@ionic/
 import { add, addCircle } from 'ionicons/icons';
 import * as React from 'react';
 import placeholder from '../pictures/placeholder.png'
+import ActivityPreview from './ActivityPreview';
 
-const DiarySegmentActivites: React.FC<{diaryId: String}>=(props)=>{
+const DiarySegmentActivites: React.FC<{diaryId: String, update: number, setActivitiesNumber}>=(props)=>{
     const [activities,setActivites]=React.useState([{
         _id: "",
         name: "",
@@ -23,11 +24,12 @@ const DiarySegmentActivites: React.FC<{diaryId: String}>=(props)=>{
             console.log(result.data)
             setActivites(result.data)
             console.log(activities.length)
+            props.setActivitiesNumber(activities.length)
         })
         .catch(err=>{
             console.log(err)
         })
-    },[])
+    },[props.update])
 
     return(
         <>
@@ -38,6 +40,12 @@ const DiarySegmentActivites: React.FC<{diaryId: String}>=(props)=>{
                     <br />
                     <IonText className="text-muted">Looks like there's nothing here...</IonText>
                 </div>
+            }
+            {
+                activities.length > 0 &&
+                activities.map((activity,i)=>(
+                    <ActivityPreview key={i} name={activity.name} place={activity.place} />
+                ))
             }
         </>
     )

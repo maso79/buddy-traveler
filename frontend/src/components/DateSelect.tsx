@@ -12,7 +12,7 @@ const DateSelect: React.FC<{date: string, setDate: Function, setModal: Function}
                     <IonLabel className="spazio-lato text-white">Select a date</IonLabel>
                     <br /><br />
                     <IonDatetime
-                        className="text-white"
+                        //className="text-white"
                         firstDayOfWeek={1}
                         value={props.date}
                         onIonChange={e=>props.setDate(e.detail.value!)} 

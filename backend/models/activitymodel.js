@@ -16,15 +16,15 @@ const activityModel = new mongoose.Schema(
     },
     pics: {
       //array strutturato tipo ["","",""]
-      type: Array,
+      arrayPics: Array,
       required: false
     },
-    startTime: {
+    date: {
       type: Date,
       required: true
     },
-    endTime: {
-      type: Date,
+    time:{
+      type: String,
       required: true
     },
     diaryId: {

@@ -47,3 +47,7 @@
 .text-white{
     color: white !important;
 }
+
+.ios .spazio-fondo{
+    padding-bottom: 5%;
+}
