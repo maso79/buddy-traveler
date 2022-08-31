@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInput, IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInput, IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonRow, IonSpinner, IonText, IonToast } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 //import path from '../pictures/placeholder.png'
@@ -23,6 +23,7 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
     const [path,setPath]=React.useState(placeholder_profile)
     const [modalStartDate,setModalStartDate]=React.useState(false)
     const [modalEndDate,setModalEndDate]=React.useState(false)
+    const [toastAggiornamento,setToastAggiornamento]=React.useState(false)
 
     React.useEffect(()=>{
         fetch(`/diary/getdiary/${props.diaryId}`,{
@@ -43,6 +44,28 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
         })
         getThumbnail()
     },[])
+
+    const diary_update=()=>{
+        fetch(`/diary/updatediary/${props.diaryId}`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({
+                name,
+                destination,
+                startDate,
+                endDate
+            })
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            setToastAggiornamento(true)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
 
     const getThumbnail = async () => {
         const data = { diaryId: props.diaryId }
@@ -162,7 +185,7 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                                 <IonItemDivider />
                             </IonCol>
                             <IonCol size="12">
-                                <IonButton color="primary" expand="block">Save settings</IonButton>
+                                <IonButton color="primary" expand="block" onClick={diary_update}>Save settings</IonButton>
                             </IonCol>
                             <IonCol size="12">
                                 <IonButton color="light" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>
@@ -177,6 +200,15 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                 <IonModal isOpen={modalEndDate} trigger="modalEndDate" onDidDismiss={()=>setModalEndDate(false)}>
                     <DateSelect date={endDate} setDate={setEndDate} setModal={setModalEndDate} />
                 </IonModal>
+
+                <IonToast
+                    isOpen={toastAggiornamento}
+                    duration={2000}
+                    onDidDismiss={()=>setToastAggiornamento(false)}
+                    color="success"
+                    header="Success"
+                    message="You diary was updated"
+                />
             </IonContent>
         </IonPage>
     )

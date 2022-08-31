@@ -57,4 +57,24 @@ router.get("/diaries",async (req,res)=>{
     })
 })
 
+router.post("/updatediary/:diaryId", (req,res)=>{
+  const userId=req.session.userId
+  const {diaryId}=req.params
+  const {name, destination, startDate, endDate}=req.body
+
+  Diary.findOneAndUpdate({
+    _id: diaryId,
+    userId
+  },
+  {
+    name,
+    destination,
+    startDate,
+    endDate
+  },(err,data)=>{
+    if (data) res.json({stato: true})
+    else res.json({stato: false})
+  })
+})
+
 module.exports = router

@@ -1,5 +1,5 @@
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
-import { calendar, location, pencil, trash } from 'ionicons/icons';
+import { calendar, camera, location, pencil, trash } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 
@@ -96,6 +96,36 @@ const ActivityView: React.FC<{ setModal: Function, activityId: String, activityN
                                     </IonContent>
                                 </IonCard>
                             </IonCol>
+                            <IonCol size="12">
+                                <IonCard>
+                                    <IonCardHeader>
+                                        <IonCardTitle>
+                                            Actions
+                                        </IonCardTitle>
+                                    </IonCardHeader>
+                                    <IonCardContent>
+                                        <IonGrid>
+                                            <IonRow>
+                                                <IonCol size="3">
+                                                    <IonButton color="light">
+                                                        <IonIcon icon={pencil} className="padding-right-minimum" />
+                                                    </IonButton>
+                                                </IonCol>
+                                                <IonCol size="3">
+                                                    <IonButton color="light">
+                                                        <IonIcon icon={trash} className="padding-right-minimum" />
+                                                    </IonButton>
+                                                </IonCol>
+                                                <IonCol size="3">
+                                                    <IonButton color="light">
+                                                        <IonIcon icon={camera} className="padding-right-minimum" />
+                                                    </IonButton>
+                                                </IonCol>
+                                            </IonRow>
+                                        </IonGrid>
+                                    </IonCardContent>
+                                </IonCard> 
+                            </IonCol> 
                         </IonRow>    
                     </IonGrid>
 
