@@ -3,9 +3,9 @@ import { location } from 'ionicons/icons';
 import * as React from 'react';
 import placeholder from '../pictures/placeholder.png'
 
-const ActivityPreview: React.FC<{name: String, place: String}>=(props)=>{
+const ActivityPreview: React.FC<{activityId: String, name: String, place: String, setModalActivities: Function}>=(props)=>{
     return(
-        <IonCard button>
+        <IonCard button onClick={()=>props.setModalActivities(props.activityId)}>
             <IonCardContent>
                 <IonGrid>
                     <IonRow>
