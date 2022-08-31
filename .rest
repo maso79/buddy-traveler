@@ -1,15 +1,23 @@
-POST http://localhost:8080/activity/createone
+POST http://localhost:8080/people/find
 Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2BobXpcBA
 Content-Type: application/json
 
 {
-  "name":"Chiesa sacro cuore",
-  "description":"Molto interessante, unica pecca il prezzo e le 2 ore di coda",
-  "place":"NABOLI",
-  "startTime":"2022-07-25T10:00:00.000+00:00",
-  "endTime":"2022-07-25T10:00:00.000+00:00",
-  "diaryId":"62e449124138234dc7c6c536"
+  "letters": "T" 
 }
+
+# POST http://localhost:8080/activity/createone
+# Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2BobXpcBA
+# Content-Type: application/json
+
+# {
+#   "name":"Chiesa sacro cuore",
+#   "description":"Molto interessante, unica pecca il prezzo e le 2 ore di coda",
+#   "place":"NABOLI",
+#   "startTime":"2022-07-25T10:00:00.000+00:00",
+#   "endTime":"2022-07-25T10:00:00.000+00:00",
+#   "diaryId":"62e449124138234dc7c6c536"
+# }
 
 //GET http://localhost:8080/activity/getactivities
 
