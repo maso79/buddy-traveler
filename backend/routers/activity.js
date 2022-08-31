@@ -34,4 +34,14 @@ router.get("/getactivities/:diaryId", (req, res) => {
 
 })
 
+router.get("/getone/:activityId",(req,res)=>{
+  const {activityId}=req.params
+
+  Activity.findById(activityId,
+    (err,data)=>{
+      if (data) res.json({data: data})
+      else res.json({stato: "error"})
+    })
+})
+
 module.exports = router
