@@ -3,7 +3,7 @@ Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2
 Content-Type: application/json
 
 {
-  "letters": "T" 
+  "letters": "t" 
 }
 
 # POST http://localhost:8080/activity/createone
