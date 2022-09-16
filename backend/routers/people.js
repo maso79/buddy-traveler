@@ -18,7 +18,7 @@ router.post("/find", async (req, res) => {
     {
       '$match': {
         'username': {
-          '$regex': letters, 
+          '$regex': letters,
           '$options': 'i'
         }
       }

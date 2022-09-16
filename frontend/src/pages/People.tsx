@@ -42,7 +42,7 @@ const People: React.FC=()=>{
                                 setQuery(e.detail.value!)
                             }} />
                             {
-                                suggestions.length > 0 &&
+                                suggestions.length > 0 && query!=="" &&
                                 <PeopleSuggestions suggestions={suggestions} />
                             }
                         </IonCol>
