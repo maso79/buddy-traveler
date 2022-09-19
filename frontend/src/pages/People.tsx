@@ -31,7 +31,7 @@ const People: React.FC=()=>{
                     console.log(err)
                 })
             }
-        },500)
+        },250)
     },[query])
 
     const lookForPeople=async ()=>{

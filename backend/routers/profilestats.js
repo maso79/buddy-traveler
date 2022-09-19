@@ -4,21 +4,21 @@ const User = require("../models/usermodel")
 const Follower = require("../models/followersmodel")
 
 router.post("/addfollow", async (req, res) => {
-  const { followedUserUsername } = req.body
-  const userId = req.session.userId
+  const { userUsername } = req.body
+  const thisUserId = req.session.userId
 
   console.log(req.session)
 
-  let x = User.findOne({ username: followedUserUsername })
+  let x = User.findOne({ username: userUsername })
 
   x = await x.clone()
-  const followedUserId = x.userId
+  const userId = x.userId
 
   let result = new Follower({
-    isFollowing: userId,
-    isFollowed: followedUserId
+    isFollowing: thisUserId,
+    isFollowed: userId
   })
-    
+
   result.save()
     .then(() => {
       res.status(200).json({ stato: "success" })
@@ -29,7 +29,16 @@ router.post("/addfollow", async (req, res) => {
 
 })
 
-router.post("/removefollow", (req, res) => {
+router.post("/removefollow", async (req, res) => {
+  const { userUsername } = req.body
+  const thisUserId = req.session.userId
+
+  let x = User.findOne({ username: userUsername })
+
+  x = await x.clone()
+  const userId = x.userId
+
+  Follower.findOneAndRemove({ isFollowing: thisUserId, isFollowed: userId })
 
 })
 
@@ -70,7 +79,7 @@ router.post("/removediary", (req, res) => {
     }
   })
 
-}) 
+})
 
 //  router.get("/followersnumber", (req, res) => {
 //   const email = req.session.email
