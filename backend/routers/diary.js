@@ -28,12 +28,16 @@ router.post("/createone", (req, res) => {
 // endopoint chiamato dal frontend nella sezione delle attività per generare le varie info sul diario
 router.get("/getdiary/:diaryId", (req, res) => {
   const { diaryId } = req.params
-
+  console.log(req.session)
   Diary.findOne({ _id: diaryId }, (err, data) => {
     if (data) res.status(200).json({ diary: data })
     else res.status(400).json({ stato: "Error: " + err })
   })
 
+})
+
+router.post("/test", (req, res) => {
+  res.json({ ses: req.session.userId })
 })
 
 router.get("/diaries",async (req,res)=>{

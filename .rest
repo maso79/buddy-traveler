@@ -1,10 +1,19 @@
-POST http://localhost:8080/people/find
-Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2BobXpcBA
+POST http://localhost:8080/diary/test
+Cookie: s%3Auq6PQnWPlXEJZtn1pMg-3t6P08IPjkvF.OxDg6CIU5uUwQI5dENyA0aMIvWqbGfh0NTEaAhb%2Bk0I
 Content-Type: application/json
 
 {
-  "letters": "t" 
+  "followedUserUsername": "teob" 
 }
+
+
+# POST http://localhost:8080/people/find
+# Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2BobXpcBA
+# Content-Type: application/json
+
+# {
+#   "letters": "o" 
+# }
 
 # POST http://localhost:8080/activity/createone
 # Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2BobXpcBA

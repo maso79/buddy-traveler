@@ -56,10 +56,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/update", update)
 app.use("/auth", auth);
+app.use("/profilestats", profilestats)
 app.use("/diary", diary)
 app.use("/profile", profile)
 app.use("/activity", activity)
-app.use("/profilestats", profilestats)
 app.use("/places", places)
 app.use("/people", people)
 
