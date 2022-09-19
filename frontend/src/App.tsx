@@ -39,6 +39,7 @@ import IsAuthorized from './components/IsAuthorized';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
 import Diaries from './pages/Diaries';
+import People from './pages/People';
 
 setupIonicReact();
 
@@ -98,6 +99,9 @@ const App: React.FC = () => {
                       </Route>
                       <Route exact path="/diaries">
                         <Diaries />
+                      </Route>
+                      <Route exact path="/people">
+                        <People />
                       </Route>
                       <Route exact path="/profile">
                         <Profile />  
