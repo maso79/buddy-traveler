@@ -3,6 +3,27 @@ const router = express()
 const User = require("../models/usermodel")
 const Follower = require("../models/followersmodel")
 
+router.post("/getuserstats", async (req, res) => {
+  //ritorna nfollower, nfollowing, username, immagine
+  const { userUsername } = req.body
+
+  let x = User.findOne({ username: userUsername })
+  x = await x.clone()
+
+  if (x) {
+    let userEmail = x.email
+    let numFollowers = Follower.find({ isFollowed: x.userId })
+    numFollowers = await numFollowers.clone()
+
+    let numFollowing = Follower.find({ isFollowing: x.userId })
+    numFollowing = await numFollowing.clone()
+
+    res.status(200).json({ data: { userUsername, numFollowers, numFollowing, userEmail } })
+  } else {
+    res.status(400).json({ stato: "not found" })
+  }
+})  
+
 router.post("/addfollow", async (req, res) => {
   const { userUsername } = req.body
   const thisUserId = req.session.userId
@@ -38,7 +59,13 @@ router.post("/removefollow", async (req, res) => {
   x = await x.clone()
   const userId = x.userId
 
-  Follower.findOneAndRemove({ isFollowing: thisUserId, isFollowed: userId })
+  Follower.findOneAndRemove({ isFollowing: thisUserId, isFollowed: userId }, (err, data) => {
+    if (err) {
+      res.status(400).json({ err })
+    } else {
+      res.status(200).json({ stato: "success" })
+    }  
+  })
 
 })
 

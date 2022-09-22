@@ -1,10 +1,17 @@
-POST http://localhost:8080/profilestats/addfollow
-Cookie: s%3ARZgvXtpdhHDwNJg8weHy59LOyhsMc_OQ.milfD4y8ioOGDiXD2TAG%2F3Eyjq7%2Bgd6upjOimERBplc
+POST http://localhost:8080/update/postprofileimage
 Content-Type: application/json
 
 {
-  "followedUserUsername": "teob" 
+  "email":"test"
 }
+
+# POST http://localhost:8080/profilestats/addfollow
+# Cookie: s%3ARZgvXtpdhHDwNJg8weHy59LOyhsMc_OQ.milfD4y8ioOGDiXD2TAG%2F3Eyjq7%2Bgd6upjOimERBplc
+# Content-Type: application/json
+
+# {
+#   "followedUserUsername": "teob" 
+# }
 
 
 # POST http://localhost:8080/people/find

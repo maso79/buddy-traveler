@@ -26,9 +26,18 @@ router.get("/s3Url", async (req, res) => {
   res.status(200).json({ url })
 })
 
-router.get("/profileimage", async (req, res) => {
-  const url = await generateRetriveURL(req.session.email)
-  res.status(200).json({ url })
+router.post("/profileimage", async (req, res) => {
+  console.log("ok")
+  const { email } = req.body
+
+  if (email) {
+    const url = await generateRetriveURL(email)
+    res.status(200).json({ url })
+  } else {
+    const url = await generateRetriveURL(req.session.email)
+    res.status(200).json({ url })
+  }
+
 })
 
 router.get("/removeprofileimage", async (req, res) => {
