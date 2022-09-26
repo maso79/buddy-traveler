@@ -17,6 +17,7 @@ router.get("/all",async (req,res)=>{
 
 router.get("/personal-information",async (req,res)=>{
     const userId=req.session.userId
+    console.log(userId)
     User.findOne({
         _id: userId
     },{
