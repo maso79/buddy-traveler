@@ -114,6 +114,36 @@ const generateRetriveURL = async (email) => {
 
 }
 
+//ottieni foto profilo
+const generateRetriveURLbyUsername = async (username) => {
+
+  try {
+    aws.config.setPromisesDependency()
+    aws.config.update({
+      accesKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: "eu-central-1"
+    })
+
+    var x = User.findOne({ username })
+
+    x = await x.clone()
+
+    if (x.imageName == "") {
+      return { url: "not found" }
+    }
+
+    var params = { Bucket: bucketName, Key: x.imageName }
+    var url = await s3.getSignedUrlPromise('getObject', params)
+
+    return url
+
+  } catch (err) {
+    return err
+  }
+
+}
+
 // ************** FINE FUNZIONI PROFILO **************
 
 
@@ -317,6 +347,7 @@ const removeOldActivityPics = async (activityId) => {
 module.exports = {
   generateUploadURL,
   generateRetriveURL,
+  generateRetriveURLbyUsername,
   removeOldProfilePicture,
   genereateUploadDiaryURL,
   removeOldDiaryPicture,

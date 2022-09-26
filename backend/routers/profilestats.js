@@ -4,7 +4,6 @@ const User = require("../models/usermodel")
 const Follower = require("../models/followersmodel")
 
 router.post("/getuserstats", async (req, res) => {
-  //ritorna nfollower, nfollowing, username, immagine
   const { userUsername } = req.body
 
   let x = User.findOne({ username: userUsername })
@@ -12,10 +11,10 @@ router.post("/getuserstats", async (req, res) => {
 
   if (x) {
     let userEmail = x.email
-    let numFollowers = Follower.find({ isFollowed: x.userId })
+    let numFollowers = Follower.find({ isFollowed: x.userId }).count()
     numFollowers = await numFollowers.clone()
 
-    let numFollowing = Follower.find({ isFollowing: x.userId })
+    let numFollowing = Follower.find({ isFollowing: x.userId }).count()
     numFollowing = await numFollowing.clone()
 
     res.status(200).json({ data: { userUsername, numFollowers, numFollowing, userEmail } })

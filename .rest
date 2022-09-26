@@ -1,12 +1,13 @@
-POST http://localhost:8080/update/postprofileimage
+POST http://localhost:8080/profilestats/getuserstats
+Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc
 Content-Type: application/json
 
 {
-  "email":"test"
+  "userUsername":"tiarossi"
 }
 
 # POST http://localhost:8080/profilestats/addfollow
-# Cookie: s%3ARZgvXtpdhHDwNJg8weHy59LOyhsMc_OQ.milfD4y8ioOGDiXD2TAG%2F3Eyjq7%2Bgd6upjOimERBplc
+# Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc
 # Content-Type: application/json
 
 # {
