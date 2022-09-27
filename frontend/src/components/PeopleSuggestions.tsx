@@ -1,7 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonContent, IonItem, IonList } from '@ionic/react';
 import * as React from 'react';
 
-const PeopleSuggestions: React.FC<{ suggestions: Array<{id: string, profilePicture: string, username: string}>, setUserIdView: Function, setModalUserView: Function }>=(props)=>{
+const PeopleSuggestions: React.FC<{ suggestions: Array<{_id: string, profilePicture: string, username: string}>, setUserIdView: Function, setUserUsername: Function, setModalUserView: Function }>=(props)=>{
     return(
         <IonCard>
             <IonCardHeader>
@@ -12,8 +12,10 @@ const PeopleSuggestions: React.FC<{ suggestions: Array<{id: string, profilePictu
                     {
                         props.suggestions.map((item,i)=>(
                             <IonItem button key={i} onClick={()=>{
+                                console.log(item)
+                                props.setUserIdView(item._id)
+                                props.setUserUsername(item.username)
                                 props.setModalUserView(true)
-                                props.setUserIdView(item.username)
                             }}>{item.username}</IonItem>
                         ))
                     }

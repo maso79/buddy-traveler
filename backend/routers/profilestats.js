@@ -33,8 +33,7 @@ router.post("/addfollow", async (req, res) => {
   let x = User.findOne({ username: userUsername })
 
   x = await x.clone()
-  const userId = x.userId
-
+  const userId = x._id
   let result = new Follower({
     isFollowing: thisUserId,
     isFollowed: userId
@@ -106,6 +105,22 @@ router.post("/removediary", (req, res) => {
     }
   })
 
+})
+
+router.post("/isfollowing", (req,res) => {
+  const userId=req.session.userId
+  const {userFollowedId}=req.body
+
+  console.log(userId)
+  console.log(userFollowedId)
+
+  Follower.findOne({
+    isFollowing: userId,
+    isFollowed: userFollowedId
+  },(err,data)=>{
+    if (data) res.json({stato: true})
+    else res.json({stato: false})
+  })
 })
 
 //  router.get("/followersnumber", (req, res) => {

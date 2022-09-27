@@ -6,10 +6,11 @@ import PeopleSuggestions from '../components/PeopleSuggestions';
 import UserView from '../components/UserView';
 
 const People: React.FC=()=>{
-    const [suggestions,setSuggestions]=React.useState([{id: "",profilePicture: "", username: ""}])
+    const [suggestions,setSuggestions]=React.useState([{_id: "",profilePicture: "", username: ""}])
     const [query,setQuery]=React.useState("")
     const [modalUser,setModalUser]=React.useState(false)
     const [userUsername,setUserUsername]=React.useState("")
+    const [userId,setUserId]=React.useState("")
     var searchTimeout=setTimeout(()=>{},100)
 
     React.useEffect(()=>{
@@ -48,7 +49,7 @@ const People: React.FC=()=>{
                             }} />
                             {
                                 suggestions.length > 0 && query!=="" &&
-                                <PeopleSuggestions suggestions={suggestions} setUserIdView={setUserUsername} setModalUserView={setModalUser} />
+                                <PeopleSuggestions suggestions={suggestions} setUserIdView={setUserId} setUserUsername={setUserUsername} setModalUserView={setModalUser} />
                             }
                         </IonCol>
                         <IonCol size="12">
@@ -59,7 +60,7 @@ const People: React.FC=()=>{
             </IonContent>
 
             <IonModal trigger="modalUser" isOpen={modalUser}>
-                <UserView setModal={setModalUser} userUsername={userUsername} />
+                <UserView setModal={setModalUser} userUsername={userUsername} userId={userId} />
             </IonModal>
         </IonPage>
     )
