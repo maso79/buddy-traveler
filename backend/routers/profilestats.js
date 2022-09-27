@@ -127,8 +127,8 @@ router.post("/isfollowingback", (req,res) => {
   const userId=req.session.userId
   const {userFollowedId}=req.body
 
-  console.log(userId)
-  console.log(userFollowedId)
+  console.log("userId "+userId)
+  console.log("userFollowedId "+userFollowedId)
 
   Follower.findOne({
     isFollowing: userFollowedId,

@@ -63,11 +63,12 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                 "Content-Type": "Application/JSON"
             },
             body: JSON.stringify({
-                userUsername: props.userUsername
+                userFollowedId: props.userId
             })
         })
         .then(result=>result.json())
         .then(result=>{
+            console.log(result)
             setIsFollowingBack(result.stato)
         })
         .catch(err=>{
