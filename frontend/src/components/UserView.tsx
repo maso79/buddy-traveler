@@ -78,6 +78,28 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             console.log(err)
         })
     }
+
+    const unfollowUser=()=>{
+        fetch("/profilestats/removefollow",{
+            method: "POST",
+            headers:{
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({
+                userUsername: props.userUsername
+            })
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            if(result.stato==="success"){
+                setIsFolllowing(false)
+            }
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+
     
     return(
         <IonPage>
@@ -112,7 +134,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                                 }
                                 {
                                     isFollowing === true &&
-                                    <IonButton color="light" expand="block">
+                                    <IonButton color="light" expand="block" onClick={unfollowUser}>
                                         Unfollow
                                     </IonButton>
                                 }

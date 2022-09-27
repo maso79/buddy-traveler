@@ -56,7 +56,7 @@ router.post("/removefollow", async (req, res) => {
   let x = User.findOne({ username: userUsername })
 
   x = await x.clone()
-  const userId = x.userId
+  const userId = x._id
 
   Follower.findOneAndRemove({ isFollowing: thisUserId, isFollowed: userId }, (err, data) => {
     if (err) {
