@@ -16,7 +16,6 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [loading,setLoading]=React.useState(true)
 
     React.useEffect(()=>{
-        console.log("userUsername "+props.userUsername)
         //Controllo se sto seguendo l'utente che sto visualizzando ora
         fetch("/profilestats/isfollowing",{
             method: "POST",
@@ -36,6 +35,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             console.log(err)
         })
 
+        console.log(props.userUsername)
         //recupero i dati dell'utente 
         fetch("/profilestats/getuserstats",{
             method: "POST",
@@ -121,7 +121,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     <IonGrid>
                         <IonRow>
                             <IonCol size="12" className="text-center landing"><h1>{props.userUsername}</h1></IonCol>
-                            <IonCol size="6" offset="3">
+                            <IonCol size="8" offset="2">
                                 <IonImg src={placeholder} alt="placeholder" />
                             </IonCol>
                             <IonCol size="6" offset="3">

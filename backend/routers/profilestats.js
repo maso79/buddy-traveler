@@ -12,10 +12,10 @@ router.post("/getuserstats", async (req, res) => {
   if (x) {
     let userEmail = x.email
     let userId= x._id
-    let numFollowers = Follower.find({ isFollowed: x.userId }).count()
+    let numFollowers = Follower.find({ isFollowed: userId }).count()
     numFollowers = await numFollowers.clone()
 
-    let numFollowing = Follower.find({ isFollowing: x.userId }).count()
+    let numFollowing = Follower.find({ isFollowing: userId }).count()
     numFollowing = await numFollowing.clone()
 
     res.status(200).json({ data: { userId, userUsername, numFollowers, numFollowing, userEmail } })
