@@ -13,6 +13,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         numFollowing: 0
     })
     const [isFollowing,setIsFolllowing]=React.useState(false)
+    const [isFollowingBack,setIsFollowingBack]=React.useState(false)
     const [loading,setLoading]=React.useState(true)
 
     React.useEffect(()=>{
@@ -51,6 +52,23 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             console.log(result)
             setUserView(result.data)
             setLoading(false)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+
+        fetch("/profilestats/isfollowingback",{
+            method: "POST",
+            headers:{
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({
+                userUsername: props.userUsername
+            })
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            setIsFollowingBack(result.stato)
         })
         .catch(err=>{
             console.log(err)
@@ -126,10 +144,17 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                             </IonCol>
                             <IonCol size="6" offset="3">
                                 {
-                                    isFollowing === false &&
+                                    isFollowing === false && isFollowingBack===false &&
                                     <IonButton color="primary" expand="block" onClick={followUser}>
                                         <IonIcon icon={personAdd} slot="start" />    
                                         Follow
+                                    </IonButton>
+                                }
+                                {
+                                    isFollowing === false && isFollowingBack===true &&
+                                    <IonButton color="primary" expand="block" onClick={followUser}>
+                                        <IonIcon icon={personAdd} slot="start" />    
+                                        Follow back
                                     </IonButton>
                                 }
                                 {

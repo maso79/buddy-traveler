@@ -8,7 +8,7 @@ import UserView from '../components/UserView';
 const People: React.FC=()=>{
     const [suggestions,setSuggestions]=React.useState([{_id: "",profilePicture: "", username: ""}])
     const [query,setQuery]=React.useState("")
-    const [modalUser,setModalUser]=React.useState(false)
+    const [modalUser,setModalUser]=React.useState(-1)
     const [userUsername,setUserUsername]=React.useState("")
     const [userId,setUserId]=React.useState("")
     var searchTimeout=setTimeout(()=>{},100)
@@ -59,7 +59,7 @@ const People: React.FC=()=>{
                 </IonGrid>
             </IonContent>
 
-            <IonModal trigger="modalUser" isOpen={modalUser}>
+            <IonModal trigger="modalUser" isOpen={modalUser===1}>
                 <UserView setModal={setModalUser} userUsername={userUsername} userId={userId} />
             </IonModal>
         </IonPage>

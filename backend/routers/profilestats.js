@@ -123,6 +123,22 @@ router.post("/isfollowing", (req,res) => {
   })
 })
 
+router.post("/isfollowingback", (req,res) => {
+  const userId=req.session.userId
+  const {userFollowedId}=req.body
+
+  console.log(userId)
+  console.log(userFollowedId)
+
+  Follower.findOne({
+    isFollowing: userFollowedId,
+    isFollowed: userId
+  },(err,data)=>{
+    if (data) res.json({stato: true})
+    else res.json({stato: false})
+  })
+})
+
 //  router.get("/followersnumber", (req, res) => {
 //   const email = req.session.email
 

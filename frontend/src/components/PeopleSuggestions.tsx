@@ -15,7 +15,7 @@ const PeopleSuggestions: React.FC<{ suggestions: Array<{_id: string, profilePict
                                 console.log(item)
                                 props.setUserIdView(item._id)
                                 props.setUserUsername(item.username)
-                                props.setModalUserView(true)
+                                props.setModalUserView(1)
                             }}>{item.username}</IonItem>
                         ))
                     }
