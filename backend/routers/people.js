@@ -1,18 +1,33 @@
 const express = require("express")
 const router = express()
 const User = require("../models/usermodel")
+const RecentUser = require("../models/recentusers")
+
+router.post("/recentsearch", async (req, res) => {
+  const { username } = req.body
+  const myId = req.session.userId
+
+  let x = User.findOne({ username })
+  x = await x.clone()
+
+  let result = new RecentUser({
+    myId,
+    userId: x._id
+  })
+
+  result.save()
+    .then(() => {
+      res.status(200).json({ stato: "success" })
+    })
+    .catch((err) => {
+      res.status(400).json({ err })
+    })
+
+})
 
 router.post("/find", async (req, res) => {
   const { letters } = req.body
   console.log(letters)
-
-  // let x = User.find({ username: new RegExp(letters, 'i') })
-  // x = await x.clone()
-  // if (x) {
-  //   res.status(200).json({ data: x })
-  // } else {
-  //   res.status(400).json({ stato: "Looks like there's nothing outta here -.-" })
-  // }
 
   await User.aggregate([
     {

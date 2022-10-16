@@ -2,6 +2,18 @@ const express = require("express");
 const router = express()
 const User = require("../models/usermodel")
 
+router.get("/profileprivacy", (req, res) => {
+    const userId = req.session.userId
+
+    User.findOneAndUpdate({ _id: userId }, { isPrivate: !isPrivate }, (err, data) => {
+        if (err) {
+            res.status(400).json({ stato: err })
+        } else {
+            res.status(200).json({ stato: "success" })
+        }
+    })
+})
+
 router.get("/all",async (req,res)=>{
     const userId=req.session.userId
     User.findOne({

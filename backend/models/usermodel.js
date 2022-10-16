@@ -44,6 +44,9 @@ const userSchema = new mongoose.Schema(
       countriesArray: Array,
       groupsArray: Array
     },
+    isPrivate: {
+      type: Boolean
+    },
     userLevel: {
       type: Number,
       required: true

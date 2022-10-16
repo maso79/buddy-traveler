@@ -44,6 +44,7 @@ router.post("/signup", async (req, res) => {
             countriesArray,
             groupsArray
           },
+          isPrivate: false,
           userLevel: 0
         })
 
