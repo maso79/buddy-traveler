@@ -1,5 +1,5 @@
 import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
-import { atCircle, camera, key, lockClosed } from 'ionicons/icons';
+import { atCircle, camera, key, lockClosed, logOut } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
 import ProfileEmail from '../components/ProfileEmail';
@@ -25,6 +25,10 @@ const items=[
         title: "Profile picture",
         icon: camera
     },
+    {
+        title: "Logout",
+        icon: logOut
+    }
 ]
 
 const Profile: React.FC=()=>{

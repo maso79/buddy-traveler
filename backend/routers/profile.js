@@ -2,10 +2,11 @@ const express = require("express");
 const router = express()
 const User = require("../models/usermodel")
 
-router.get("/profileprivacy", (req, res) => {
+router.get("/profileprivacy/:toggle", (req, res) => {
     const userId = req.session.userId
+    const {toggle}=req.params
 
-    User.findOneAndUpdate({ _id: userId }, { isPrivate: !isPrivate }, (err, data) => {
+    User.findOneAndUpdate({ _id: userId }, { isPrivate: toggle }, (err, data) => {
         if (err) {
             res.status(400).json({ stato: err })
         } else {
