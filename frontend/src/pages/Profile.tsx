@@ -1,6 +1,7 @@
 import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
-import { atCircle, camera, key, lockClosed, logOut } from 'ionicons/icons';
+import { atCircle, camera, key, lockClosed, logOut, shield } from 'ionicons/icons';
 import * as React from 'react';
+import { useHistory } from 'react-router';
 import BTHeader from '../components/BTHeader';
 import ProfileEmail from '../components/ProfileEmail';
 import ProfilePassword from '../components/ProfilePassword';
@@ -26,6 +27,10 @@ const items=[
         icon: camera
     },
     {
+        title: "Privacy",
+        icon: shield
+    },
+    {
         title: "Logout",
         icon: logOut
     }
@@ -37,6 +42,7 @@ const Profile: React.FC=()=>{
     const [modal,setModal]=React.useState(-1)
     const [path,setPath]=React.useState(placeholder_profile)
     const [loadingPicture,setLoadingPicture]=React.useState(true)
+    const history=useHistory()
 
     React.useEffect(()=>{
         console.log("use effect")
@@ -72,6 +78,17 @@ const Profile: React.FC=()=>{
         
         setIsLoading(false)
         setLoadingPicture(false)
+    }
+
+    const logout=()=>{
+        fetch("/auth/logout",{
+            method: "GET"
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            history.push("/")
+        })
+        .catch(err=>console.log(err))
     }
 
     return(
@@ -140,6 +157,9 @@ const Profile: React.FC=()=>{
                         </IonModal>
                         <IonModal trigger="modalPicture" isOpen={modal === 3}>
                             <ProfilePictures setModal={setModal} />
+                        </IonModal>
+                        <IonModal trigger="modalLogout" isOpen={modal===4} onIonModalDidDismiss={logout}>
+                            
                         </IonModal>
                     </>
                 }

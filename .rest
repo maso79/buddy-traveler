@@ -6,6 +6,10 @@ Content-Type: application/json
   "userUsername":"tiarossi"
 }
 
+###
+GET http://localhost:8080/profile/profileprivacy/false
+Cookie: s%3A6fqPG4qoqBMxq9dLVEAPy3vTH_BFg8-R.xrSIi8yBofdRcmCpz8Yat318tbvRQfgKhXLdZfOzVu8
+
 # POST http://localhost:8080/profilestats/addfollow
 # Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc
 # Content-Type: application/json
@@ -22,19 +26,33 @@ Content-Type: application/json
 # {
 #   "letters": "o" 
 # }
+###
 
-# POST http://localhost:8080/activity/createone
-# Cookie: s%3AM6rDnB0QpB4XF9IBJYGakDEZx84fyyQd.TVT4RKCVP4ma10gZUlBjs0pnGjMSQD5bmu2BobXpcBA
-# Content-Type: application/json
+POST http://localhost:8080/activity/createone
+Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc
+Content-Type: application/json
 
-# {
-#   "name":"Chiesa sacro cuore",
-#   "description":"Molto interessante, unica pecca il prezzo e le 2 ore di coda",
-#   "place":"NABOLI",
-#   "startTime":"2022-07-25T10:00:00.000+00:00",
-#   "endTime":"2022-07-25T10:00:00.000+00:00",
-#   "diaryId":"62e449124138234dc7c6c536"
-# }
+{
+  "name":"Chiesa sacro cuore",
+  "description":"Molto interessante, unica pecca il prezzo e le 2 ore di coda",
+  "place":"NABOLI",
+  "startTime":"2022-07-25T10:00:00.000+00:00",
+  "endTime":"2022-07-25T10:00:00.000+00:00",
+  "diaryId":"62e449124138234dc7c6c536"
+}
+
+###
+POST http://localhost:8100/diary/createone
+Cookie: s%3ALVPbVbEGAE3iggo1yisPqW_Gw4V19o4y.JInOCHaatqNprTzlDJ7zhaC0xlEuJnsnmSvQaOCIdcs
+Content-Type: application/json
+
+{
+    "name": "PROVA DIARIO",
+    "destination": "bnedfk",
+    "imageName": "",
+    "startDate": "2022-10-01",
+    "endDate": "2022-10-10"
+}
 
 //GET http://localhost:8080/activity/getactivities
 

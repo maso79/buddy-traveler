@@ -5,6 +5,7 @@ const User = require("../models/usermodel")
 router.get("/profileprivacy/:toggle", (req, res) => {
     const userId = req.session.userId
     const {toggle}=req.params
+    console.log(userId)
 
     User.findOneAndUpdate({ _id: userId }, { isPrivate: toggle }, (err, data) => {
         if (err) {

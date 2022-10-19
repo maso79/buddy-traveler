@@ -1,6 +1,7 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import { calendar, camera, location, pencil, trash } from 'ionicons/icons';
 import * as React from 'react';
+import ActivityUploadPicture from './ActivityUploadPicture';
 import BTHeaderModal from './BTHeaderModal';
 
 const ActivityView: React.FC<{ setModal: Function, activityId: String, activityName: String }>=(props)=>{
@@ -12,6 +13,7 @@ const ActivityView: React.FC<{ setModal: Function, activityId: String, activityN
         time: ""
     })
     const [caricamento,setCaricamento]=React.useState(true)
+    const [modalPictures,setModalPictures]=React.useState(-1)
 
     React.useEffect(()=>{
         fetch(`/activity/getone/${props.activityId}`,{
@@ -117,7 +119,7 @@ const ActivityView: React.FC<{ setModal: Function, activityId: String, activityN
                                                     </IonButton>
                                                 </IonCol>
                                                 <IonCol size="3">
-                                                    <IonButton color="light">
+                                                    <IonButton color="light" onClick={()=>setModalPictures(0)}>
                                                         <IonIcon icon={camera} className="padding-right-minimum" />
                                                     </IonButton>
                                                 </IonCol>
@@ -130,6 +132,9 @@ const ActivityView: React.FC<{ setModal: Function, activityId: String, activityN
                     </IonGrid>
 
                 }
+                <IonModal isOpen={modalPictures===0}>
+                    <ActivityUploadPicture setModal={setModalPictures} activityId={""+props.activityId} />
+                </IonModal>
             </IonContent>
         </IonPage>
     )
