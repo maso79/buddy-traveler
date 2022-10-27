@@ -25,6 +25,21 @@ router.post("/recentsearch", async (req, res) => {
 
 })
 
+router.post("/checkusername", async (req, res) => {
+  const {username} = req.body
+  const myId = req.session.userId
+
+  let x = User.findOne({ _id: myId })
+  x = await x.clone()
+
+  if (username == x.username) {
+    res.status(200).json({ stato: true })
+  } else {
+    res.status(200).json({ stato: false })
+  }
+
+})
+
 router.post("/find", async (req, res) => {
   const { letters } = req.body
   console.log(letters)

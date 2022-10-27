@@ -2,7 +2,8 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonContent, Io
 import * as React from 'react';
 
 const PeopleSuggestions: React.FC<{ suggestions: Array<{_id: string, profilePicture: string, username: string}>, setUserIdView: Function, setUserUsername: Function, setModalUserView: Function }>=(props)=>{
-    return(
+
+    return (
         <IonCard>
             <IonCardHeader>
                 <IonCardSubtitle>Suggestions</IonCardSubtitle>

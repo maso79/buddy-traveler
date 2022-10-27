@@ -16,7 +16,26 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [isFollowingBack,setIsFollowingBack]=React.useState(false)
     const [loading,setLoading]=React.useState(true)
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
+
+        fetch("/people/checkusername", {
+            method: "POST",
+            headers: {
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({
+                username: props.userUsername
+            })
+        })
+        .then(result => result.json())
+        .then(result => {
+            if (result.stato) {
+                window.location.href = "/profile"
+            } else {
+                console.log("non è il tuo profilo")
+            }
+        })
+
         //Controllo se sto seguendo l'utente che sto visualizzando ora
         fetch("/profilestats/isfollowing",{
             method: "POST",
@@ -36,7 +55,6 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             console.log(err)
         })
 
-        console.log(props.userUsername)
         //recupero i dati dell'utente 
         fetch("/profilestats/getuserstats",{
             method: "POST",
