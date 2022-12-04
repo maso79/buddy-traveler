@@ -24,7 +24,7 @@ const ActivityCreate: React.FC<{ diaryId: String, setModal: Function, setUpdate:
             body: JSON.stringify({
                 name,
                 description,
-                place: placeId,
+                place,
                 date: startDate,
                 time,
                 diaryId: props.diaryId

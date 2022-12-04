@@ -47,7 +47,7 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
             },
             body: JSON.stringify({
                 name,
-                destination: destinationId,
+                destination,
                 startDate,
                 endDate
             })
