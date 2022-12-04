@@ -107,7 +107,7 @@ const ActivityCreate: React.FC<{ diaryId: String, setModal: Function, setUpdate:
                             </IonItem>
                         </IonCol>
                         <IonCol size="12">
-                            <IonButton color="primary" expand="block" onClick={activity_create} disabled={buttonDisabled}>Create activity</IonButton>
+                            <IonButton color="primary" expand="block" onClick={activity_create}>Create activity</IonButton>
                         </IonCol>
                         <IonCol size="12">
                             <IonButton color="light" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>

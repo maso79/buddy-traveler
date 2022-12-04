@@ -89,10 +89,8 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, u
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="12">
-                                    <IonImg src={path} alt="Placeholder" />
-                                </IonCol>
-                                <IonCol size="12">
                                     <IonCard button onClick={()=>setModal(1)}>
+                                    <IonImg src={path} alt="Placeholder" />
                                         <IonCardHeader>
                                             <IonCardSubtitle>
                                             </IonCardSubtitle>

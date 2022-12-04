@@ -119,7 +119,7 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
                        </IonCol>
                         <IonCol size="12">
                             <br />
-                           <IonButton color="primary" expand="block" onClick={create} disabled={buttonDisabled}>Create diary</IonButton>
+                           <IonButton color="primary" expand="block" onClick={create}>Create diary</IonButton>
                        </IonCol>
                        <IonCol size="12">
                            <IonButton color="primary" fill="clear" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>

@@ -7,6 +7,7 @@ import ProfileEmail from '../components/ProfileEmail';
 import ProfilePassword from '../components/ProfilePassword';
 import ProfilePersonalInfo from '../components/ProfilePersonalInfo';
 import ProfilePictures from '../components/ProfilePicture';
+import ProfilePrivacy from '../components/ProfilePrivacy';
 import placeholder_profile from '../pictures/placeholder-profile.png'
 
 const items=[
@@ -158,7 +159,10 @@ const Profile: React.FC=()=>{
                         <IonModal trigger="modalPicture" isOpen={modal === 3}>
                             <ProfilePictures setModal={setModal} />
                         </IonModal>
-                        <IonModal trigger="modalLogout" isOpen={modal===4} onIonModalDidDismiss={logout}>
+                        <IonModal trigger="modalPrivacy" isOpen={modal===4}>
+                            <ProfilePrivacy setModal={setModal} />
+                        </IonModal>
+                        <IonModal trigger="modalLogout" isOpen={modal===5} onIonModalDidDismiss={logout}>
                             
                         </IonModal>
                     </>
