@@ -1,4 +1,4 @@
-import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonAlert, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import { atCircle, camera, key, lockClosed, logOut, shield } from 'ionicons/icons';
 import * as React from 'react';
 import { useHistory } from 'react-router';
@@ -37,7 +37,7 @@ const items=[
     }
 ]
 
-const Profile: React.FC=()=>{
+const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=(props)=>{
     const [isLoading,setIsLoading]=React.useState(true)
     const [name,setName]=React.useState("")
     const [modal,setModal]=React.useState(-1)
@@ -87,7 +87,9 @@ const Profile: React.FC=()=>{
         })
         .then(result=>result.json())
         .then(result=>{
-            history.push("/")
+            props.setAutorizzato(false)
+            props.setConfigurato(true)
+            history.push("/signin")
         })
         .catch(err=>console.log(err))
     }
@@ -162,9 +164,19 @@ const Profile: React.FC=()=>{
                         <IonModal trigger="modalPrivacy" isOpen={modal===4}>
                             <ProfilePrivacy setModal={setModal} />
                         </IonModal>
-                        <IonModal trigger="modalLogout" isOpen={modal===5} onIonModalDidDismiss={logout}>
-                            
-                        </IonModal>
+                        <IonAlert
+                            isOpen={modal === 5}
+                            onDidDismiss={()=>setModal(-1)}
+                            header="Are you sure?"
+                            message="Do you really want to logout?"
+                            buttons={[{
+                                text: "Close",
+                                role: "cancel"
+                            },{
+                                text: "Persist",
+                                handler: ()=>logout()
+                            }]}
+                        />
                     </>
                 }
             </IonContent>

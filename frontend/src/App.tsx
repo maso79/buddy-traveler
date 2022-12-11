@@ -49,24 +49,32 @@ const App: React.FC = () => {
 
   useEffect(()=>{
     setConfigurato(getItemLocalStorage("configurato"))
-    console.log(document.cookie)
+    console.log(getItemLocalStorage("configurato"))
 
-    fetch("/auth/authorized",{
-      method: "GET"
-    })
-    .then(result=>result.json())
-    .then(result=>{
-        if (result.stato==true) {
-            console.log("ok")
-            setAutorizzato(true)
-        }
-        else {
-            setAutorizzato(false)
-        }
-    })
-    .catch(err=>{
-        setAutorizzato(false)
-    })
+    try{
+      fetch("/auth/authorized",{
+        method: "GET"
+      })
+      .then(result=>result.json())
+      .then(result=>{
+        console.log(result)
+          if (result.stato===true) {
+              console.log("ok")
+              setAutorizzato(true)
+          }
+          else {
+              setAutorizzato(false)
+          }
+      })
+      .catch(err=>{
+        console.log("non auth")
+          setAutorizzato(false)
+      })
+    }
+    catch(e){
+      console.log("non auth")
+      setAutorizzato(false)
+    }
   },[])
 
   return(  
@@ -90,7 +98,21 @@ const App: React.FC = () => {
           </Switch>
         }
         {
-          configurato === true && autorizzato &&
+          configurato === true && autorizzato===false &&
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/signin" />
+            </Route>
+            <Route exact path="/signup">
+              <Signup />
+            </Route>
+            <Route exact path="/signin">
+              <SignIn setConfigurato={setConfigurato} setAutorizzato={setAutorizzato} />
+            </Route>
+          </Switch>
+        }
+        {
+          configurato === true && autorizzato===true &&
               <IonTabs>
                 <IonRouterOutlet>
                   <Switch>
@@ -104,7 +126,7 @@ const App: React.FC = () => {
                         <People />
                       </Route>
                       <Route exact path="/profile">
-                        <Profile />  
+                        <Profile setAutorizzato={setAutorizzato} setConfigurato={setConfigurato} />  
                       </Route>
                       <Route exact path="/">
                         <Redirect to="/home" />
