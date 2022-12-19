@@ -25,6 +25,69 @@ router.post("/recentsearch", async (req, res) => {
 
 })
 
+router.get("/recentsearch", async (req,res)=>{
+  const myId=req.session.userId
+
+  console.log(myId)
+
+  const result=await RecentUser.aggregate([
+    {
+      '$match': {
+        'myId': myId.toString()
+      }
+    }, {
+      '$sort': {
+        'createdAt': -1
+      }
+    }, {
+      '$addFields': {
+        'id_string': {
+          '$toString': '$userId'
+        }
+      }
+    }, {
+      '$group': {
+        '_id': '$id_string', 
+        'count': {
+          '$count': {}
+        }
+      }
+    }, {
+      '$limit': 5
+    }, {
+      '$addFields': {
+        'id_obj': {
+          '$toObjectId': '$_id'
+        }
+      }
+    }, {
+      '$lookup': {
+        'from': 'users', 
+        'localField': 'id_obj', 
+        'foreignField': '_id', 
+        'as': 'user'
+      }
+    }, {
+      '$unwind': {
+        'path': '$user', 
+        'preserveNullAndEmptyArrays': true
+      }
+    }, {
+      '$addFields': {
+        'username': '$user.username'
+      }
+    }, {
+      '$project': {
+        'username': 1
+      }
+    }
+  ],(err,data)=>{
+    console.log(data)
+    if (data) res.status(200).json({stato: data})
+    else res.status(200).json({ stato: false })
+  })
+})
+
 router.post("/checkusername", async (req, res) => {
   const {username} = req.body
   const myId = req.session.userId

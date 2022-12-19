@@ -7,6 +7,8 @@ const recentUserModel = new mongoose.Schema({
   userId: {
     type: String
   }
+},{
+  timestamps: true
 })
 
 const RecentUser = mongoose.model("RecentUser", recentUserModel)

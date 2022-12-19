@@ -92,6 +92,16 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         .catch(err=>{
             console.log(err)
         })
+
+        fetch("/people/recentsearch",{
+            method: "POST",
+            headers:{
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({
+                username: props.userUsername
+            })
+        })
     },[])
 
 

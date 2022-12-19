@@ -53,7 +53,7 @@ const People: React.FC=()=>{
                             }
                         </IonCol>
                         <IonCol size="12">
-                            <PeopleRecent />
+                            <PeopleRecent setUserIdView={setUserId} setUserUsername={setUserUsername} setModalUserView={setModalUser}/>
                         </IonCol>
                     </IonRow>
                 </IonGrid>
