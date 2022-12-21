@@ -1,4 +1,4 @@
-import { IonAlert, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonAlert, IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText, useIonActionSheet } from '@ionic/react';
 import { atCircle, camera, key, lockClosed, logOut, shield } from 'ionicons/icons';
 import * as React from 'react';
 import { useHistory } from 'react-router';
@@ -12,29 +12,36 @@ import placeholder_profile from '../pictures/placeholder-profile.png'
 
 const items=[
     {
-        title: "Your personal information",
+        text: "Your personal information",
         icon: lockClosed
     },
     {
-        title: "Your email",
+        text: "Your email",
         icon: atCircle
     },
     {
-        title: "Your password",
+        text: "Your password",
         icon: key
     },
     {
-        title: "Profile picture",
+        text: "Profile picture",
         icon: camera
     },
     {
-        title: "Privacy",
+        text: "Privacy",
         icon: shield
     },
     {
-        title: "Logout",
+        text: "Logout",
         icon: logOut
-    }
+    },
+    {
+        text: 'Close',
+        role: 'cancel',
+        data: {
+            action: 'cancel',
+        },
+    },
 ]
 
 const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=(props)=>{
@@ -43,6 +50,8 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
     const [modal,setModal]=React.useState(-1)
     const [path,setPath]=React.useState(placeholder_profile)
     const [loadingPicture,setLoadingPicture]=React.useState(true)
+    const [actionsheet,setActionsheet]=React.useState(false)
+    const [present] = useIonActionSheet();
     const history=useHistory()
 
     React.useEffect(()=>{
@@ -136,9 +145,31 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                 <IonCol size="12" className="text-center">
                                     <IonText><h1>Hi, {name}</h1></IonText>
                                 </IonCol>
+                                <IonCol size="6" className="text-center">
+                                    <IonText><h1>131</h1><br />followers</IonText>
+                                </IonCol>
+                                <IonCol size="6" className="text-center">
+                                    <IonText><h1>25</h1><br />followed</IonText>
+                                </IonCol>
+                                <IonCol size="12">
+                                    <IonButton
+                                        className="text-left"
+                                        expand="block"
+                                        onClick={() =>
+                                        present({
+                                            header: 'Settings',
+                                            subHeader: 'Manage your profile',
+                                            buttons: items,
+                                            onDidDismiss: ()=>setActionsheet(false),
+                                        })
+                                        }
+                                    >
+                                        Settings
+                                    </IonButton>
+                                </IonCol>
                             </IonRow>
                         </IonGrid>
-                        <IonList inset lines="full">
+                        {/* <IonList inset lines="full">
                             {
                                 items.map((item,i)=>(
                                     <IonItem key={i} button onClick={()=>setModal(i)}>
@@ -147,7 +178,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                     </IonItem>
                                 ))
                             }
-                        </IonList>
+                        </IonList> */}
 
                         <IonModal trigger="modalPersonalInformation" isOpen={modal === 0}>
                             <ProfilePersonalInfo setModal={setModal} />

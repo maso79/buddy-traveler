@@ -1,4 +1,4 @@
-import { IonCol, IonContent, IonGrid, IonModal, IonPage, IonRow, IonSearchbar } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonModal, IonPage, IonRow, IonSearchbar, IonText } from '@ionic/react';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
 import PeopleRecent from '../components/PeopleRecent';
