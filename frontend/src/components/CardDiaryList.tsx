@@ -7,8 +7,11 @@ const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, 
 
     return (
         <IonCard button onClick={()=>props.setModalDiaries(props._id)}>
-            <IonImg src={props.thumbnail !== "" ? ""+props.thumbnail : placeholder} />
-            <IonCardHeader>
+            <div>
+                <IonImg src={props.thumbnail !== "" ? ""+props.thumbnail : placeholder} />
+                <h1 className="text-on-image">{props.name}</h1>
+            </div>
+            {/* <IonCardHeader>
                 <IonCardTitle>{props.name}</IonCardTitle>
                 <br />
                 <IonCardSubtitle>
@@ -27,7 +30,7 @@ const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, 
                         </IonCol>
                     </IonRow>
                 </IonCardSubtitle>
-            </IonCardHeader>
+            </IonCardHeader> */}
         </IonCard>
     )
 }

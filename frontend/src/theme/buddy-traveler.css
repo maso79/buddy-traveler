@@ -55,3 +55,13 @@
 .text-left{
     text-align: left !important;
 }
+
+.text-on-image{
+    text-align: center !important;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white !important;
+    text-shadow: 5px 5px 5px black !important;
+}

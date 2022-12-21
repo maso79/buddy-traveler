@@ -74,13 +74,17 @@ const Diaries: React.FC=()=>{
                         }
                         {
                             diariesNumber > 0 &&
-                            <IonList>
-                                {
-                                        diaries.map((diary, i) => (
-                                        <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={diary.imageName} setModalDiaries={setModalDiaries} />
-                                    ))
-                                }
-                            </IonList>
+                            <IonGrid>
+                                <IonRow>
+                                    {
+                                            diaries.map((diary, i) => (
+                                            <IonCol sizeXs="12" sizeMd="6">
+                                                <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={diary.imageName} setModalDiaries={setModalDiaries} />
+                                            </IonCol>
+                                        ))
+                                    }
+                                </IonRow>
+                            </IonGrid>
                         }
                         {
                             diariesNumber > 0 &&
