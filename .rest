@@ -1,14 +1,17 @@
-POST http://localhost:8080/profilestats/getuserstats
-Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc
-Content-Type: application/json
+GET http://localhost:8080/diaries
+Cookie: s%3Arj4u5ftikBkQOchhmCC9_ilZySxAyw9J.z4E1UQLkfEPb9tQj%2BYL82VU0oc2%2Ba9UYIwJUxiXh558
 
-{
-  "userUsername":"tiarossi"
-}
+# POST http://localhost:8080/profilestats/getuserstats
+# Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc
+# Content-Type: application/json
 
-###
-GET http://localhost:8080/profile/profileprivacy/false
-Cookie: s%3A6fqPG4qoqBMxq9dLVEAPy3vTH_BFg8-R.xrSIi8yBofdRcmCpz8Yat318tbvRQfgKhXLdZfOzVu8
+# {
+#   "userUsername":"tiarossi"
+# }
+
+# ###
+# GET http://localhost:8080/profile/profileprivacy/false
+# Cookie: s%3A6fqPG4qoqBMxq9dLVEAPy3vTH_BFg8-R.xrSIi8yBofdRcmCpz8Yat318tbvRQfgKhXLdZfOzVu8
 
 # POST http://localhost:8080/profilestats/addfollow
 # Cookie: s%3AO8D65Y6Ca96RE2o3JSaHrI6vtAH6b8jV.pWtG1xFSQOSrMeBqHwBxqJUJHrJGP%2BgJDTrLRPcnp%2Bc

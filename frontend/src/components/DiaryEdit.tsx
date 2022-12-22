@@ -113,6 +113,10 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
         props.setUpdate(props.update+1)
     }
 
+    const testApi = () => {
+        fetch("/diary/showuserslist")
+    }
+
     return(
         <IonPage>
             <BTHeaderModal setModal={props.setModal} title="Diary settings" />
@@ -132,6 +136,9 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                     loading === false &&
                     <IonGrid>
                         <IonRow>
+                            <IonCol size="12">
+                                <IonButton expand="block" onClick={testApi}>test api</IonButton>
+                            </IonCol>
                             <IonCol size="6" offset="3" className="text-center">
                                 <IonImg src={path} alt="picture" />
                             </IonCol>

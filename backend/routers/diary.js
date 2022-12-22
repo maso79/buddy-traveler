@@ -1,6 +1,9 @@
 const express = require("express")
 const router = express()
 const Diary = require("../models/diarymodel")
+const Follower = require("../models/followersmodel")
+const User = require("../models/usermodel")
+const DiaryBanList = require("../models/diarylistmodel")
 const { generateRetriveDiaryURL } = require("./s3")
 
 router.post("/createone", (req, res) => {
@@ -80,6 +83,55 @@ router.post("/updatediary/:diaryId", (req, res) => {
       if (data) res.json({ stato: true })
       else res.json({ stato: false })
     })
+})
+
+//Diary visibility
+
+//mostra lista followers
+router.get("/showuserslist", async (req, res) => {
+  const userId = req.session.userId
+  var arrayUsers = []
+
+  var x = Follower.find({ isFollowed: userId })
+
+  x = await x.clone()
+
+  for (const element of x) {
+    var z = User.findOne({ _id: element.isFollowing })
+
+    z = await z.clone()
+
+    arrayUsers.push({ username: z.username, userId: z._id })
+  }
+
+  res.json({ data: arrayUsers })
+})
+
+//cambia accesso al diario
+router.post("/changevisibility", (req, res) => {
+  const followerId = req.body._id
+  const myId = req.session.userId
+  const banUser = req.body.change
+
+  if (banUser) { //bisogna nascondere a questo utente il diario
+    const result = new DiaryBanList({ userDiaryId: myId, userNotAllowedId: followerId })
+
+    result.save()
+      .then(() => {
+        res.status(200).json({ stato: "success" })
+      }).catch(err => {
+        res.status(400).json({ stato: "Error: " + err })
+      })
+
+  } else { //bisogna mostrare a questo utente il diario
+    DiaryBanList.findOneAndRemove({ userDiaryId: myId, userNotAllowedId: followerId }, (err, data) => {
+      if (err) {
+        res.status(400).json({ err })
+      } else {
+        res.status(200).json({ stato: "success" })
+      }
+    })
+  }
 })
 
 module.exports = router

@@ -112,8 +112,8 @@ router.get("/logout", (req, res) => {
 
 //Check authorized
 router.get("/authorized", (req, res) => {
-  if (req.session.isAuth == true) res.status(200).json({"stato": true})
-  else res.status(200).json({"stato": false})
+  if (req.session.isAuth == true) res.status(200).json({ "stato": true })
+  else res.status(200).json({ "stato": false })
 })
 
 module.exports = router;

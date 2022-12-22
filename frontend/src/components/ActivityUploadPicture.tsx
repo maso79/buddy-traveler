@@ -12,7 +12,7 @@ const ActivityUploadPicture: React.FC<{ setModal: Function, activityId: string }
                         <IonCol size="12">
                             <IonText>Choose a picture</IonText>
                             <form>
-                                <input type="file" name="profileImage" id=""  />
+                                <input type="file" name="profileImage" id="" />
                                 <br /><br />
                             </form>
                         </IonCol>
