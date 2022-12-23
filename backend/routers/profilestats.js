@@ -2,6 +2,7 @@ const express = require("express")
 const router = express()
 const User = require("../models/usermodel")
 const Follower = require("../models/followersmodel")
+const FriendlyRequest = require("../models/requestmodel")
 
 router.post("/getuserstats", async (req, res) => {
   const { userUsername } = req.body
@@ -11,7 +12,7 @@ router.post("/getuserstats", async (req, res) => {
 
   if (x) {
     let userEmail = x.email
-    let userId= x._id
+    let userId = x._id
     let numFollowers = Follower.find({ isFollowed: userId }).count()
     numFollowers = await numFollowers.clone()
 
@@ -22,7 +23,7 @@ router.post("/getuserstats", async (req, res) => {
   } else {
     res.status(400).json({ stato: "not found" })
   }
-})  
+})
 
 router.post("/addfollow", async (req, res) => {
   const { userUsername } = req.body
@@ -63,7 +64,7 @@ router.post("/removefollow", async (req, res) => {
       res.status(400).json({ err })
     } else {
       res.status(200).json({ stato: "success" })
-    }  
+    }
   })
 
 })
@@ -107,9 +108,9 @@ router.post("/removediary", (req, res) => {
 
 })
 
-router.post("/isfollowing", (req,res) => {
-  const userId=req.session.userId
-  const {userFollowedId}=req.body
+router.post("/isfollowing", (req, res) => {
+  const userId = req.session.userId
+  const { userFollowedId } = req.body
 
   console.log(userId)
   console.log(userFollowedId)
@@ -117,26 +118,95 @@ router.post("/isfollowing", (req,res) => {
   Follower.findOne({
     isFollowing: userId,
     isFollowed: userFollowedId
-  },(err,data)=>{
-    if (data) res.json({stato: true})
-    else res.json({stato: false})
+  }, (err, data) => {
+    if (data) res.json({ stato: true })
+    else res.json({ stato: false })
   })
 })
 
-router.post("/isfollowingback", (req,res) => {
-  const userId=req.session.userId
-  const {userFollowedId}=req.body
+router.post("/isfollowingback", (req, res) => {
+  const userId = req.session.userId
+  const { userFollowedId } = req.body
 
-  console.log("userId "+userId)
-  console.log("userFollowedId "+userFollowedId)
+  console.log("userId " + userId)
+  console.log("userFollowedId " + userFollowedId)
 
   Follower.findOne({
     isFollowing: userFollowedId,
     isFollowed: userId
-  },(err,data)=>{
-    if (data) res.json({stato: true})
-    else res.json({stato: false})
+  }, (err, data) => {
+    if (data) res.json({ stato: true })
+    else res.json({ stato: false })
   })
+})
+
+// Endpoint richieste following
+
+router.post("/makefriendlyrequest", (req, res) => {
+  const userId = req.session.userId
+  const idToSend = req.body.id //id della persona a cui mandi la richiesta
+
+  const result = new FriendlyRequest({
+    requestedId: userId,
+    receivedId: idToSend,
+    state: "pending"
+  })
+
+  result.save()
+    .then(() => {
+      res.status(200).json({ stato: "success" })
+    })
+    .catch(err => {
+      res.status(400).json({ stato: "Err" + err })
+    })
+
+})
+
+router.post("/declinefriendlyrequest", (req, res) => {
+  const userId = req.session.userId
+  const idToDecline = req.body.id
+
+  FriendlyRequest.findOneAndDelete({ requestedId: idToDecline, receivedId: userId }, (err, data) => {
+    if (data) {
+      res.status(200).json({ stato: "success" })
+    } else {
+      res.status(400).json({ stato: "Err" + err })
+    }
+  })
+
+})
+
+router.post("/acceptfriendlyrequest", (req, res) => {
+  const userId = req.session.userId //mio id
+  const idToAccept = req.body.id //id della persona a cui devo accettare la richiesta
+
+  FriendlyRequest.findOneAndUpdate({ requestedId: idToAccept, receivedId: userId }, { state: "accepted" }, {}, (err, data) => {
+    if (data) {
+      res.status(200).json({ stato: "success" })
+    } else {
+      res.status(400).json({ stato: "Err" + err })
+    }
+  })
+})
+
+
+router.post("/checkrequest", (req, res) => {
+  const userId = req.session.userId //mio id
+  const idToCheck = req.body.id //id della persona a cui ho mandato la richiesta, quindi l'id del profilo di quella persona
+
+  FriendlyRequest.findOne({ requestedId: userId, receivedId: idToCheck }, (err, data) => {
+    if (data) {
+      if (data.state == "pending") {
+        res.status(200).json({ stato: "pending" })
+
+      } else if (data.state == "accepted") {
+        res.status(200).json({ stato: "accepted" })
+      }
+    } else {
+      res.status(400).json({ stato: "not found" }) //mostrare la pagina come se la richiesta non fosse mai stata mandata
+    }
+  })
+
 })
 
 module.exports = router
