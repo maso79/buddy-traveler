@@ -9,6 +9,7 @@ const activity = require("./routers/activity")
 const profilestats = require("./routers/profilestats")
 const places = require("./routers/places")
 const people = require("./routers/people")
+const settings = require("./routers/settings")
 const session = require("express-session")
 const MongoDBSession = require("connect-mongodb-session")(session)
 const morgan = require("morgan")
@@ -53,7 +54,7 @@ app.use(
   })
 )
 
-app.set("trust-proxy",1)
+app.set("trust-proxy", 1)
 
 app.use(morgan("dev"))
 
@@ -67,6 +68,7 @@ app.use("/profile", profile)
 app.use("/activity", activity)
 app.use("/places", places)
 app.use("/people", people)
+app.use("/settings", settings)
 
 
 
