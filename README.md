@@ -2,5 +2,5 @@
 
 Currently developing a mobile-app for travels
 
-codingteo: frontend
+codingteo: frontend <br>
 maso79: backend
