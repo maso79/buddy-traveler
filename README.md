@@ -1,5 +1,6 @@
 # buddy-traveler
-maso79
-
 
 Currently developing a mobile-app for travels
+
+codingteo: frontend
+maso79: backend
