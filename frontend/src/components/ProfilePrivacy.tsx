@@ -3,24 +3,19 @@ import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 
 const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
-    const [name,setName]=React.useState("")
-    const [surname,setSurname]=React.useState("")
-    const [username,setUsername]=React.useState("")
+    const [privacy,setPrivacy]=React.useState(false)
     const [toastSuccess,setToastSuccess]=React.useState(false)
     const [toastError,setToastError]=React.useState(false)
     const [toastErrorText,setToastErrorText]=React.useState("")
 
     React.useEffect(()=>{
-        fetch("/profile/all",{
+        fetch("/profile/privacy",{
             method: "GET"
         })
         .then(result=>result.json())
         .then(result=>{
-            if (result.user.email){
-                setName(result.user.name)
-                setSurname(result.user.surname)
-                setUsername(result.user.username)
-            }
+            console.log(result)
+            setPrivacy(result.user.isPrivate)
         })
         .catch(err=>{
             console.log(err)
@@ -28,28 +23,21 @@ const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
     },[])
 
     const update=()=>{
-        console.log(name)
-        fetch("/update/userinfo",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                name,
-                surname,
-                username
-            })
+        fetch(`/profile/profileprivacy/${privacy}`,{
+            method: "GET"
         })
         .then(result=>result.json())
         .then(result=>{
+            console.log(result)
             if (result.stato==="success") setToastSuccess(true)
             else{
-                setToastErrorText(result.stato)
+                setToastErrorText("Something went wrong. Try again later")
                 setToastError(true)
             }
         })
         .catch(err=>{
-            setToastErrorText(err.stato)
+            console.log(err)
+            setToastErrorText("Something went wrong. Try again later")
             setToastError(true)
         })
     }
@@ -63,11 +51,11 @@ const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
                         <IonCol size="12">
                             <IonItem>
                                 <IonLabel>Private profile</IonLabel>
-                                <IonToggle slot="end"></IonToggle>
+                                <IonToggle checked={privacy} onIonChange={(e)=>setPrivacy(e.detail.checked)} slot="end"></IonToggle>
                             </IonItem>
                         </IonCol>
                         <IonCol size="12">
-                            <IonButton color="primary" expand="block">Save</IonButton>
+                            <IonButton color="primary" expand="block" onClick={()=>update()}>Save</IonButton>
                         </IonCol>
                         <IonCol size="12">
                             <IonButton color="light" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>
@@ -80,7 +68,7 @@ const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
                     duration={2000}
                     color="success"
                     header="Success!"
-                    message="Your personal information was updated"
+                    message="Your preferences have been updated!"
                 />
                 <IonToast
                     isOpen={toastError}
