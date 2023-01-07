@@ -1,5 +1,5 @@
-import { IonAlert, IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText, useIonActionSheet } from '@ionic/react';
-import { atCircle, camera, key, lockClosed, logOut, shield } from 'ionicons/icons';
+import { IonActionSheet, IonAlert, IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText, useIonActionSheet } from '@ionic/react';
+import { atCircle, camera, closeCircle, key, lockClosed, logOut, shield } from 'ionicons/icons';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import BTHeader from '../components/BTHeader';
@@ -10,39 +10,6 @@ import ProfilePictures from '../components/ProfilePicture';
 import ProfilePrivacy from '../components/ProfilePrivacy';
 import placeholder_profile from '../pictures/placeholder-profile.png'
 
-const items=[
-    {
-        text: "Your personal information",
-        icon: lockClosed
-    },
-    {
-        text: "Your email",
-        icon: atCircle
-    },
-    {
-        text: "Your password",
-        icon: key
-    },
-    {
-        text: "Profile picture",
-        icon: camera
-    },
-    {
-        text: "Privacy",
-        icon: shield
-    },
-    {
-        text: "Logout",
-        icon: logOut
-    },
-    {
-        text: 'Close',
-        role: 'cancel',
-        data: {
-            action: 'cancel',
-        },
-    },
-]
 
 const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=(props)=>{
     const [isLoading,setIsLoading]=React.useState(true)
@@ -54,6 +21,64 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
     const [present] = useIonActionSheet();
     const history=useHistory()
 
+    const items=[
+        {
+            text: "Your personal information",
+            icon: lockClosed,
+            role: "edit",
+            handler: ()=>{
+                setModal(0)
+            }
+        },
+        {
+            text: "Your email",
+            icon: atCircle,
+            role: "edit",
+            handler: ()=>{
+                setModal(1)
+            }
+        },
+        {
+            text: "Your password",
+            icon: key,
+            modal: 2,
+            role: "edit",
+                hanhandler: ()=> ()=>setModal(2)
+         },
+        {
+            text: "Profile picture",
+            icon: camera,
+            role: "edit",
+            handler: ()=>{
+                setModal(3)
+            }
+        },
+        {
+            text: "Privacy",
+            icon: shield,
+            role: "edit",
+            handler: ()=>{
+                setModal(4)
+            }
+        },
+        {
+            text: "Logout",
+            icon: logOut,
+            role: "edit",
+            handler: ()=>{
+                setModal(5)
+            }
+        },
+        {
+            text: 'Close',
+            role: 'cancel',
+            icon: closeCircle,
+            data: {
+                handler: 'cancel',
+            },
+        },
+    ]
+    
     React.useEffect(()=>{
         console.log("use effect")
 
@@ -155,14 +180,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                     <IonButton
                                         className="text-left"
                                         expand="block"
-                                        onClick={() =>
-                                        present({
-                                            header: 'Settings',
-                                            subHeader: 'Manage your profile',
-                                            buttons: items,
-                                            onDidDismiss: ()=>setActionsheet(false),
-                                        })
-                                        }
+                                        onClick={() =>setActionsheet(true) }
                                     >
                                         Settings
                                     </IonButton>
@@ -207,6 +225,12 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                 text: "Persist",
                                 handler: ()=>logout()
                             }]}
+                        />
+                        <IonActionSheet 
+                            isOpen={actionsheet}
+                            onDidDismiss={()=>setActionsheet(false)}
+                            header={"User settings"}
+                            buttons={items}
                         />
                     </>
                 }

@@ -11,9 +11,7 @@ const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, 
                 <IonImg src={props.thumbnail !== "" ? ""+props.thumbnail : placeholder} />
                 <h1 className="text-on-image">{props.name}</h1>
             </div>
-            {/* <IonCardHeader>
-                <IonCardTitle>{props.name}</IonCardTitle>
-                <br />
+            <IonCardHeader>
                 <IonCardSubtitle>
                     <IonRow>
                         <IonCol size="12">
@@ -30,7 +28,7 @@ const CardDiaryList: React.FC<{ _id: String, name: String, destination: String, 
                         </IonCol>
                     </IonRow>
                 </IonCardSubtitle>
-            </IonCardHeader> */}
+            </IonCardHeader>
         </IonCard>
     )
 }
