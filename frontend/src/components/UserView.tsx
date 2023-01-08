@@ -22,9 +22,10 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         role: "",
         handler: ()=>{}
     }])
+    const [reload,setReload]=React.useState(0)
 
     React.useEffect(() => {
-
+        setOptions([])
         fetch("/people/checkusername", {
             method: "POST",
             headers: {
@@ -49,7 +50,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         })
         .then(result=>result.json())
         .then(result=>{
-            console.log(result.following)
+            console.log(result)
             if (result.following){
                 //non seguire più
                 options.push({
@@ -59,7 +60,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     handler: ()=>unfollowUser()
                 })
             }
-            else if (result.isPrivate){
+            else if (result.private){
                 //richiedi
                 options.push({
                     text: "Send friendship request",
@@ -171,7 +172,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                 username: props.userUsername
             })
         })
-    },[])
+    },[reload])
 
 
     const followUser=()=>{
@@ -188,6 +189,8 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         .then(result=>{
             if(result.stato==="success"){
                 setIsFolllowing(true)
+                setOptions([])
+                setReload(reload+1)
             }
         })
         .catch(err=>{
@@ -209,6 +212,8 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         .then(result=>{
             if(result.stato==="success"){
                 setIsFolllowing(false)
+                setOptions([])
+                setReload(reload+1)
             }
         })
         .catch(err=>{

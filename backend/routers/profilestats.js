@@ -355,6 +355,7 @@ const fsGetPrivate=(userId,checkUserId)=>{
       _id: 0,
       isPrivate: 1
     },(err,data)=>{
+      console.log(data)
       if (data.isPrivate) resolve(true)
       else resolve(false)
     })
@@ -438,7 +439,7 @@ router.get("/friendship-status/:checkUserId",async (req,res)=>{
     //     friendshipRequest="not found" //mostrare la pagina come se la richiesta non fosse mai stata mand
     //   }
     // })
-    friendshipRequest=fsGetRequest(userId,checkUserId)
+    friendshipRequest=await fsGetRequest(userId,checkUserId)
   
     console.log(hasBlocked,followed,following,private,friendshipRequest)
 
