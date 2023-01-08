@@ -3,6 +3,7 @@ const router = express()
 const User = require("../models/usermodel")
 const Follower = require("../models/followersmodel")
 const FriendlyRequest = require("../models/requestmodel")
+const BlockedUser = require("../models/userblockedmodel")
 
 router.post("/getuserstats", async (req, res) => {
   const { userUsername } = req.body
@@ -307,6 +308,146 @@ router.get("/following",async (req,res)=>{
     if (data) res.status(200).json({followers: data})
     else res.status(400).json({ stato: "error" })
   })
+})
+
+
+const fsGetBlocked=(userId,checkUserId)=>{
+  return new Promise(async(resolve,reject)=>{
+    BlockedUser.findOne({
+      userIdWhoBlocks: checkUserId.toString(),
+      userIdWhoIsBlocked: userId.toString()
+    },(err,data)=>{
+      if (data) resolve(true)
+      else resolve(false)
+    })
+  })
+}
+
+const fsGetFollowing=(userId,checkUserId)=>{
+  return new Promise(async(resolve,reject)=>{
+    Follower.findOne({
+      isFollowing: userId,
+      isFollowed: checkUserId
+    }, (err, data) => {
+      if (data) resolve(true)
+      else resolve(false)
+    })
+  })
+}
+
+const fsGetFollowed=(userId,checkUserId)=>{
+  return new Promise(async(resolve,reject)=>{
+    Follower.findOne({
+      isFollowed: userId,
+      isFollowing: checkUserId
+    }, (err, data) => {
+      if (data) resolve(true)
+      else resolve(false)
+    })
+  })
+}
+
+const fsGetPrivate=(userId,checkUserId)=>{
+  return new Promise(async(resolve,reject)=>{
+    User.findOne({
+      _id: checkUserId
+    },{
+      _id: 0,
+      isPrivate: 1
+    },(err,data)=>{
+      if (data.isPrivate) resolve(true)
+      else resolve(false)
+    })
+  })
+}
+
+const fsGetRequest=(userId,checkUserId)=>{
+  return new Promise(async(resolve,reject)=>{
+    FriendlyRequest.findOne({ requestedId: userId, receivedId: checkUserId }, (err, data) => {
+      if (data) {
+        if (data.state == "pending") {
+          resolve("pending")
+  
+        } else if (data.state == "accepted") {
+          resolve("accepted")
+        }
+      } else {
+        resolve("not found") //mostrare la pagina come se la richiesta non fosse mai stata mand)
+      }
+    })
+  })
+}
+
+router.get("/friendship-status/:checkUserId",async (req,res)=>{
+  try{
+    const userId = req.session.userId //mio id
+    const {checkUserId} = req.params
+    
+    //bloccato, following, followed, pubblico, richiesta di amicizia
+    let hasBlocked,isBlocked,following,followed,private,friendshipRequest
+    // BlockedUser.findOne({
+    //   userIdWhoBlocks: checkUserId.toString(),
+    //   userIdWhoIsBlocked: userId.toString()
+    // },(err,data)=>{
+    //   if (data) blocked=true
+    //   else blocked=false
+    // })
+    hasBlocked=await fsGetBlocked(userId,checkUserId)
+    isBlocked=await fsGetBlocked(checkUserId,userId)
+  
+    // Follower.findOne({
+    //   isFollowing: userId,
+    //   isFollowed: checkUserId
+    // }, (err, data) => {
+    //   if (data) following=true
+    //   else followed=false
+    // })
+    following=await fsGetFollowing(userId,checkUserId)
+  
+    // Follower.findOne({
+    //   isFollowing: checkUserId,
+    //   isFollowed: userId
+    // }, (err, data) => {
+    //   if (data) followed=true
+    //   else followed=false
+    // })
+    followed=await fsGetFollowed(userId,checkUserId)
+  
+  
+    // User.findOne({
+    //   _id: checkUserId
+    // },{
+    //   _id: 0,
+    //   isPrivate: 1
+    // },(err,data)=>{
+    //   if (data.isPrivate) private=true
+    //   else private=false
+    // })
+    private=await fsGetPrivate(userId,checkUserId)
+  
+  
+    // FriendlyRequest.findOne({ requestedId: userId, receivedId: checkUserId }, (err, data) => {
+    //   if (data) {
+    //     if (data.state == "pending") {
+    //       friendshipRequest="pending"
+  
+    //     } else if (data.state == "accepted") {
+    //       friendshipRequest="accepted"
+    //     }
+    //   } else {
+    //     friendshipRequest="not found" //mostrare la pagina come se la richiesta non fosse mai stata mand
+    //   }
+    // })
+    friendshipRequest=fsGetRequest(userId,checkUserId)
+  
+    console.log(hasBlocked,followed,following,private,friendshipRequest)
+
+    res.status(200).json({hasBlocked,isBlocked,followed,following,private,friendshipRequest})
+  }
+  catch(e){
+    console.log(e)
+    req.stats(400).json({stato: "errore"})
+  }
 })
 
 module.exports = router

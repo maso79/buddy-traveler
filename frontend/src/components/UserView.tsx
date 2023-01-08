@@ -1,8 +1,8 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItemDivider, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonActionSheet, IonButton, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItemDivider, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 import placeholder from '../pictures/placeholder.png'
-import { personAdd } from 'ionicons/icons';
+import { addCircle, closeCircle, lockClosed, lockOpen, personAdd, send } from 'ionicons/icons';
 
 const UserView: React.FC<{ setModal: Function, userUsername: string, userId: string}>=(props)=>{
     const [userView,setUserView]=React.useState({
@@ -15,6 +15,12 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [isFollowing,setIsFolllowing]=React.useState(false)
     const [isFollowingBack,setIsFollowingBack]=React.useState(false)
     const [loading,setLoading]=React.useState(true)
+    const [actionsheet,setActionSheet]=React.useState(false)
+    const [options,setOptions]=React.useState([{
+        text: "",
+        icon: "",
+        role: "",
+    }])
 
     React.useEffect(() => {
 
@@ -34,6 +40,60 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             } else {
                 console.log("non è il tuo profilo")
             }
+        })
+
+
+        fetch("/profilestats/friendship-status/"+props.userId,{
+            method: "GET",
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            console.log(result.following)
+            if (result.following){
+                //non seguire più
+                options.push({
+                    text: "Unfollow",
+                    icon: closeCircle,
+                    role: "edit",
+                })
+            }
+            else if (result.isPrivate){
+                //richiedi
+                options.push({
+                    text: "Send friendship request",
+                    icon: send,
+                    role: "edit",
+                })
+            }
+            else{
+                //segui
+                options.push({
+                    text: "Follow",
+                    icon: addCircle,
+                    role: "edit",
+                })
+            }
+
+            if (result.isBlocked){
+                //sblocca
+                options.push({
+                    text: "Unlock user",
+                    icon: lockOpen,
+                    role: "edit",
+                })
+            }
+            else{
+                //blocca
+                options.push({
+                    text: "Lock user",
+                    icon: lockClosed,
+                    role: "edit",
+                })
+            }
+
+        })
+        .catch(err=>{
+            console.log(err)
         })
 
         //Controllo se sto seguendo l'utente che sto visualizzando ora
@@ -175,11 +235,11 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                                 <IonImg src={placeholder} alt="placeholder" />
                             </IonCol>
                             <IonCol size="8" offset="2">
-                                <IonButton color="light" expand="block" onClick={followUser}>
+                                <IonButton color="light" expand="block" onClick={()=>setActionSheet(true)}>
                                     <IonIcon icon={personAdd} slot="start" />    
                                     Options for {userView.userUsername}
                                 </IonButton>
-                                {
+                                {/* {
                                     isFollowing === false && isFollowingBack===false &&
                                     <IonButton color="primary" expand="block" onClick={followUser}>
                                         <IonIcon icon={personAdd} slot="start" />    
@@ -198,7 +258,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                                     <IonButton color="light" expand="block" onClick={unfollowUser}>
                                         Unfollow
                                     </IonButton>
-                                }
+                                } */}
                             </IonCol>
                             <IonCol size="12">
                                 <br /><br />
@@ -215,7 +275,14 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                         </IonRow>
                     </IonGrid>
                 }
+                <IonActionSheet
+                    isOpen={actionsheet}
+                    onDidDismiss={()=>setActionSheet(false)}
+                    header={"Options on this user"}
+                    buttons={options}
+                />
             </IonContent>
+            
         </IonPage>
     )
 }

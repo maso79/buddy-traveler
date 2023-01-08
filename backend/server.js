@@ -45,16 +45,12 @@ app.use(
     secret: process.env.SECRET_TOKEN,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, //Una settimana,
-      sameSite: "none",
-      secure: "auto"
     },
     store: store,
     resave: true,
     saveUninitialized: true
   })
 )
-
-app.set("trust-proxy", 1)
 
 app.use(morgan("dev"))
 
