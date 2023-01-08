@@ -18,7 +18,8 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
     const [path,setPath]=React.useState(placeholder_profile)
     const [loadingPicture,setLoadingPicture]=React.useState(true)
     const [actionsheet,setActionsheet]=React.useState(false)
-    const [present] = useIonActionSheet();
+    const [followersNumber,setFollowersNumber]=React.useState(0)
+    const [followingNumber,setFollowingNumber]=React.useState(0)
     const history=useHistory()
 
     const items=[
@@ -97,7 +98,33 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
         .catch(err=>{
             console.log(err)
         })
-    })
+
+
+        fetch("/profilestats/followers",{
+            method: "GET",
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            console.log(result)
+            setFollowersNumber(result.followers.length)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+
+
+        fetch("/profilestats/following",{
+            method: "GET",
+        })
+        .then(result=>result.json())
+        .then(result=>{
+            console.log(result)
+            setFollowingNumber(result.followers.length)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    },[])
 
     const retriveImage = async () => {
         const { url } = await fetch("/update/profileimage")
@@ -171,10 +198,10 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                     <IonText><h1>Hi, {name}</h1></IonText>
                                 </IonCol>
                                 <IonCol size="6" className="text-center" onClick={()=>history.push("/people/followers")}>
-                                    <IonText><h1>131</h1><br />followers</IonText>
+                                    <IonText><h1>{followersNumber}</h1><br />followers</IonText>
                                 </IonCol>
-                                <IonCol size="6" className="text-center">
-                                    <IonText><h1>25</h1><br />followed</IonText>
+                                <IonCol size="6" className="text-center" onClick={()=>history.push("/people/following")}>
+                                    <IonText><h1>{followingNumber}</h1><br />followed</IonText>
                                 </IonCol>
                                 <IonCol size="12">
                                     <IonButton
@@ -187,16 +214,6 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
-                        {/* <IonList inset lines="full">
-                            {
-                                items.map((item,i)=>(
-                                    <IonItem key={i} button onClick={()=>setModal(i)}>
-                                        <IonIcon icon={item.icon} size="large" slot="start" />
-                                        <IonText>{item.title}</IonText>
-                                    </IonItem>
-                                ))
-                            }
-                        </IonList> */}
 
                         <IonModal trigger="modalPersonalInformation" isOpen={modal === 0}>
                             <ProfilePersonalInfo setModal={setModal} />
