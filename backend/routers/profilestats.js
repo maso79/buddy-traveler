@@ -209,4 +209,54 @@ router.post("/checkrequest", (req, res) => {
 
 })
 
+router.get("/followers",async (req,res)=>{
+  const userId = req.session.userId //mio id
+
+  await Follower.aggregate([
+    {
+      '$match': {
+        'isFollowed': userId.toString()
+      }
+    }, {
+      '$addFields': {
+        'id_obj': {
+          '$toObjectId': '$isFollowing'
+        }
+      }
+    }, {
+      '$lookup': {
+        'from': 'users', 
+        'localField': 'id_obj', 
+        'foreignField': '_id', 
+        'as': 'followingUser'
+      }
+    }, {
+      '$unwind': {
+        'path': '$followingUser', 
+        'preserveNullAndEmptyArrays': false
+      }
+    }, {
+      '$addFields': {
+        'username': '$followingUser.username', 
+        'name': '$followingUser.name', 
+        'surname': '$followingUser.surname', 
+        'id_user': {
+          '$toString': '$followingUser._id'
+        }
+      }
+    }, {
+      '$project': {
+        'username': 1, 
+        'name': 1, 
+        'surname': 1, 
+        'id_user': 1, 
+        '_id': 0
+      }
+    }
+  ],(err,data)=>{
+    if (data) res.status(200).json({followers: data})
+    else res.status(400).json({ stato: "error" })
+  })
+})
+
 module.exports = router

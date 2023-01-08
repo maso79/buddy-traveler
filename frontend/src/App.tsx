@@ -40,6 +40,7 @@ import Profile from './pages/Profile';
 import Home from './pages/Home';
 import Diaries from './pages/Diaries';
 import People from './pages/People';
+import Followers from './pages/Followers';
 
 setupIonicReact();
 
@@ -124,6 +125,9 @@ const App: React.FC = () => {
                       </Route>
                       <Route exact path="/people">
                         <People />
+                      </Route>
+                      <Route exact path="/people/followers">
+                        <Followers />
                       </Route>
                       <Route exact path="/profile">
                         <Profile setAutorizzato={setAutorizzato} setConfigurato={setConfigurato} />  

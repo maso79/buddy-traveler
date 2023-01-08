@@ -170,7 +170,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                 <IonCol size="12" className="text-center">
                                     <IonText><h1>Hi, {name}</h1></IonText>
                                 </IonCol>
-                                <IonCol size="6" className="text-center">
+                                <IonCol size="6" className="text-center" onClick={()=>history.push("/people/followers")}>
                                     <IonText><h1>131</h1><br />followers</IonText>
                                 </IonCol>
                                 <IonCol size="6" className="text-center">
