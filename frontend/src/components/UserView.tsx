@@ -25,7 +25,6 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [reload,setReload]=React.useState(0)
 
     React.useEffect(() => {
-        setOptions([])
         fetch("/people/checkusername", {
             method: "POST",
             headers: {
