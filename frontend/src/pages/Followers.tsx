@@ -1,10 +1,14 @@
-import { IonCol, IonContent, IonGrid, IonImg, IonItem, IonList, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonImg, IonItem, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
+import UserView from '../components/UserView';
 import placeholder from '../pictures/placeholder.png'
 
 const Followers: React.FC=()=>{
     const [isLoading,setIsLoading]=React.useState(true)
+    const [modalUser,setModalUser]=React.useState(-1)
+    const [viewUserId,setViewUserId]=React.useState("")
+    const [viewUserUsername,setViewUserUsername]=React.useState("")
     const [followers,setFollowes]=React.useState([{
         id_user: "",
         username: "",
@@ -47,7 +51,11 @@ const Followers: React.FC=()=>{
                     <IonList>
                         {
                             followers.map((item,i)=>(
-                                <IonItem button key={i}>
+                                <IonItem button key={i} onClick={()=>{
+                                    setViewUserId(item.id_user)
+                                    setViewUserUsername(item.username)
+                                    setModalUser(0)
+                                }}>
                                     <IonGrid>
                                         <IonRow>
                                             <IonCol size="2">
@@ -62,6 +70,10 @@ const Followers: React.FC=()=>{
                     </IonList>
                 }
             </IonContent>
+
+            <IonModal isOpen={modalUser===0}>
+                <UserView setModal={setModalUser} userId={viewUserId} userUsername={viewUserUsername} />
+            </IonModal>
         </IonPage>
     )
 }

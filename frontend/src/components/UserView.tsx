@@ -75,6 +75,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             console.log(err)
         })
 
+
         fetch("/profilestats/isfollowingback",{
             method: "POST",
             headers:{
@@ -93,6 +94,8 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
             console.log(err)
         })
 
+
+        //aggiungo questo utente alle visualizzazioni recenti
         fetch("/people/recentsearch",{
             method: "POST",
             headers:{
@@ -171,7 +174,11 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                             <IonCol size="8" offset="2">
                                 <IonImg src={placeholder} alt="placeholder" />
                             </IonCol>
-                            <IonCol size="6" offset="3">
+                            <IonCol size="8" offset="2">
+                                <IonButton color="light" expand="block" onClick={followUser}>
+                                    <IonIcon icon={personAdd} slot="start" />    
+                                    Options for {userView.userUsername}
+                                </IonButton>
                                 {
                                     isFollowing === false && isFollowingBack===false &&
                                     <IonButton color="primary" expand="block" onClick={followUser}>
