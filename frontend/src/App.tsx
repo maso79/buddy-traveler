@@ -127,10 +127,10 @@ const App: React.FC = () => {
                       <Route exact path="/people">
                         <People />
                       </Route>
-                      <Route exact path="/people/followers">
+                      <Route exact path="/followers">
                         <Followers />
                       </Route>
-                      <Route exact path="/people/following">
+                      <Route exact path="/following">
                         <Following />
                       </Route>
                       <Route exact path="/profile">

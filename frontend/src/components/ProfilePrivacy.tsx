@@ -3,6 +3,7 @@ import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 
 const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
+    const [isLoading,setIsLoading]=React.useState(true)
     const [privacy,setPrivacy]=React.useState(false)
     const [toastSuccess,setToastSuccess]=React.useState(false)
     const [toastError,setToastError]=React.useState(false)

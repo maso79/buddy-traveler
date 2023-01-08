@@ -20,6 +20,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         text: "",
         icon: "",
         role: "",
+        handler: ()=>{}
     }])
 
     React.useEffect(() => {
@@ -55,6 +56,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     text: "Unfollow",
                     icon: closeCircle,
                     role: "edit",
+                    handler: ()=>unfollowUser()
                 })
             }
             else if (result.isPrivate){
@@ -63,6 +65,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     text: "Send friendship request",
                     icon: send,
                     role: "edit",
+                    handler: ()=>{}
                 })
             }
             else{
@@ -71,6 +74,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     text: "Follow",
                     icon: addCircle,
                     role: "edit",
+                    handler: ()=>followUser()
                 })
             }
 
@@ -80,6 +84,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     text: "Unlock user",
                     icon: lockOpen,
                     role: "edit",
+                    handler: ()=>{}
                 })
             }
             else{
@@ -88,6 +93,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                     text: "Lock user",
                     icon: lockClosed,
                     role: "edit",
+                    handler: ()=>{}
                 })
             }
 
