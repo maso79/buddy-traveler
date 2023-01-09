@@ -2,6 +2,7 @@ import { IonActionSheet, IonButton, IonCol, IonContent, IonGrid, IonIcon, IonImg
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 import placeholder from '../pictures/placeholder.png'
+import placeholder_profile from '../pictures/placeholder_profile.png'
 import { addCircle, closeCircle, lockClosed, lockOpen, personAdd, send } from 'ionicons/icons';
 
 const UserView: React.FC<{ setModal: Function, userUsername: string, userId: string}>=(props)=>{
@@ -15,7 +16,9 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [isFollowing,setIsFolllowing]=React.useState(false)
     const [isFollowingBack,setIsFollowingBack]=React.useState(false)
     const [loading,setLoading]=React.useState(true)
+    const [loadingPicture,setLoadingPicture]=React.useState(true)
     const [actionsheet,setActionSheet]=React.useState(false)
+    const [path,setPath]=React.useState(placeholder)
     const [options,setOptions]=React.useState([{
         text: "",
         icon: "",
@@ -25,6 +28,8 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [reload,setReload]=React.useState(0)
 
     React.useEffect(() => {
+        retriveImage()
+
         fetch("/people/checkusername", {
             method: "POST",
             headers: {
@@ -220,6 +225,30 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         })
     }
 
+    const retriveImage = async () => {
+        let data = props.userUsername
+
+        const { url } = await fetch("/update/profileusernameimage", {
+            method: 'POST',
+            headers:{
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({ username: props.userUsername })
+        })
+        .then(res => res.json())
+        
+        if (url.url == "not found") {
+            setLoadingPicture(false)            
+           return
+        }
+        
+        const imageUrl = url.split('?')[0]
+        setPath(imageUrl)
+        
+        setLoading(false)
+        setLoadingPicture(false)
+    }
+
     
     return(
         <IonPage>
@@ -242,7 +271,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                         <IonRow>
                             <IonCol size="12" className="text-center landing"><h1>{props.userUsername}</h1></IonCol>
                             <IonCol size="8" offset="2">
-                                <IonImg src={placeholder} alt="placeholder" />
+                                <IonImg src={path} alt="placeholder" />
                             </IonCol>
                             <IonCol size="8" offset="2">
                                 <IonButton color="light" expand="block" onClick={()=>setActionSheet(true)}>
