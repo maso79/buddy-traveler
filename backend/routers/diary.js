@@ -134,4 +134,18 @@ router.post("/changevisibility", (req, res) => {
   }
 })
 
+//restituisci i diari per username
+router.post("/retrivediariesbyid", (req, res) => {
+  const userId = req.body.userId
+
+  Diary.find({ userId }, (err, data) => {
+    if (data) {
+      res.status(200).json({ data: data })
+    } else {
+      res.status(400).json({ stato: "error" })
+    }
+  })
+
+})
+
 module.exports = router

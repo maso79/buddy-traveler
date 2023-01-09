@@ -19,6 +19,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     const [loadingPicture,setLoadingPicture]=React.useState(true)
     const [actionsheet,setActionSheet]=React.useState(false)
     const [path,setPath]=React.useState(placeholder)
+    const [diaries,setDiaries]=React.useState([])
     const [options,setOptions]=React.useState([{
         text: "",
         icon: "",
@@ -29,6 +30,7 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
 
     React.useEffect(() => {
         retriveImage()
+        retriveDiaries()
 
         fetch("/people/checkusername", {
             method: "POST",
@@ -226,7 +228,6 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     }
 
     const retriveImage = async () => {
-        let data = props.userUsername
 
         const { url } = await fetch("/update/profileusernameimage", {
             method: 'POST',
@@ -247,6 +248,26 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
         
         setLoading(false)
         setLoadingPicture(false)
+    }
+
+    const retriveDiaries = async () => {
+        const data = await fetch("/diary/retrivediariesbyid", {
+            method: 'POST',
+            headers: {
+                'Content-Type':'Application/JSON'
+            },
+            body: JSON.stringify({ userId: props.userId })
+        })
+        .then(res => res.json())
+        .then(response => {
+            if(response.data) {
+                response.data.forEach(element => {
+                    setDiaries(current => [...current, element])
+                });
+            } else {
+                console.log("error")
+            }
+        })
     }
 
     
@@ -311,6 +332,25 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                             <IonCol size="12">
                                 <IonItemDivider />
                             </IonCol>
+                            {
+                                diaries && 
+                                <IonGrid>
+                                    {
+                                        diaries.map((diary, i) => {
+                                            console.log(diary)
+                                            // <IonRow key={i}>
+                                            //     {
+                                            //         diaries.map((diary, i) => {
+                                            //             <IonCol key={i} size='6' className="text-center">
+                                            //                 <IonText>{ diary.name }</IonText>
+                                            //             </IonCol>
+                                            //         })
+                                            //     }
+                                            // </IonRow>
+                                        })
+                                    }
+                                </IonGrid>
+                            }
                         </IonRow>
                     </IonGrid>
                 }
