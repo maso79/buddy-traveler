@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonText, IonToast } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSpinner, IonText, IonToast } from '@ionic/react';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 
@@ -7,6 +7,7 @@ const ProfileEmail: React.FC<{ setModal: Function }>=(props)=>{
     const [toastSuccess,setToastSuccess]=React.useState(false)
     const [toastError,setToastError]=React.useState(false)
     const [toastErrorText,setToastErrorText]=React.useState("")
+    const [isLoading,setIsLoading]=React.useState(true)
 
     React.useEffect(()=>{
         fetch("/profile/email",{
@@ -16,6 +17,7 @@ const ProfileEmail: React.FC<{ setModal: Function }>=(props)=>{
         .then(result=>{
             if (result.user.email){
                 setEmail(result.user.email)
+                setIsLoading(false)
             }
         })
         .catch(err=>{
@@ -51,26 +53,40 @@ const ProfileEmail: React.FC<{ setModal: Function }>=(props)=>{
         <IonPage>
             <BTHeaderModal title="Change your email" setModal={props.setModal} />
             <IonContent>
-                <IonGrid>
-                    <IonRow>
-                        <IonCol size="12">
-                            <IonItem>
-                                <IonLabel position="floating">Your email</IonLabel>
-                                <IonInput value={email} onIonChange={e=>setEmail(e.detail.value!)} />
-                            </IonItem>
-                        </IonCol>
-                        <IonCol size="12">
-                            <IonText className="text-muted spazio-lato">You'll be asked to verify your new email</IonText>
-                        </IonCol>
-                        <IonCol size="12">
-                            <br />
-                            <IonButton color="primary" expand="block" onClick={update}>Update email</IonButton>
-                        </IonCol>
-                        <IonCol size="12">
-                            <IonButton color="primary" fill="clear" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>
-                        </IonCol>
-                    </IonRow>
-                </IonGrid>
+                {
+                    isLoading === true &&
+                    <IonGrid className="landing-half">
+                        <IonRow>
+                            <IonCol size="12" className="text-center">
+                                <IonSpinner name="crescent" /><br />
+                                <IonText>Loading your data...</IonText>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                }
+                {
+                    isLoading === false &&
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol size="12">
+                                <IonItem>
+                                    <IonLabel position="floating">Your email</IonLabel>
+                                    <IonInput value={email} onIonChange={e=>setEmail(e.detail.value!)} />
+                                </IonItem>
+                            </IonCol>
+                            <IonCol size="12">
+                                <IonText className="text-muted spazio-lato">You'll be asked to verify your new email</IonText>
+                            </IonCol>
+                            <IonCol size="12">
+                                <br />
+                                <IonButton color="primary" expand="block" onClick={update}>Update email</IonButton>
+                            </IonCol>
+                            <IonCol size="12">
+                                <IonButton color="primary" fill="clear" expand="block" onClick={()=>props.setModal(-1)}>Close</IonButton>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                }
                 <IonToast
                     isOpen={toastSuccess}
                     onDidDismiss={()=>setToastSuccess(false)}
