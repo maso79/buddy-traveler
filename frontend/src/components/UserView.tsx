@@ -4,6 +4,7 @@ import BTHeaderModal from './BTHeaderModal';
 import placeholder from '../pictures/placeholder.png'
 import placeholder_profile from '../pictures/placeholder_profile.png'
 import { addCircle, closeCircle, lockClosed, lockOpen, personAdd, send } from 'ionicons/icons';
+import UserViewDiaries from './UserViewDiaries';
 
 const UserView: React.FC<{ setModal: Function, userUsername: string, userId: string}>=(props)=>{
     const [userView,setUserView]=React.useState({
@@ -332,25 +333,9 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
                             <IonCol size="12">
                                 <IonItemDivider />
                             </IonCol>
-                            {
-                                diaries && 
-                                <IonGrid>
-                                    {
-                                        diaries.map((diary, i) => {
-                                            console.log(diary)
-                                            // <IonRow key={i}>
-                                            //     {
-                                            //         diaries.map((diary, i) => {
-                                            //             <IonCol key={i} size='6' className="text-center">
-                                            //                 <IonText>{ diary.name }</IonText>
-                                            //             </IonCol>
-                                            //         })
-                                            //     }
-                                            // </IonRow>
-                                        })
-                                    }
-                                </IonGrid>
-                            }
+                            <IonCol size="12">
+                                <UserViewDiaries userId={props.userId} username={props.userUsername } />
+                            </IonCol>
                         </IonRow>
                     </IonGrid>
                 }
