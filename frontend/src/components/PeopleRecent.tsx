@@ -1,9 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonImg, IonItem, IonList, IonRow, IonText } from '@ionic/react';
 import * as React from 'react';
+import { useHistory } from 'react-router';
 import placeholder from '../pictures/placeholder.png'
 
 const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Function, setModalUserView: Function }>=(props)=>{
     const [recentUsers,setRecentUsers]=React.useState([{_id: "", username: ""}])
+    const history=useHistory()
 
     React.useEffect(()=>{
         console.log("prova")
@@ -42,9 +44,11 @@ const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Functio
                                     {                                    
                                     recentUsers.map(user=>(
                                         <IonItem button onClick={()=>{
-                                            props.setUserIdView(user._id)
-                                            props.setUserUsername(user.username)
-                                            props.setModalUserView(1)
+                                            // props.setUserIdView(user._id)
+                                            // props.setUserUsername(user.username)
+                                            // props.setModalUserView(1)
+
+                                            history.push(`/people/${user.username}&${user._id}`)
                                         }}>{user.username}</IonItem>
                                     ))}
 

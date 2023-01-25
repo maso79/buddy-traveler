@@ -42,6 +42,7 @@ import Diaries from './pages/Diaries';
 import People from './pages/People';
 import Followers from './pages/Followers';
 import Following from './pages/Following';
+import PeopleUserView from './pages/PeopleUserView';
 
 setupIonicReact();
 
@@ -126,6 +127,9 @@ const App: React.FC = () => {
                       </Route>
                       <Route exact path="/people">
                         <People />
+                      </Route>
+                      <Route exact path="/people/:username&:id_utente">
+                        <PeopleUserView />
                       </Route>
                       <Route exact path="/followers">
                         <Followers />
