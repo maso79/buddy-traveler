@@ -323,7 +323,7 @@ const PeopleUserView: React.FC=()=>{
                         <IonRow>
                             <IonCol size="12" className="text-center landing"><h1>{usernamePrint}</h1></IonCol>
                             <IonCol size="8" offset="2">
-                                <IonImg src={path} alt="placeholder" />
+                                <IonImg src={path} alt="placeholder" className='profile-pic' />
                             </IonCol>
                             <IonCol size="8" offset="2">
                                 <IonButton color="light" expand="block" onClick={()=>setActionSheet(true)}>

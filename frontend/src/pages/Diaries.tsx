@@ -1,5 +1,5 @@
-import { IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonItemDivider, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
-import { add } from 'ionicons/icons';
+import { IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonItemDivider, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { add, calendar, location } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
 import CardDiaryList from '../components/CardDiaryList';
@@ -78,9 +78,37 @@ const Diaries: React.FC=()=>{
                                 <IonRow>
                                     {
                                             diaries.map((diary, i) => (
-                                            <IonCol sizeXs="12" sizeMd="6">
-                                                <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={diary.imageName} setModalDiaries={setModalDiaries} />
-                                            </IonCol>
+                                            // <IonCol sizeXs="12" sizeMd="6">
+                                            //     <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={diary.imageName} setModalDiaries={setModalDiaries} />
+                                            // </IonCol>
+                                            <div className='diary-card'>
+                                                <IonRow>
+                                                    {
+                                                        i%2===0 &&
+                                                        <>
+                                                            <IonCol size='6'>
+                                                                <IonImg src={diary.imageName !== "" ? ""+diary.imageName : placeholder} className="diary-card-picture" />
+                                                            </IonCol>
+                                                            <IonCol size='6'>
+                                                                <IonGrid>
+                                                                    <IonRow>
+                                                                        <IonCol size='12'>
+                                                                            <IonText><h3>{diary.name}</h3></IonText>
+                                                                        </IonCol>
+                                                                        <IonCol size='12'>
+                                                                            <IonText><h4>{diary.destination}</h4></IonText>
+                                                                        </IonCol>
+                                                                        <IonCol size='12'>
+                                                                            <IonText>From {new Date(""+diary.startDate).toLocaleDateString()} to {new Date(""+diary.endDate).toLocaleDateString()}</IonText>
+                                                                        </IonCol>
+                                                                    </IonRow>
+                                                                </IonGrid>
+                                                            </IonCol>
+                                                        </>
+
+                                                    }
+                                                </IonRow>
+                                            </div>
                                         ))
                                     }
                                 </IonRow>

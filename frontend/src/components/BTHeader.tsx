@@ -7,16 +7,9 @@ const BTHeader: React.FC<{ title: String }>=(props)=>{
     const history=useHistory()
 
     return(
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle>{props.title}</IonTitle>
-                <IonButtons slot="start">
-                    {/* <IonButton onClick={()=>history.push("/home")}>
-                        <IonIcon icon={home} />
-                    </IonButton> */}
-                </IonButtons>
-            </IonToolbar>
-        </IonHeader>
+        <>
+        
+        </>
     )
 }
 

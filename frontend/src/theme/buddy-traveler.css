@@ -75,3 +75,17 @@
 .tabbar-icon{
     font-size: 27px !important;
 }
+
+.profile-pic{
+    border-radius: 50% !important;
+}
+
+.diary-card{
+    background-color: #B4CE8F !important;
+    border-radius: 15px !important;
+}
+
+.diary-card-picture{
+    border-top-left-radius: 15px !important;
+    border-bottom-left-radius: 15px !important;
+}

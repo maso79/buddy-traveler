@@ -189,7 +189,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                     }
                                     {
                                         loadingPicture === false &&
-                                        <IonCard button onClick={()=>setModal(3)}>
+                                        <IonCard button onClick={()=>setModal(3)} className='profile-pic'>
                                             <IonImg src={path} alt="picture" />
                                         </IonCard>
                                     }
