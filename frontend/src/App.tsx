@@ -42,6 +42,7 @@ import People from './pages/People';
 import Followers from './pages/Followers';
 import Following from './pages/Following';
 import PeopleUserView from './pages/PeopleUserView';
+import serverFetchNative from './logic/serverFetchNative';
 
 setupIonicReact();
 
@@ -49,29 +50,18 @@ const App: React.FC = () => {
   const [configurato,setConfigurato]=useState(false)
   const [autorizzato,setAutorizzato]=useState(Boolean)
 
+  const isAuth=async()=>{
+      const richiesta=await serverFetchNative("/auht/authorized","GET",JSON.stringify({}))
+      if (richiesta.stato == true) setAutorizzato(true)
+      else setAutorizzato(false)
+  }
+
   useEffect(()=>{
     setConfigurato(getItemLocalStorage("configurato"))
     console.log(getItemLocalStorage("configurato"))
 
     try{
-      fetch("/auth/authorized",{
-        method: "GET"
-      })
-      .then(result=>result.json())
-      .then(result=>{
-        console.log(result)
-          if (result.stato===true) {
-              console.log("ok")
-              setAutorizzato(true)
-          }
-          else {
-              setAutorizzato(false)
-          }
-      })
-      .catch(err=>{
-        console.log("non auth")
-          setAutorizzato(false)
-      })
+      isAuth()
     }
     catch(e){
       console.log("non auth")
