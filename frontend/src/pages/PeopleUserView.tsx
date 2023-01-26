@@ -65,6 +65,22 @@ const PeopleUserView: React.FC=()=>{
             }
         })
 
+        const makeFriendshipRequest=()=>{
+            fetch("/makefriendlyrequest",{
+                method: "POST",
+                headers:{
+                    "Content-Type": "Application/JSON"
+                },
+                body: JSON.stringify({id: userId})
+            })
+            .then(result=>result.json())
+            .then(result=>{
+                console.log(result)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        }
 
         fetch("/profilestats/friendship-status/"+userId,{
             method: "GET",
@@ -87,7 +103,7 @@ const PeopleUserView: React.FC=()=>{
                     text: "Send friendship request",
                     icon: send,
                     role: "edit",
-                    handler: ()=>{}
+                    handler: ()=>makeFriendshipRequest()
                 })
             }
             else{

@@ -48,10 +48,6 @@
     color: white !important;
 }
 
-.ios .spazio-fondo{
-    padding-bottom: 5%;
-}
-
 .text-left{
     text-align: left !important;
 }
@@ -64,4 +60,18 @@
     transform: translate(-50%, -50%);
     color: white !important;
     text-shadow: 5px 5px 5px black !important;
+}
+
+
+.tabbar{
+    /* background-color: #86B049 !important;
+    color: white !important; */
+    border-radius: 34px !important;
+    margin: 10px 15px 15px 15px !important;
+    padding: 12px 12px 12px 12px !important;
+}
+
+
+.tabbar-icon{
+    font-size: 27px !important;
 }

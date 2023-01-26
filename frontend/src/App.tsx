@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { home, library, map, people, personCircle } from 'ionicons/icons';
+import { home, homeOutline, library, libraryOutline, map, mapOutline, people, peopleOutline, personCircle, personCircleOutline } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,7 +35,6 @@ import getItemLocalStorage from './logic/getItemLocalStorage';
 import Introduction from './pages/Introduction';
 import Signup from './pages/Signup';
 import SignIn from './pages/SignIn';
-import IsAuthorized from './components/IsAuthorized';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
 import Diaries from './pages/Diaries';
@@ -145,26 +144,21 @@ const App: React.FC = () => {
                       </Route>
                   </Switch>
                 </IonRouterOutlet>
-                <IonTabBar slot="bottom" className="spazio-fondo">
+                <IonTabBar slot="bottom" className="spazio-fondo tabbar" color={"primary"}>
                   <IonTabButton tab="home" href="/home">
-                    <IonIcon icon={home} />
-                    <IonLabel>Home</IonLabel>
+                    <IonIcon icon={homeOutline} className="tabbar-icon" />
                   </IonTabButton>
                   <IonTabButton tab="diaries" href="/diaries">
-                    <IonIcon icon={library} />
-                    <IonLabel>Diaries</IonLabel>
+                    <IonIcon icon={libraryOutline} className="tabbar-icon" />
                   </IonTabButton>
                   <IonTabButton tab="people" href="/people">
-                    <IonIcon icon={people} />
-                    <IonLabel>People</IonLabel>
+                    <IonIcon icon={peopleOutline} className="tabbar-icon" />
                   </IonTabButton>
                   <IonTabButton tab="places" href="/places">
-                    <IonIcon icon={map} />
-                    <IonLabel>Places</IonLabel>
+                    <IonIcon icon={mapOutline} className="tabbar-icon" />
                   </IonTabButton>
                   <IonTabButton tab="profile" href="/profile">
-                    <IonIcon icon={personCircle} />
-                    <IonLabel>Profile</IonLabel>
+                    <IonIcon icon={personCircleOutline} className="tabbar-icon" />
                   </IonTabButton>
                 </IonTabBar>
               </IonTabs>

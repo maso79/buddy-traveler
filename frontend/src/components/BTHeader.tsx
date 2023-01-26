@@ -11,9 +11,9 @@ const BTHeader: React.FC<{ title: String }>=(props)=>{
             <IonToolbar>
                 <IonTitle>{props.title}</IonTitle>
                 <IonButtons slot="start">
-                    <IonButton onClick={()=>history.push("/home")}>
+                    {/* <IonButton onClick={()=>history.push("/home")}>
                         <IonIcon icon={home} />
-                    </IonButton>
+                    </IonButton> */}
                 </IonButtons>
             </IonToolbar>
         </IonHeader>
