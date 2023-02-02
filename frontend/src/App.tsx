@@ -51,7 +51,7 @@ const App: React.FC = () => {
   const [autorizzato,setAutorizzato]=useState(Boolean)
 
   const isAuth=async()=>{
-      const richiesta=await serverFetchNative("/auht/authorized","GET",JSON.stringify({}))
+      const richiesta=await serverFetchNative("/auth/authorized","GET",JSON.stringify({}))
       if (richiesta.stato == true) setAutorizzato(true)
       else setAutorizzato(false)
   }
