@@ -1,6 +1,7 @@
 import { IonFab, IonFabButton, IonIcon, IonImg, IonList, IonModal, IonText } from '@ionic/react';
 import { add, addCircle } from 'ionicons/icons';
 import * as React from 'react';
+import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 import ActivityPreview from './ActivityPreview';
 import ActivityView from './ActivityView';
@@ -16,21 +17,30 @@ const DiarySegmentActivites: React.FC<{diaryId: String, update: number, setActiv
     }])
     const [modalActivities,setModalActivities]=React.useState("")
 
+    const getActivities = async () => {
+        const result = await serverFetchNative(`/activity/getactivities/${props.diaryId}`, "GET", JSON.stringify({}))
+        console.log(result.data)
+        setActivites(result.data)
+        console.log(activities.length)
+        props.setActivitiesNumber(activities.length)
+    }
+
     React.useEffect(()=>{
         setActivites([])
-        fetch(`/activity/getactivities/${props.diaryId}`,{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result.data)
-            setActivites(result.data)
-            console.log(activities.length)
-            props.setActivitiesNumber(activities.length)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        getActivities()
+        // fetch(`/activity/getactivities/${props.diaryId}`,{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result.data)
+        //     setActivites(result.data)
+        //     console.log(activities.length)
+        //     props.setActivitiesNumber(activities.length)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     },[props.update])
 
     return(

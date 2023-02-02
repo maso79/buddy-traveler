@@ -5,6 +5,7 @@ import placeholder from '../pictures/placeholder.png'
 import placeholder_profile from '../pictures/placeholder_profile.png'
 import { addCircle, closeCircle, lockClosed, lockOpen, personAdd, send } from 'ionicons/icons';
 import UserViewDiaries from './UserViewDiaries';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const UserView: React.FC<{ setModal: Function, userUsername: string, userId: string}>=(props)=>{
     const [userView,setUserView]=React.useState({
@@ -29,215 +30,322 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     }])
     const [reload,setReload]=React.useState(0)
 
+    const checkUsername = async () => {
+        const result = await serverFetchNative("/people/checkusername", "POST", JSON.stringify({ username: props.userUsername }))
+        if (result.stato) {
+            window.location.href = "/profile"
+        } else {
+            console.log("non è il tuo profilo")
+        }
+    }
+
+    const friendshipStatus = async () => {
+        const result = await serverFetchNative("/profilestats/friendship-status/" + props.userId, "GET", JSON.stringify({}))
+        console.log(result)
+        if (result.following){
+            //non seguire più
+            options.push({
+                text: "Unfollow",
+                icon: closeCircle,
+                role: "edit",
+                handler: ()=>unfollowUser()
+            })
+        }
+        else if (result.private){
+            //richiedi
+            options.push({
+                text: "Send friendship request",
+                icon: send,
+                role: "edit",
+                handler: ()=>{}
+            })
+        }
+         else{
+            //segui
+            options.push({
+                text: "Follow",
+                icon: addCircle,
+                role: "edit",
+                handler: ()=>followUser()
+            })
+        }
+
+        if (result.isBlocked){
+            //sblocca
+            options.push({
+                text: "Unlock user",
+                icon: lockOpen,
+                role: "edit",
+                handler: ()=>{}
+            })
+        }
+        else{
+            //blocca
+            options.push({
+                text: "Lock user",
+                icon: lockClosed,
+                role: "edit",
+                handler: ()=>{}
+            })
+        }
+    }
+
+    const checkIsFollowing = async () => {
+        const result = await serverFetchNative("/profilestats/isfollowing", "POST", JSON.stringify({ userFollowedId: props.userId }))
+        setIsFolllowing(result.stato)
+        console.log(isFollowing)
+    }
+
+    const getUserStats = async () => {
+        const result = await serverFetchNative("/profilestats/getuserstats", "POST", JSON.stringify({ userUsername: props.userUsername }))
+        console.log(result)
+        setUserView(result.data)
+        setLoading(false)
+    }
+
+    const checkIsFollowingBack = async () => {
+        const result = await serverFetchNative("/profilestats/isfollowingback", "POST", JSON.stringify({ userFollowedId: props.userId }))
+        console.log(result)
+        setIsFollowingBack(result.stato)
+    }
+
+    const recentSearch = async () => {
+        const result = await serverFetchNative("/people/recentsearch", "POST", JSON.stringify({ username: props.userUsername }))
+    }
+
+
     React.useEffect(() => {
         retriveImage()
         retriveDiaries()
 
-        fetch("/people/checkusername", {
-            method: "POST",
-            headers: {
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                username: props.userUsername
-            })
-        })
-        .then(result => result.json())
-        .then(result => {
-            if (result.stato) {
-                window.location.href = "/profile"
-            } else {
-                console.log("non è il tuo profilo")
-            }
-        })
+        // fetch("/people/checkusername", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         username: props.userUsername
+        //     })
+        // })
+        // .then(result => result.json())
+        // .then(result => {
+        //     if (result.stato) {
+        //         window.location.href = "/profile"
+        //     } else {
+        //         console.log("non è il tuo profilo")
+        //     }
+        // })
+        checkUsername()
 
 
-        fetch("/profilestats/friendship-status/"+props.userId,{
-            method: "GET",
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            if (result.following){
-                //non seguire più
-                options.push({
-                    text: "Unfollow",
-                    icon: closeCircle,
-                    role: "edit",
-                    handler: ()=>unfollowUser()
-                })
-            }
-            else if (result.private){
-                //richiedi
-                options.push({
-                    text: "Send friendship request",
-                    icon: send,
-                    role: "edit",
-                    handler: ()=>{}
-                })
-            }
-            else{
-                //segui
-                options.push({
-                    text: "Follow",
-                    icon: addCircle,
-                    role: "edit",
-                    handler: ()=>followUser()
-                })
-            }
+        // fetch("/profilestats/friendship-status/"+props.userId,{
+        //     method: "GET",
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     if (result.following){
+        //         //non seguire più
+        //         options.push({
+        //             text: "Unfollow",
+        //             icon: closeCircle,
+        //             role: "edit",
+        //             handler: ()=>unfollowUser()
+        //         })
+        //     }
+        //     else if (result.private){
+        //         //richiedi
+        //         options.push({
+        //             text: "Send friendship request",
+        //             icon: send,
+        //             role: "edit",
+        //             handler: ()=>{}
+        //         })
+        //     }
+        //     else{
+        //         //segui
+        //         options.push({
+        //             text: "Follow",
+        //             icon: addCircle,
+        //             role: "edit",
+        //             handler: ()=>followUser()
+        //         })
+        //     }
 
-            if (result.isBlocked){
-                //sblocca
-                options.push({
-                    text: "Unlock user",
-                    icon: lockOpen,
-                    role: "edit",
-                    handler: ()=>{}
-                })
-            }
-            else{
-                //blocca
-                options.push({
-                    text: "Lock user",
-                    icon: lockClosed,
-                    role: "edit",
-                    handler: ()=>{}
-                })
-            }
+        //     if (result.isBlocked){
+        //         //sblocca
+        //         options.push({
+        //             text: "Unlock user",
+        //             icon: lockOpen,
+        //             role: "edit",
+        //             handler: ()=>{}
+        //         })
+        //     }
+        //     else{
+        //         //blocca
+        //         options.push({
+        //             text: "Lock user",
+        //             icon: lockClosed,
+        //             role: "edit",
+        //             handler: ()=>{}
+        //         })
+        //     }
 
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        friendshipStatus()
 
         //Controllo se sto seguendo l'utente che sto visualizzando ora
-        fetch("/profilestats/isfollowing",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                userFollowedId: props.userId
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            setIsFolllowing(result.stato)
-            console.log(isFollowing)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch("/profilestats/isfollowing",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         userFollowedId: props.userId
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     setIsFolllowing(result.stato)
+        //     console.log(isFollowing)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        checkIsFollowing()
 
         //recupero i dati dell'utente 
-        fetch("/profilestats/getuserstats",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                userUsername: props.userUsername
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setUserView(result.data)
-            setLoading(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch("/profilestats/getuserstats",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         userUsername: props.userUsername
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setUserView(result.data)
+        //     setLoading(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        getUserStats()
 
 
-        fetch("/profilestats/isfollowingback",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                userFollowedId: props.userId
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setIsFollowingBack(result.stato)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch("/profilestats/isfollowingback",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         userFollowedId: props.userId
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setIsFollowingBack(result.stato)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        checkIsFollowingBack()
 
 
         //aggiungo questo utente alle visualizzazioni recenti
-        fetch("/people/recentsearch",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                username: props.userUsername
-            })
-        })
+        // fetch("/people/recentsearch",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         username: props.userUsername
+        //     })
+        // })
+        recentSearch()
     },[reload])
 
 
-    const followUser=()=>{
-        fetch("/profilestats/addfollow",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                userUsername: props.userUsername
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if(result.stato==="success"){
-                setIsFolllowing(true)
-                setOptions([])
-                setReload(reload+1)
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const followUser = async () => {
+        
+        const result = await serverFetchNative("/profilestats/addfollow", "POST", JSON.stringify({ userUsername: props.userUsername }))
+        if(result.stato==="success"){
+            setIsFolllowing(true)
+            setOptions([])
+            setReload(reload+1)
+        }
+
+        // fetch("/profilestats/addfollow",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         userUsername: props.userUsername
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if(result.stato==="success"){
+        //         setIsFolllowing(true)
+        //         setOptions([])
+        //         setReload(reload+1)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     }
 
-    const unfollowUser=()=>{
-        fetch("/profilestats/removefollow",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                userUsername: props.userUsername
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if(result.stato==="success"){
-                setIsFolllowing(false)
-                setOptions([])
-                setReload(reload+1)
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const unfollowUser = async () => {
+        const result = await serverFetchNative("/profilestats/removefollow", "POST", JSON.stringify({ userUsername: props.userUsername }))
+        if(result.stato==="success"){
+            setIsFolllowing(false)
+            setOptions([])
+            setReload(reload+1)
+        }
+
+        // fetch("/profilestats/removefollow",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         userUsername: props.userUsername
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if(result.stato==="success"){
+        //         setIsFolllowing(false)
+        //         setOptions([])
+        //         setReload(reload+1)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     }
 
     const retriveImage = async () => {
 
-        const { url } = await fetch("/update/profileusernameimage", {
-            method: 'POST',
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({ username: props.userUsername })
-        })
-        .then(res => res.json())
+        const { url } = await serverFetchNative("/update/profileusernameimage", "POST", JSON.stringify({ username: props.userUsername }))
+
+        // const { url } = await fetch("/update/profileusernameimage", {
+        //     method: 'POST',
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({ username: props.userUsername })
+        // })
+        // .then(res => res.json())
         
         if (url.url == "not found") {
             setLoadingPicture(false)            
@@ -252,23 +360,33 @@ const UserView: React.FC<{ setModal: Function, userUsername: string, userId: str
     }
 
     const retriveDiaries = async () => {
-        const data = await fetch("/diary/retrivediariesbyid", {
-            method: 'POST',
-            headers: {
-                'Content-Type':'Application/JSON'
-            },
-            body: JSON.stringify({ userId: props.userId })
-        })
-        .then(res => res.json())
-        .then(response => {
-            if(response.data) {
-                response.data.forEach(element => {
-                    setDiaries(current => [...current, element])
-                });
-            } else {
-                console.log("error")
-            }
-        })
+
+        const result = await serverFetchNative("/diary/retrivediariesbyid", "POST", JSON.stringify({ userId: props.userId }))
+        if(result.data) {
+            result.data.forEach(element => {
+                setDiaries(current => [...current, element])
+            });
+        } else {
+            console.log("error")
+        }
+
+        // const data = await fetch("/diary/retrivediariesbyid", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type':'Application/JSON'
+        //     },
+        //     body: JSON.stringify({ userId: props.userId })
+        // })
+        // .then(res => res.json())
+        // .then(response => {
+        //     if(response.data) {
+        //         response.data.forEach(element => {
+        //             setDiaries(current => [...current, element])
+        //         });
+        //     } else {
+        //         console.log("error")
+        //     }
+        // })
     }
 
     

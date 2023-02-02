@@ -28,17 +28,6 @@ router.get("/getplace/:query", (req,res) => {
     .catch(function (error) {
         console.log(error);
     });
-
-    // fetch(url,{
-    //     method: "GET"
-    // })
-    // .then(res=>res.json())
-    // .then(res=>{
-    //     console.log(res)
-    // })
-    // .catch(err=>{
-    //     console.log(err)
-    // })
 })
 
 module.exports = router

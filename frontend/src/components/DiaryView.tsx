@@ -5,6 +5,7 @@ import DiarySegmentActivites from './DiarySegmentActivities';
 import DiaryEdit from './DiaryEdit';
 import ActivityCreate from './ActivityCreate';
 import placeholder_profile from '../pictures/placeholder.png'
+import serverFetchNative from '../logic/serverFetchNative';
 
 const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, update: number, setUpdate: Function}>=(props)=>{
     const [diary,setDiary]=React.useState({
@@ -22,33 +23,43 @@ const DiaryView: React.FC<{diaryId: String, title: String, setModal: Function, u
     const [updateActivities,setUpdateActivities]=React.useState(0)
     const [activitiesNumber,setActivitiesNumber]=React.useState(0)
 
-    React.useEffect(()=>{
-        fetch(`/diary/getdiary/${props.diaryId}`,{
-            method: "GET",
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setDiary(result.diary)
-            setLoadig(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const getDiary = async () => {
+        const result = await serverFetchNative(`/diary/getdiary/${props.diaryId}`, "GET", JSON.stringify({}))
+        console.log(result)
+        setDiary(result.diary)
+        setLoadig(false)
+    }
 
+    React.useEffect(()=>{
+        // fetch(`/diary/getdiary/${props.diaryId}`,{
+        //     method: "GET",
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setDiary(result.diary)
+        //     setLoadig(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        getDiary()
         getThumbnail()
     },[props.update])
 
     const getThumbnail = async () => {
         const data = { diaryId: props.diaryId }
-        const { url } = await fetch("/update/showdiaryimage", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
+
+        const { url } = await serverFetchNative("/update/showdiaryimage", "POST", JSON.stringify(data))
+
+        // const { url } = await fetch("/update/showdiaryimage", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(data)
+        // })
+        // .then(res => res.json())
         
         console.log(url)
         if (url.url == "not found") {           

@@ -1,5 +1,6 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonToast } from '@ionic/react';
 import * as React from 'react';
+import serverFetchNative from '../logic/serverFetchNative';
 import BTHeaderModal from './BTHeaderModal';
 
 const ProfilePassword: React.FC<{ setModal: Function }>=(props)=>{
@@ -10,31 +11,45 @@ const ProfilePassword: React.FC<{ setModal: Function }>=(props)=>{
     const [toastErrorText,setToastErrorText]=React.useState("")
 
 
-    const update=()=>{
+    const update= async ()=>{
         try{
             if (password !== confirmPassword) throw new Error("Passwords don't match")
-            fetch("/update/password",{
-                method: "POST",
-                headers:{
-                    "Content-Type": "Application/JSON"
-                },
-                body: JSON.stringify({
-                    password
-                })
-            })
-            .then(result=>result.json())
-            .then(result=>{
+
+            try {
+                const result = await serverFetchNative("/update/password", "POST", JSON.stringify({ password }))
                 if (result.stato === "success") setToastSuccess(true)
                 else {
                     setToastErrorText(result.stato)
                     setToastError(true)
                 }
-            })
-            .catch(err=>{
+            } catch (err) {
                 console.log(err)
                 setToastErrorText(err.stato)
                 setToastError(true)
-            })
+            }
+
+            // fetch("/update/password",{
+            //     method: "POST",
+            //     headers:{
+            //         "Content-Type": "Application/JSON"
+            //     },
+            //     body: JSON.stringify({
+            //         password
+            //     })
+            // })
+            // .then(result=>result.json())
+            // .then(result=>{
+            //     if (result.stato === "success") setToastSuccess(true)
+            //     else {
+            //         setToastErrorText(result.stato)
+            //         setToastError(true)
+            //     }
+            // })
+            // .catch(err=>{
+            //     console.log(err)
+            //     setToastErrorText(err.stato)
+            //     setToastError(true)
+            // })
         }
         catch(e){
             console.log(e)

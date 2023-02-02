@@ -5,6 +5,7 @@ import BTHeaderModal from './BTHeaderModal';
 import { search } from 'ionicons/icons';
 import placeholder_profile from '../pictures/placeholder.png'
 import DateSelect from './DateSelect';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number, setUpdate: Function }>=(props)=>{
     const [diary,setDiary]=React.useState({
@@ -25,63 +26,81 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
     const [modalEndDate,setModalEndDate]=React.useState(false)
     const [toastAggiornamento,setToastAggiornamento]=React.useState(false)
 
+    const getDiary = async () => {
+        const result = await serverFetchNative(`/diary/getdiary/${props.diaryId}`, "GET", JSON.stringify({}))
+        setDiary(result.diary)
+        setName(result.diary.name)
+        setDestionation(result.diary.destination)
+        setStartDate(result.diary.startDate)
+        setEndDate(result.diary.endDate)
+        setLoadig(false)
+    }
+
     React.useEffect(()=>{
-        fetch(`/diary/getdiary/${props.diaryId}`,{
-            method: "GET",
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setDiary(result.diary)
-            setName(result.diary.name)
-            setDestionation(result.diary.destination)
-            setStartDate(result.diary.startDate)
-            setEndDate(result.diary.endDate)
-            setLoadig(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch(`/diary/getdiary/${props.diaryId}`,{
+        //     method: "GET",
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setDiary(result.diary)
+        //     setName(result.diary.name)
+        //     setDestionation(result.diary.destination)
+        //     setStartDate(result.diary.startDate)
+        //     setEndDate(result.diary.endDate)
+        //     setLoadig(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        getDiary()
         getThumbnail()
     },[])
 
-    const diary_update=()=>{
-        fetch(`/diary/updatediary/${props.diaryId}`,{
-            method: "POST",
-            headers: {
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                name,
-                destination,
-                startDate,
-                endDate
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            setToastAggiornamento(true)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const diary_update = async () => {
+        const result = await serverFetchNative(`/diary/updatediary/${props.diaryId}`, "POST", JSON.stringify({name, destination, startDate, endDate}))
+        setToastAggiornamento(true)
+
+        // fetch(`/diary/updatediary/${props.diaryId}`,{
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         name,
+        //         destination,
+        //         startDate,
+        //         endDate
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     setToastAggiornamento(true)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     }
 
     const getThumbnail = async () => {
+
         const data = { diaryId: props.diaryId }
-        const { url } = await fetch("/update/showdiaryimage", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        
-        if (url.url == "not found") {           
+
+        const { url } = await serverFetchNative("/update/showdiaryimage", "POST", JSON.stringify(data))
+
+        // const { url } = await fetch("/update/showdiaryimage", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(data)
+        // })
+        // .then(res => res.json())
+
+        if (url.url == "not found") {
            return
         }
-        
+
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
     }
@@ -90,31 +109,31 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
         const file = document.querySelector("input").files[0]
         console.log(file)
         const data = { diaryId: props.diaryId }
-    
-        const { url } = await fetch("/update/diaryimage", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
 
-        await fetch(url, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            body: file
-        })
+        const { url } = await serverFetchNative("/update/diaryimage", "POST", JSON.stringify(data))
+
+        // const { url } = await fetch("/update/diaryimage", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(data)
+        // })
+        // .then(res => res.json())
+
+        const result = await serverFetchNative(url, "PUT", file)
+
+        // await fetch(url, {
+        //     method: "PUT",
+        //     headers: {
+        //         "Content-Type": "multipart/form-data"
+        //     },
+        //     body: file
+        // })
 
         const imageUrl = url.split('?')[0]
         setPath(imageUrl)
         props.setUpdate(props.update+1)
-    }
-
-    const testApi = () => {
-        fetch("/diary/showuserslist")
     }
 
     return(
@@ -136,9 +155,6 @@ const DiaryEdit: React.FC<{ setModal: Function, diaryId: String, update: number,
                     loading === false &&
                     <IonGrid>
                         <IonRow>
-                            <IonCol size="12">
-                                <IonButton expand="block" onClick={testApi}>test api</IonButton>
-                            </IonCol>
                             <IonCol size="6" offset="3" className="text-center">
                                 <IonImg src={path} alt="picture" />
                             </IonCol>

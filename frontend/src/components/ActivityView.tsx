@@ -3,6 +3,7 @@ import { calendar, camera, location, pencil, trash } from 'ionicons/icons';
 import * as React from 'react';
 import ActivityUploadPicture from './ActivityUploadPicture';
 import BTHeaderModal from './BTHeaderModal';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const ActivityView: React.FC<{ setModal: Function, activityId: String, activityName: String }>=(props)=>{
     const [activity,setActivity]=React.useState({
@@ -15,19 +16,32 @@ const ActivityView: React.FC<{ setModal: Function, activityId: String, activityN
     const [caricamento,setCaricamento]=React.useState(true)
     const [modalPictures,setModalPictures]=React.useState(-1)
 
-    React.useEffect(()=>{
-        fetch(`/activity/getone/${props.activityId}`,{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setActivity(result.data)
-            setCaricamento(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const getOneActivity = async () => {
+        const result = await serverFetchNative(`/activity/getone/${props.activityId}`, "GET", JSON.stringify({}))
+        setActivity(result.data)
+        setCaricamento(false)
+    }
+
+    React.useEffect(() => {
+        try {
+            getOneActivity()
+        } catch {
+            console.log("error")
+        }
+        
+
+        // fetch(`/activity/getone/${props.activityId}`,{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setActivity(result.data)
+        //     setCaricamento(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     },[])
 
     return(

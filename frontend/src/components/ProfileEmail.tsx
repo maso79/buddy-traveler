@@ -1,5 +1,6 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSpinner, IonText, IonToast } from '@ionic/react';
 import * as React from 'react';
+import serverFetchNative from '../logic/serverFetchNative';
 import BTHeaderModal from './BTHeaderModal';
 
 const ProfileEmail: React.FC<{ setModal: Function }>=(props)=>{
@@ -9,44 +10,64 @@ const ProfileEmail: React.FC<{ setModal: Function }>=(props)=>{
     const [toastErrorText,setToastErrorText]=React.useState("")
     const [isLoading,setIsLoading]=React.useState(true)
 
-    React.useEffect(()=>{
-        fetch("/profile/email",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if (result.user.email){
-                setEmail(result.user.email)
-                setIsLoading(false)
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const profileEmail = async () => {
+        const result = await serverFetchNative("/profile/email", "GET", JSON.stringify({}))
+        if (result.user.email){
+            setEmail(result.user.email)
+            setIsLoading(false)
+        }
+    }
+
+    React.useEffect(() => {
+        profileEmail()
+        // fetch("/profile/email",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.user.email){
+        //         setEmail(result.user.email)
+        //         setIsLoading(false)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     },[])
 
-    const update=()=>{
-        fetch("/update/email",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                email,
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
+    const update = async () => {
+        try {
+            const result = await serverFetchNative("/update/email", "POST", JSON.stringify({ email }))
             if (result.stato==="success") setToastSuccess(true)
             else{
                 setToastErrorText(result.stato)
                 setToastError(true)
             }
-        })
-        .catch(err=>{
+        } catch (err) {
             setToastErrorText(err.stato)
             setToastError(true)
-        })
+        }
+        // fetch("/update/email",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         email,
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.stato==="success") setToastSuccess(true)
+        //     else{
+        //         setToastErrorText(result.stato)
+        //         setToastError(true)
+        //     }
+        // })
+        // .catch(err=>{
+        //     setToastErrorText(err.stato)
+        //     setToastError(true)
+        // })
     }
 
     return(

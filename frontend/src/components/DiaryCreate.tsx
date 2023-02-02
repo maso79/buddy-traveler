@@ -8,6 +8,7 @@ import PlacesAutocomplete,{
 } from "react-places-autocomplete"
 import DiaryCreateDestination from './DiaryCreateDestinatio';
 import { search } from 'ionicons/icons';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
     const [name,setName]=React.useState("")
@@ -24,50 +25,70 @@ const DiaryCreate: React.FC<{ setModal:Function }>=(props)=>{
     const [chosenDestination,setChosenDestination]=React.useState("")
     const [buttonDisabled,setButtonDisabled]=React.useState(true)
     
-    const search_places=()=>{
-        fetch(`/places/getplace/${destination}`,{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            setChosenDestination(result.stato[0].name)
-            setDestinationId(result.stato[0].id)
-            setButtonDisabled(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const search_places = async () => {
+        const result = await serverFetchNative(`/places/getplace/${destination}`, "GET", JSON.stringify({}))
+        setChosenDestination(result.stato[0].name)
+        setDestinationId(result.stato[0].id)
+        setButtonDisabled(false)
+
+        // fetch(`/places/getplace/${destination}`,{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     setChosenDestination(result.stato[0].name)
+        //     setDestinationId(result.stato[0].id)
+        //     setButtonDisabled(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     }
 
-    const create=()=>{
-        fetch("/diary/createone",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                name,
-                destination,
-                startDate,
-                endDate
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
+    const create = async () => {
+        try {
+            const result = await serverFetchNative("/diary/createone", "POST", JSON.stringify({name, destination, startDate, endDate}))
             if (result.stato === "success") {
                 setToastSuccess(true)
-                setTimeout(()=>props.setModal(-1),2050)
-            }
-            else{
+                setTimeout(() => props.setModal((-1),2050))
+            } else {
                 setToastErrorText("Damn, something went wrong. Check the form or try again later")
                 setToastError(true)
             }
-        })
-        .catch(err=>{
-            console.log(err)
+        } catch (err) {
             setToastErrorText("Damn, something went wrong. Check the form or try again later")
             setToastError(true)
-        })
+        }
+        
+
+        // fetch("/diary/createone",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         name,
+        //         destination,
+        //         startDate,
+        //         endDate
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.stato === "success") {
+        //         setToastSuccess(true)
+        //         setTimeout(()=>props.setModal(-1),2050)
+        //     }
+        //     else{
+        //         setToastErrorText("Damn, something went wrong. Check the form or try again later")
+        //         setToastError(true)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        //     setToastErrorText("Damn, something went wrong. Check the form or try again later")
+        //     setToastError(true)
+        // })
     }
 
     return(

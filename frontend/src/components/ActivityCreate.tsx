@@ -3,6 +3,7 @@ import { search } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeaderModal from './BTHeaderModal';
 import DateSelect from './DateSelect';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const ActivityCreate: React.FC<{ diaryId: String, setModal: Function, setUpdate: Function, update: number }>=(props)=>{
     const [name,setName]=React.useState("")
@@ -15,46 +16,57 @@ const ActivityCreate: React.FC<{ diaryId: String, setModal: Function, setUpdate:
     const [placeId,setPlaceId]=React.useState("")
     const [buttonDisabled,setButtonDisabled]=React.useState(true)
 
-    const activity_create=()=>{
-        fetch("/activity/createone",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                name,
-                description,
-                place,
-                date: startDate,
-                time,
-                diaryId: props.diaryId
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            props.setUpdate(props.update+1)
-            props.setModal(false)
+    const activity_create = async () => {
+        
+        const result = await serverFetchNative("/activity/createone", "POST", JSON.stringify({name, description, place, date: startDate, time, diaryId: props.diaryId}))
+        props.setUpdate(props.update + 1)
+        props.setModal(false)
 
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch("/activity/createone",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         name,
+        //         description,
+        //         place,
+        //         date: startDate,
+        //         time,
+        //         diaryId: props.diaryId
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     props.setUpdate(props.update+1)
+        //     props.setModal(false)
+
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     }
 
-    const search_places=()=>{
-        fetch(`/places/getplace/${place}`,{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            setChosenDestination(result.stato[0].name)
-            setPlaceId(result.stato[0].id)
-            setButtonDisabled(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    const search_places = async () => {
+        
+        const result = await serverFetchNative(`/places/getplace/${place}`, "GET", JSON.stringify({}))
+        setChosenDestination(result.stato[0].name)
+        setPlaceId(result.stato[0].id)
+        setButtonDisabled(false)
+
+        // fetch(`/places/getplace/${place}`,{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     setChosenDestination(result.stato[0].name)
+        //     setPlaceId(result.stato[0].id)
+        //     setButtonDisabled(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     }
     
     return(

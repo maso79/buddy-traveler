@@ -1,5 +1,6 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSpinner, IonText, IonToast } from '@ionic/react';
 import * as React from 'react';
+import serverFetchNative from '../logic/serverFetchNative';
 import BTHeaderModal from './BTHeaderModal';
 
 const ProfilePersonalInfo: React.FC<{ setModal: Function }>=(props)=>{
@@ -11,49 +12,72 @@ const ProfilePersonalInfo: React.FC<{ setModal: Function }>=(props)=>{
     const [toastErrorText,setToastErrorText]=React.useState("")
     const [isLoading,setIsLoading]=React.useState(true)
 
+    const all = async () => {
+        const result = await serverFetchNative("/profile/all", "GET", JSON.stringify({}))
+        if (result.user.email){
+            setName(result.user.name)
+            setSurname(result.user.surname)
+            setUsername(result.user.username)
+            setIsLoading(false)
+        }
+    }
+
     React.useEffect(()=>{
-        fetch("/profile/all",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if (result.user.email){
-                setName(result.user.name)
-                setSurname(result.user.surname)
-                setUsername(result.user.username)
-                setIsLoading(false)
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch("/profile/all",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.user.email){
+        //         setName(result.user.name)
+        //         setSurname(result.user.surname)
+        //         setUsername(result.user.username)
+        //         setIsLoading(false)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        all()
     },[])
 
-    const update=()=>{
+    const update= async ()=>{
         console.log(name)
-        fetch("/update/userinfo",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                name,
-                surname,
-                username
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if (result.stato==="success") setToastSuccess(true)
-            else{
+        try {
+            const result = await serverFetchNative("/update/userinfo", "POST", JSON.stringify({ name, surname, username }))
+            if (result.stato === "success") setToastSuccess(true)
+            else {
                 setToastErrorText(result.stato)
                 setToastError(true)
             }
-        })
-        .catch(err=>{
+        } catch (err) {
             setToastErrorText(err.stato)
             setToastError(true)
-        })
+        }
+        
+        // fetch("/update/userinfo", {
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         name,
+        //         surname,
+        //         username
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.stato==="success") setToastSuccess(true)
+        //     else{
+        //         setToastErrorText(result.stato)
+        //         setToastError(true)
+        //     }
+        // })
+        // .catch(err=>{
+        //     setToastErrorText(err.stato)
+        //     setToastError(true)
+        // })
     }
 
     return(

@@ -1,25 +1,33 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonImg, IonItem, IonList, IonRow, IonText } from '@ionic/react';
 import * as React from 'react';
 import { useHistory } from 'react-router';
+import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 
 const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Function, setModalUserView: Function }>=(props)=>{
     const [recentUsers,setRecentUsers]=React.useState([{_id: "", username: ""}])
     const history=useHistory()
 
+    const recentSearch = async () => {
+        const result = await serverFetchNative("/people/recentsearch", "GET", JSON.stringify({}))
+        console.log(result)
+        setRecentUsers(result.stato)
+    }
+
     React.useEffect(()=>{
         console.log("prova")
-        fetch("/people/recentsearch",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setRecentUsers(result.stato)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        recentSearch()
+        // fetch("/people/recentsearch",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setRecentUsers(result.stato)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     },[])
 
     return(

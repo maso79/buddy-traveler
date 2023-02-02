@@ -1,5 +1,6 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSpinner, IonText, IonToast, IonToggle } from '@ionic/react';
 import * as React from 'react';
+import serverFetchNative from '../logic/serverFetchNative';
 import BTHeaderModal from './BTHeaderModal';
 
 const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
@@ -9,39 +10,62 @@ const ProfilePrivacy: React.FC<{ setModal: Function }>=(props)=>{
     const [toastError,setToastError]=React.useState(false)
     const [toastErrorText,setToastErrorText]=React.useState("")
 
+    const profilePrivacy = async () => {
+        const result = await serverFetchNative("/profile/privacy", "GET", JSON.stringify({}))
+        console.log(result)
+        setPrivacy(result.user.isPrivate)
+        setIsLoading(false)
+    }
+
     React.useEffect(()=>{
-        fetch("/profile/privacy",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setPrivacy(result.user.isPrivate)
-            setIsLoading(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        // fetch("/profile/privacy",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setPrivacy(result.user.isPrivate)
+        //     setIsLoading(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
+        profilePrivacy()
     },[])
 
-    const update=()=>{
-        fetch(`/profile/profileprivacy/${privacy}`,{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
+    const update = async () => {
+        
+        try {
+            const result = await serverFetchNative(`/profile/profileprivacy/${privacy}`, "GET", JSON.stringify({}))
             console.log(result)
-            if (result.stato==="success") setToastSuccess(true)
-            else{
+            if (result.stato === "success") setToastSuccess(true)
+            else {
                 setToastErrorText("Something went wrong. Try again later")
                 setToastError(true)
             }
-        })
-        .catch(err=>{
+        } catch (err) {
             console.log(err)
             setToastErrorText("Something went wrong. Try again later")
             setToastError(true)
-        })
+        }
+
+        // fetch(`/profile/profileprivacy/${privacy}`,{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     if (result.stato==="success") setToastSuccess(true)
+        //     else{
+        //         setToastErrorText("Something went wrong. Try again later")
+        //         setToastError(true)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        //     setToastErrorText("Something went wrong. Try again later")
+        //     setToastError(true)
+        // })
     }
 
     return(
