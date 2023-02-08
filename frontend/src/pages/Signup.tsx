@@ -8,6 +8,7 @@ import SignUpLooking from '../components/SignUpLooking';
 import SignUpCountries from '../components/SignUpCountries';
 import SignUpGroups from '../components/SignUpGroups';
 import SignUpDone from '../components/SignUpDone';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const Signup: React.FC=()=>{
     const [phase,setPhase]=React.useState(0)
@@ -22,30 +23,37 @@ const Signup: React.FC=()=>{
     const [state,setState]=React.useState("pending")
     const history=useHistory()
 
+    const signUp = async () => {
+        const result = await serverFetchNative("/auth/signup", "POST", JSON.stringify({ name, surname, username, email, password, placesArray, countriesArray, groupsArray }))
+        console.log(result)
+        setState(result.stato)
+    }
+
     React.useEffect(()=>{
         if (phase===4){
-            fetch("/auth/signup",{
-                method: "POST",
-                headers:{
-                    "Content-Type": "Application/JSON"
-                },
-                body: JSON.stringify({
-                    name,
-                    surname,
-                    username,
-                    email,
-                    password,
-                    placesArray,
-                    countriesArray,
-                    groupsArray
-                })
-            })
-            .then(result=>result.json())
-            .then(result=>{
-                console.log(result)
-                setState(result.stato)
-            })
-            .catch(err=>console.log(err))
+            signUp()
+            // fetch("/auth/signup",{
+            //     method: "POST",
+            //     headers:{
+            //         "Content-Type": "Application/JSON"
+            //     },
+            //     body: JSON.stringify({
+            //         name,
+            //         surname,
+            //         username,
+            //         email,
+            //         password,
+            //         placesArray,
+            //         countriesArray,
+            //         groupsArray
+            //     })
+            // })
+            // .then(result=>result.json())
+            // .then(result=>{
+            //     console.log(result)
+            //     setState(result.stato)
+            // })
+            // .catch(err=>console.log(err))
         }
     },[phase])
 

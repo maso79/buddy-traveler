@@ -4,6 +4,7 @@ import BTHeader from '../components/BTHeader';
 import PeopleRecent from '../components/PeopleRecent';
 import PeopleSuggestions from '../components/PeopleSuggestions';
 import UserView from '../components/UserView';
+import serverFetchNative from '../logic/serverFetchNative';
 
 const People: React.FC=()=>{
     const [suggestions,setSuggestions]=React.useState([{_id: "",profilePicture: "", username: ""}])
@@ -13,26 +14,33 @@ const People: React.FC=()=>{
     const [userId,setUserId]=React.useState("")
     var searchTimeout=setTimeout(()=>{},100)
 
+    const findPeople = async () => {
+        const result = await serverFetchNative("/people/find", "POST", JSON.stringify({letters: query}))
+        console.log(result.stato)
+        setSuggestions(result.stato)
+    }
+
     React.useEffect(()=>{
         setSuggestions([])
         clearTimeout(searchTimeout)
         searchTimeout=setTimeout(async ()=>{
             if (query.length>=3){
-                const result=await fetch("/people/find",{
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "Application/JSON"
-                    },
-                    body: JSON.stringify({letters: query})
-                })
-                .then(result=>result.json())
-                .then(result=>{
-                    console.log(result.stato)
-                    setSuggestions(result.stato)
-                })
-                .catch(err=>{
-                    console.log(err)
-                })
+                findPeople()
+                // const result=await fetch("/people/find",{
+                //     method: "POST",
+                //     headers: {
+                //         "Content-Type": "Application/JSON"
+                //     },
+                //     body: JSON.stringify({letters: query})
+                // })
+                // .then(result=>result.json())
+                // .then(result=>{
+                //     console.log(result.stato)
+                //     setSuggestions(result.stato)
+                // })
+                // .catch(err=>{
+                //     console.log(err)
+                // })
             }
         },250)
     },[query])

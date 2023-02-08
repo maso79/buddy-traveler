@@ -8,6 +8,7 @@ import ProfilePassword from '../components/ProfilePassword';
 import ProfilePersonalInfo from '../components/ProfilePersonalInfo';
 import ProfilePictures from '../components/ProfilePicture';
 import ProfilePrivacy from '../components/ProfilePrivacy';
+import serverFetchNative from '../logic/serverFetchNative';
 import placeholder_profile from '../pictures/placeholder-profile.png'
 
 
@@ -80,55 +81,78 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
         },
     ]
     
+    const getAll = async () => {
+        const result = await serverFetchNative("/profile/all", "GET", JSON.stringify({}))
+        if (result.user.email){
+            setName(result.user.name)
+            setIsLoading(false)
+        }
+    }
+
+    const getFollowers = async () => {
+        const result = await serverFetchNative("/profilestats/followers", "GET", JSON.stringify({}))
+        console.log(result)
+        setFollowersNumber(result.followers.length)
+    } 
+
+    const getFollowing = async () => {
+        const result = await serverFetchNative("/profilestats/following", "GET", JSON.stringify({}))
+        console.log(result)
+        setFollowingNumber(result.followers.length)
+    }
+
     React.useEffect(()=>{
         console.log("use effect")
 
         retriveImage()
 
-        fetch("/profile/all",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if (result.user.email){
-                setName(result.user.name)
-                setIsLoading(false)
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        getAll()
+        // fetch("/profile/all",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.user.email){
+        //         setName(result.user.name)
+        //         setIsLoading(false)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
 
 
-        fetch("/profilestats/followers",{
-            method: "GET",
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setFollowersNumber(result.followers.length)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        getFollowers()
+        // fetch("/profilestats/followers",{
+        //     method: "GET",
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setFollowersNumber(result.followers.length)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
 
-
-        fetch("/profilestats/following",{
-            method: "GET",
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setFollowingNumber(result.followers.length)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        getFollowing()
+        // fetch("/profilestats/following",{
+        //     method: "GET",
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setFollowingNumber(result.followers.length)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     },[])
 
     const retriveImage = async () => {
-        const { url } = await fetch("/update/profileimage")
-            .then(res => res.json())
+        const { url } = await serverFetchNative("/update/profileimage", "GET", JSON.stringify({}))
+        // const { url } = await fetch("/update/profileimage")
+        //     .then(res => res.json())
         
         if (url.url == "not found") {
             setLoadingPicture(false)            
@@ -142,17 +166,22 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
         setLoadingPicture(false)
     }
 
-    const logout=()=>{
-        fetch("/auth/logout",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            props.setAutorizzato(false)
-            props.setConfigurato(true)
-            history.push("/signin")
-        })
-        .catch(err=>console.log(err))
+    const logout= async ()=>{
+        const result = await serverFetchNative("/auth/logout", "GET", JSON.stringify({}))
+        props.setAutorizzato(false)
+        props.setConfigurato(true)
+        history.push("/signin")
+
+        // fetch("/auth/logout",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     props.setAutorizzato(false)
+        //     props.setConfigurato(true)
+        //     history.push("/signin")
+        // })
+        // .catch(err=>console.log(err))
     }
 
     return(

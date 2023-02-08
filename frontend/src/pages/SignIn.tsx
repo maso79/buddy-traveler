@@ -1,6 +1,7 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonPage, IonRow, IonText, IonTitle, IonToast, IonToolbar } from '@ionic/react';
 import * as React from 'react';
 import { useHistory } from 'react-router';
+import serverFetchNative from '../logic/serverFetchNative';
 import setItemLocalStorage from '../logic/setItemLocalStorage';
 import placeholder_logo from '../pictures/placeholder-logo.png'
 
@@ -15,18 +16,9 @@ const SignIn: React.FC<{ setConfigurato: Function, setAutorizzato: Function }>=(
 
     const signin=async ()=>{
         setProcessing(true)
-        fetch("/auth/signin",{
-            method: "POST",
-            headers:{
-                "Content-Type": "Application/JSON"
-            },
-            body: JSON.stringify({
-                email,
-                password
-            })
-        })
-        .then(result=>result.json())
-        .then(result=>{
+
+        try {
+            const result = await serverFetchNative("/auth/signin", "POST", JSON.stringify({ email, password}))
             console.log(result)
             if (result.stato==="success"){
                 setItemLocalStorage("configurato",true)
@@ -41,10 +33,40 @@ const SignIn: React.FC<{ setConfigurato: Function, setAutorizzato: Function }>=(
                 setToastText("Looks like the username or password you used is not valid. Please try again with different data")
                 setToastError(true)
             }
-        })
-        .catch(err=>{
+        } catch (err) {
             setProcessing(false)
-        })
+        }
+
+        // fetch("/auth/signin",{
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type": "Application/JSON"
+        //     },
+        //     body: JSON.stringify({
+        //         email,
+        //         password
+        //     })
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     if (result.stato==="success"){
+        //         setItemLocalStorage("configurato",true)
+        //         props.setConfigurato(true)
+        //         console.log("cookies:")
+        //         console.log(document.cookie)
+        //         props.setAutorizzato(true)
+        //         history.push("/home")
+        //     }
+        //     if (result.stato==="error: null"){
+        //         setToastTitle("Wrong data")
+        //         setToastText("Looks like the username or password you used is not valid. Please try again with different data")
+        //         setToastError(true)
+        //     }
+        // })
+        // .catch(err=>{
+        //     setProcessing(false)
+        // })
     }
 
     return(

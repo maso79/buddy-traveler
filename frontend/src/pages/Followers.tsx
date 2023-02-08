@@ -2,6 +2,7 @@ import { IonCol, IonContent, IonGrid, IonImg, IonItem, IonList, IonModal, IonPag
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
 import UserView from '../components/UserView';
+import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 
 const Followers: React.FC=()=>{
@@ -16,19 +17,27 @@ const Followers: React.FC=()=>{
         surname: ""
     }])
 
+    const getFollowerStats = async () => {
+        const result = await serverFetchNative("/profilestats/followers", "GET", JSON.stringify({}))
+        console.log(result)
+        setFollowes(result.followers)
+        setIsLoading(false)
+    }
+
     React.useEffect(()=>{
-        fetch("/profilestats/followers",{
-            method: "GET",
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            console.log(result)
-            setFollowes(result.followers)
-            setIsLoading(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        getFollowerStats()
+        // fetch("/profilestats/followers",{
+        //     method: "GET",
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     console.log(result)
+        //     setFollowes(result.followers)
+        //     setIsLoading(false)
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
     },[])
 
     return(

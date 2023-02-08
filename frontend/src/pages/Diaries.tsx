@@ -6,6 +6,7 @@ import CardDiaryList from '../components/CardDiaryList';
 import CardNoDiaries from '../components/CardNoDiaries';
 import DiaryCreate from '../components/DiaryCreate';
 import DiaryView from '../components/DiaryView';
+import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 
 const Diaries: React.FC=()=>{
@@ -15,30 +16,39 @@ const Diaries: React.FC=()=>{
     const [modal,setModal]=React.useState(-1)
     const [modalDiaries, setModalDiaries] = React.useState("null")
     const [update,setUpdate]=React.useState(0)
- 
+    
+    const getDiaries = async () => {
+        const result = await serverFetchNative("/diary/diaries", "GET", JSON.stringify({}))
+        if(result.diaries) {
+            console.log(diaries)
+
+            setDiaries(result.diaries)
+            setDiariesNumber(result.diaries.length)
+            setIsLoading(false)
+        }
+    }
+
     React.useEffect(()=>{
         console.log("use effect")
 
-        fetch("/diary/diaries",{
-            method: "GET"
-        })
-        .then(result=>result.json())
-        .then(result=>{
-            if (result.diaries){
-                // for (let i=0;i<result.diaries.length;i++){
-                //     fetch("/")
-                // }
+        getDiaries()
+        // fetch("/diary/diaries",{
+        //     method: "GET"
+        // })
+        // .then(result=>result.json())
+        // .then(result=>{
+        //     if (result.diaries){
 
-                console.log(diaries)
+        //         console.log(diaries)
 
-                setDiaries(result.diaries)
-                setDiariesNumber(result.diaries.length)
-                setIsLoading(false)
-            }
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+        //         setDiaries(result.diaries)
+        //         setDiariesNumber(result.diaries.length)
+        //         setIsLoading(false)
+        //     }
+        // })
+        // .catch(err=>{
+        //     console.log(err)
+        // })
 
     },[modal, update])
 
