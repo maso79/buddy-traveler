@@ -13,9 +13,14 @@ const settings = require("./routers/settings")
 const session = require("express-session")
 const MongoDBSession = require("connect-mongodb-session")(session)
 const morgan = require("morgan")
+const cors=require("cors")
 require("dotenv").config();
 
 const PORT = process.env.PORT;
+const corsOptions={
+  credentials: true,
+  origin: ["http://localhost:8100","http://localhost:3000", "http://localhost", "https://127.0.0.1", "https://192.168.1.63"]
+}
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:8100");
@@ -56,6 +61,8 @@ app.use(morgan("dev"))
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors(corsOptions))
+
 app.use("/update", update)
 app.use("/auth", auth);
 app.use("/profilestats", profilestats)
