@@ -1,11 +1,12 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonImg, IonItem, IonList, IonRow, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonList, IonRow, IonText } from '@ionic/react';
+import { close } from 'ionicons/icons';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 
 const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Function, setModalUserView: Function }>=(props)=>{
-    const [recentUsers,setRecentUsers]=React.useState([{_id: "", username: ""}])
+    const [recentUsers,setRecentUsers]=React.useState([{_id: "", username: "", name: "", surname: ""}])
     const history=useHistory()
 
     const recentSearch = async () => {
@@ -31,13 +32,13 @@ const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Functio
     },[])
 
     return(
-        <IonCard>
-            <IonCardHeader>
-                <IonCardTitle>Recently Viewed People</IonCardTitle>
-            </IonCardHeader>
+        <IonCard className='people-recent-card'>
             <IonCardContent>
                 <IonGrid>
                     <IonRow>
+                        <IonCol size='12'>
+                            <h3 className='bold'>Recent</h3>
+                        </IonCol>
                         <IonCol size="12">
                             {
                                 recentUsers.length===0 &&
@@ -48,16 +49,27 @@ const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Functio
                             }
                             {
                                 recentUsers.length > 0 &&
-                                <IonList>
+                                <IonList lines='none'>
                                     {                                    
-                                    recentUsers.map(user=>(
-                                        <IonItem button onClick={()=>{
-                                            // props.setUserIdView(user._id)
-                                            // props.setUserUsername(user.username)
-                                            // props.setModalUserView(1)
-
-                                            history.push(`/people/${user.username}&${user._id}`)
-                                        }}>{user.username}</IonItem>
+                                    recentUsers.map((user,i)=>(
+                                        <IonItem className='people-recent-card' key={i}>
+                                            <IonGrid>
+                                                <IonRow>
+                                                    <IonCol size='2' onClick={()=>history.push(`/people/${user.username}&${user._id}`)}>
+                                                        <IonImg src={placeholder} />
+                                                    </IonCol>
+                                                    <IonCol size='7' offset='1' onClick={()=>history.push(`/people/${user.username}&${user._id}`)}>
+                                                        <IonText><h4>{user.username}</h4></IonText>
+                                                        <IonText className='text-muted'> <small>{user.name} {user.surname}</small> </IonText>
+                                                    </IonCol>
+                                                    <IonCol size='2'>
+                                                        <IonButton color={"light"} fill="clear">
+                                                            <IonIcon icon={close} color="primary" />
+                                                        </IonButton>
+                                                    </IonCol>
+                                                </IonRow>
+                                            </IonGrid>
+                                        </IonItem>
                                     ))}
 
                                 </IonList>

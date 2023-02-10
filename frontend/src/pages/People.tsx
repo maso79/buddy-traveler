@@ -1,4 +1,4 @@
-import { IonCol, IonContent, IonGrid, IonModal, IonPage, IonRow, IonSearchbar, IonText } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonLabel, IonModal, IonPage, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonText } from '@ionic/react';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
 import PeopleRecent from '../components/PeopleRecent';
@@ -47,10 +47,12 @@ const People: React.FC=()=>{
 
     return(
         <IonPage>
-            <BTHeader title="People" />
             <IonContent>
                 <IonGrid>
                     <IonRow>
+                        <IonCol size='12'>
+                            <h1 className="bt-header bold spazio-lato">Look for the right one.</h1>
+                        </IonCol>
                         <IonCol size="12">
                             <IonSearchbar placeholder="Search for people" value={query} onIonChange={e=>{
                                 setQuery(e.detail.value!)
@@ -59,6 +61,16 @@ const People: React.FC=()=>{
                                 suggestions.length > 0 && query!=="" &&
                                 <PeopleSuggestions suggestions={suggestions} setUserIdView={setUserId} setUserUsername={setUserUsername} setModalUserView={setModalUser} />
                             }
+                        </IonCol>
+                        <IonCol size='12' className='bt-space-side'>
+                            <IonSegment value='recent' mode='ios'>
+                                <IonSegmentButton value='recent'>
+                                    <IonLabel>Recent</IonLabel>
+                                </IonSegmentButton>
+                                <IonSegmentButton value='suggestions'>
+                                    <IonLabel>Suggestions</IonLabel>
+                                </IonSegmentButton>
+                            </IonSegment>
                         </IonCol>
                         <IonCol size="12">
                             <PeopleRecent setUserIdView={setUserId} setUserUsername={setUserUsername} setModalUserView={setModalUser}/>

@@ -16,6 +16,32 @@ body{
     height: 100%;
 }
 
+.bt-inherit{
+    background-color: inherit !important;
+}
+
+.bt-space-side{
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+}
+
+ion-segment-button::part(indicator-background) {
+    background: #DEE7D2 !important;
+  }
+
+ion-segment-button.ios::part(native) {
+    border-radius: 20px;
+}
+
+.segment-button-checked.ios::part(native) {
+    background-color: #DEE7D2;
+    color: #383838;
+}
+
+ion-segment-button.ios::part(indicator-background) {
+  border-radius: 20px;
+}
+
 .landing{
     padding-top: 20px;
     padding-left: 10px;
@@ -135,4 +161,9 @@ body{
 .bold{
     font-weight: bold !important;
     font-weight: 700 !important;
+}
+
+.people-recent-card{
+    background-color: #F3F3F3 !important;
+    color: #383838 !important;
 }
