@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { home, homeOutline, library, libraryOutline, map, mapOutline, people, peopleOutline, personCircle, personCircleOutline } from 'ionicons/icons';
+import { book, bookOutline, home, homeOutline, library, libraryOutline, map, mapOutline, people, peopleOutline, personCircle, personCircleOutline } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -43,6 +43,7 @@ import Followers from './pages/Followers';
 import Following from './pages/Following';
 import PeopleUserView from './pages/PeopleUserView';
 import serverFetchNative from './logic/serverFetchNative';
+import navbarIcons from './logic/navbarIcons';
 
 setupIonicReact();
 
@@ -136,10 +137,10 @@ const App: React.FC = () => {
                 </IonRouterOutlet>
                 <IonTabBar slot="bottom" className="spazio-fondo tabbar" color={"primary"}>
                   <IonTabButton tab="home" href="/home">
-                    <IonIcon icon={homeOutline} className="tabbar-icon" />
+                    <IonIcon icon={navbarIcons.fill!="home" ? homeOutline : home} className="tabbar-icon" />
                   </IonTabButton>
                   <IonTabButton tab="diaries" href="/diaries">
-                    <IonIcon icon={libraryOutline} className="tabbar-icon" />
+                    <IonIcon icon={navbarIcons.fill!="diaries" ? bookOutline : book} className="tabbar-icon" />
                   </IonTabButton>
                   <IonTabButton tab="people" href="/people">
                     <IonIcon icon={peopleOutline} className="tabbar-icon" />

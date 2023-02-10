@@ -14,6 +14,7 @@ import placeholder_profile from '../pictures/placeholder-profile.png'
 
 const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=(props)=>{
     const [isLoading,setIsLoading]=React.useState(true)
+    const [username,setUsername]=React.useState("")
     const [name,setName]=React.useState("")
     const [modal,setModal]=React.useState(-1)
     const [path,setPath]=React.useState(placeholder_profile)
@@ -85,6 +86,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
         const result = await serverFetchNative("/profile/all", "GET", JSON.stringify({}))
         if (result.user.email){
             setName(result.user.name)
+            setUsername(result.user.username)
             setIsLoading(false)
         }
     }
@@ -105,48 +107,9 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
         console.log("use effect")
 
         retriveImage()
-
         getAll()
-        // fetch("/profile/all",{
-        //     method: "GET"
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     if (result.user.email){
-        //         setName(result.user.name)
-        //         setIsLoading(false)
-        //     }
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
-
-
         getFollowers()
-        // fetch("/profilestats/followers",{
-        //     method: "GET",
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     console.log(result)
-        //     setFollowersNumber(result.followers.length)
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
-
         getFollowing()
-        // fetch("/profilestats/following",{
-        //     method: "GET",
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     console.log(result)
-        //     setFollowingNumber(result.followers.length)
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
     },[])
 
     const retriveImage = async () => {
@@ -204,7 +167,10 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                     <>
                         <IonGrid>
                             <IonRow>
-                                <IonCol size="6" offset="3">
+                                <IonCol size="6" className="text-center">
+                                    <IonText><h1>{username}</h1></IonText>
+                                </IonCol>
+                                <IonCol size="6">
                                     {
                                         loadingPicture === true &&
                                         <IonGrid className="landing-half">
@@ -222,9 +188,6 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                             <IonImg src={path} alt="picture" />
                                         </IonCard>
                                     }
-                                </IonCol>
-                                <IonCol size="12" className="text-center">
-                                    <IonText><h1>Hi, {name}</h1></IonText>
                                 </IonCol>
                                 <IonCol size="6" className="text-center" onClick={()=>history.push("/followers")}>
                                     <IonText><h1>{followersNumber}</h1><br />followers</IonText>

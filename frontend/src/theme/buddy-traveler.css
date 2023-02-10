@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700&display=swap');
+
+body{
+    font-family: 'Inter', sans-serif;
+}
+
+.bt-header{
+    font-size: 25px !important;
+}
+
+.bt-padding-top{
+    padding-top: 15px !important;
+}
+
+.bt-same-height{
+    height: 100%;
+}
+
 .landing{
     padding-top: 20px;
     padding-left: 10px;
@@ -67,7 +85,7 @@
     /* background-color: #86B049 !important;
     color: white !important; */
     border-radius: 34px !important;
-    margin: 10px 15px 15px 15px !important;
+    margin: 10px 15px 20px 15px !important;
     padding: 12px 12px 12px 12px !important;
 }
 
@@ -80,12 +98,41 @@
     border-radius: 50% !important;
 }
 
+.diaries-card{
+    background-color: #F3F3F3 !important;
+}
+
 .diary-card{
-    background-color: #B4CE8F !important;
+    display: flex;
     border-radius: 15px !important;
 }
 
 .diary-card-picture{
+    width: 50%;
+    height: 100%;
+    
     border-top-left-radius: 15px !important;
     border-bottom-left-radius: 15px !important;
+}
+
+.diary-card-content{
+    background-color: #DAE4CB !important;
+    color: #3E3E3E !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.diary-card-left{
+    border-top-left-radius: 15px !important;
+    border-bottom-left-radius: 15px !important;
+}
+
+.diary-card-right{
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+}
+
+.bold{
+    font-weight: bold !important;
+    font-weight: 700 !important;
 }

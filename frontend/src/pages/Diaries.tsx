@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonItemDivider, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
+import { IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonRow, IonSpinner, IonText } from '@ionic/react';
 import { add, calendar, location } from 'ionicons/icons';
 import * as React from 'react';
 import BTHeader from '../components/BTHeader';
@@ -6,6 +6,7 @@ import CardDiaryList from '../components/CardDiaryList';
 import CardNoDiaries from '../components/CardNoDiaries';
 import DiaryCreate from '../components/DiaryCreate';
 import DiaryView from '../components/DiaryView';
+import navbarIcons from '../logic/navbarIcons';
 import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 
@@ -32,23 +33,7 @@ const Diaries: React.FC=()=>{
         console.log("use effect")
 
         getDiaries()
-        // fetch("/diary/diaries",{
-        //     method: "GET"
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     if (result.diaries){
-
-        //         console.log(diaries)
-
-        //         setDiaries(result.diaries)
-        //         setDiariesNumber(result.diaries.length)
-        //         setIsLoading(false)
-        //     }
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
+        navbarIcons.setFill("diaries")
 
     },[modal, update])
 
@@ -70,6 +55,7 @@ const Diaries: React.FC=()=>{
                 {
                     isLoading === false &&
                     <>
+                        <h1 className='spazio-lato landing bold bt-header'>My diaries</h1>
                         {
                             diariesNumber === 0 &&
                             <>
@@ -84,21 +70,30 @@ const Diaries: React.FC=()=>{
                         }
                         {
                             diariesNumber > 0 &&
-                            <IonGrid>
-                                <IonRow>
+                            <IonCard className='diaries-card'>
+                                <IonCardContent>
+                                    <IonItemDivider>
+                                        <IonLabel>2023</IonLabel>
+                                    </IonItemDivider>
                                     {
                                             diaries.map((diary, i) => (
-                                            // <IonCol sizeXs="12" sizeMd="6">
-                                            //     <CardDiaryList key={i} _id={diary._id} name={diary.name} destination={diary.destination} startDate={diary.startDate} endDate={diary.endDate} thumbnail={diary.imageName} setModalDiaries={setModalDiaries} />
-                                            // </IonCol>
-                                            <div className='diary-card'>
-                                                <IonRow>
+                                            <div key={i}>
+                                                
                                                     {
                                                         i%2===0 &&
+                                                        <div className='spazio-lato diary-card bt-padding-top'>
+                                                            <IonImg src={placeholder} className="diary-card-picture diary-card-left"  />
+                                                            <div className="diary-card-content spazio-lato">
+                                                                <h4 className='bold'>{diary.name}</h4>
+                                                                <h5>Location: {diary.destination}</h5>
+                                                                <small>From {new Date(diary.startDate).toLocaleString("it-IT",{dateStyle: "short"})} to {new Date(diary.endDate).toLocaleString("it-IT",{dateStyle: "short"})}</small>
+                                                            </div>
+                                                        </div>
+
+                                                    }
+                                                    {
+                                                        i%2===1 &&
                                                         <>
-                                                            <IonCol size='6'>
-                                                                <IonImg src={diary.imageName !== "" ? ""+diary.imageName : placeholder} className="diary-card-picture" />
-                                                            </IonCol>
                                                             <IonCol size='6'>
                                                                 <IonGrid>
                                                                     <IonRow>
@@ -114,15 +109,18 @@ const Diaries: React.FC=()=>{
                                                                     </IonRow>
                                                                 </IonGrid>
                                                             </IonCol>
+                                                            <IonCol size='6'>
+                                                                <IonImg src={diary.imageName !== "" ? ""+diary.imageName : placeholder} className="diary-card-picture" />
+                                                            </IonCol>
                                                         </>
 
                                                     }
-                                                </IonRow>
+                                                
                                             </div>
                                         ))
                                     }
-                                </IonRow>
-                            </IonGrid>
+                                </IonCardContent>
+                            </IonCard>
                         }
                         {
                             diariesNumber > 0 &&
