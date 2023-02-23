@@ -1,5 +1,5 @@
-import { IonActionSheet, IonAlert, IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText, useIonActionSheet } from '@ionic/react';
-import { atCircle, camera, closeCircle, key, lockClosed, logOut, shield } from 'ionicons/icons';
+import { IonActionSheet, IonAlert, IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonList, IonListHeader, IonModal, IonPage, IonRow, IonSpinner, IonText, useIonActionSheet } from '@ionic/react';
+import { atCircle, camera, closeCircle, cog, key, lockClosed, logOut, shield } from 'ionicons/icons';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import BTHeader from '../components/BTHeader';
@@ -169,7 +169,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                             <IonRow>
                                 <IonCol size="6" className="profile-info">
                                     <IonText>
-                                        <h1><b>{username}</b></h1>
+                                        <h1 className='bold'>{username}</h1>
                                         <p className="text-muted">{name}</p>
                                     </IonText>
                                 </IonCol>
@@ -192,20 +192,37 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                                         </IonCard>
                                     }
                                 </IonCol>
-                                <IonCol size="6" className="text-center" onClick={()=>history.push("/followers")}>
-                                    <IonText><h1>{followersNumber}</h1><br />followers</IonText>
+                                <IonCol size="2" className="text-center" onClick={()=>history.push("/followers")}>
+                                    <IonText>
+                                        <small>Followers</small>
+                                        <br />  
+                                        <small>{followersNumber}</small>
+                                    </IonText>
                                 </IonCol>
-                                <IonCol size="6" className="text-center" onClick={()=>history.push("/following")}>
-                                    <IonText><h1>{followingNumber}</h1><br />followed</IonText>
+                                <IonCol size="2" className="text-center" onClick={()=>history.push("/following")}>
+                                    <IonText>
+                                        <small>Following</small>
+                                        <br />
+                                        <small>{followingNumber}</small>
+                                    </IonText>
                                 </IonCol>
-                                <IonCol size="12">
-                                    <IonButton
-                                        className="text-left"
-                                        expand="block"
-                                        onClick={() =>setActionsheet(true) }
-                                    >
-                                        Settings
+                                <IonCol size='2' className='text-center'>
+                                    <IonText>
+                                        <small>Diaries</small>
+                                        <br />
+                                        <small>3</small>
+                                    </IonText>
+                                </IonCol>
+                                <IonCol size='6'>
+                                    <IonButton color={"primary"} expand="block" onClick={() =>setActionsheet(true)}>
+                                        Settings <IonIcon icon={cog} />
                                     </IonButton>
+                                </IonCol>
+                                <IonCol size='12'>
+                                    <IonItemDivider mode='md' />
+                                </IonCol>
+                                <IonCol size='12'>
+                                    <IonText><h2 className='bold profile-text'>Best of 2023</h2></IonText>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
