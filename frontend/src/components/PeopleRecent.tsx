@@ -6,7 +6,7 @@ import serverFetchNative from '../logic/serverFetchNative';
 import placeholder from '../pictures/placeholder.png'
 
 const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Function, setModalUserView: Function }>=(props)=>{
-    const [recentUsers,setRecentUsers]=React.useState([{_id: "", username: "", name: "", surname: ""}])
+    const [recentUsers,setRecentUsers]=React.useState([{_id: "", username: "", name: "", surname: "", imageName: ""}])
     const history=useHistory()
 
     const recentSearch = async () => {
@@ -56,7 +56,7 @@ const PeopleRecent: React.FC<{ setUserIdView: Function, setUserUsername: Functio
                                             <IonGrid>
                                                 <IonRow>
                                                     <IonCol size='2' onClick={()=>history.push(`/people/${user.username}&${user._id}`)}>
-                                                        <IonImg src={placeholder} />
+                                                        <IonImg src={"https://buddytraveler-s3-bucket.s3.eu-central-1.amazonaws.com/"+user.imageName} className="bt-img-round" />
                                                     </IonCol>
                                                     <IonCol size='7' offset='1' onClick={()=>history.push(`/people/${user.username}&${user._id}`)}>
                                                         <IonText><h4>{user.username}</h4></IonText>

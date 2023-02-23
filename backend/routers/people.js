@@ -76,13 +76,15 @@ router.get("/recentsearch", async (req,res)=>{
       '$addFields': {
         'username': '$user.username',
         'name': '$user.name',
-        'surname': '$user.surname'
+        'surname': '$user.surname',
+        'imageName': '$user.imageName'
       }
     }, {
       '$project': {
         'username': 1,
         'name': 1,
-        'surname': 1
+        'surname': 1,
+        'imageName': 1
       }
     }
   ],(err,data)=>{

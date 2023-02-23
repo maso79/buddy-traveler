@@ -25,6 +25,10 @@ body{
     padding-right: 10% !important;
 }
 
+.bt-img-round{
+    border-radius: 20px !important;
+}
+
 ion-segment-button::part(indicator-background) {
     background: #DEE7D2 !important;
   }
@@ -166,4 +170,9 @@ ion-segment-button.ios::part(indicator-background) {
 .people-recent-card{
     background-color: #F3F3F3 !important;
     color: #383838 !important;
+}
+
+.profile-info{
+    padding-top: 20% !important;
+    padding-left: 10%;
 }

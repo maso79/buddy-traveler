@@ -85,7 +85,7 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
     const getAll = async () => {
         const result = await serverFetchNative("/profile/all", "GET", JSON.stringify({}))
         if (result.user.email){
-            setName(result.user.name)
+            setName(result.user.name+" "+result.user.surname)
             setUsername(result.user.username)
             setIsLoading(false)
         }
@@ -167,8 +167,11 @@ const Profile: React.FC<{ setAutorizzato: Function, setConfigurato: Function }>=
                     <>
                         <IonGrid>
                             <IonRow>
-                                <IonCol size="6" className="text-center">
-                                    <IonText><h1>{username}</h1></IonText>
+                                <IonCol size="6" className="profile-info">
+                                    <IonText>
+                                        <h1><b>{username}</b></h1>
+                                        <p className="text-muted">{name}</p>
+                                    </IonText>
                                 </IonCol>
                                 <IonCol size="6">
                                     {
