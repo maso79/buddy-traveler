@@ -86,6 +86,7 @@ const Diaries: React.FC=()=>{
                                                 thumbnail={diary.imageName}
                                                 setModalDiaries={setModalDiaries}
                                                 i={i}
+                                                key={i}
                                             />
                                         ))
                                     }
