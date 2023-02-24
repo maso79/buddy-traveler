@@ -55,22 +55,17 @@ const ProfilePictures: React.FC<{ setModal: Function }>=(props)=>{
         const file = document.querySelector("input").files[0]
         console.log(file)
         if (file != undefined || file.type == "image/jpg" || file.type == "image/jpeg" || file.type == "image/png") {
-            if (file.size < 1000000) {
+            if (file.size < 10000000) {
+                const { url } = await fetch("/update/s3Url")
+                .then(res => res.json())
 
-                const { url } = await serverFetchNative("/update/s3Url", "GET", JSON.stringify({}))
-
-                // const { url } = await fetch("/update/s3Url")
-                // .then(res => res.json())
-
-                const result = await serverFetchNative(url, "PUT", file)
-
-                // await fetch(url, {
-                //     method: "PUT",
-                //     headers: {
-                //         "Content-Type": "multipart/form-data"
-                //     },
-                //     body: file
-                // })
+                await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
+                    body: file
+                })
 
                 const imageUrl = url.split('?')[0]
                 setPath(imageUrl)

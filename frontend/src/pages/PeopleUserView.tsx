@@ -142,6 +142,7 @@ const PeopleUserView: React.FC=()=>{
     React.useEffect(() => {
         const url=location.pathname
         const user=url.split("/")[2]
+        setOptions([])
 
         console.log(user.split("&"))
 
@@ -152,156 +153,17 @@ const PeopleUserView: React.FC=()=>{
         retriveImage()
         retriveDiaries()
 
-        // fetch("/people/checkusername", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "Application/JSON"
-        //     },
-        //     body: JSON.stringify({
-        //         username: userUsername
-        //     })
-        // })
-        // .then(result => result.json())
-        // .then(result => {
-        //     if (result.stato) {
-        //         window.location.href = "/profile"
-        //     } else {
-        //         console.log("non è il tuo profilo")
-        //     }
-        // })
         checkUsername()
 
         friendshipStatus()
-        // fetch("/profilestats/friendship-status/"+userId,{
-        //     method: "GET",
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     console.log(result)
-        //     if (result.following){
-        //         //non seguire più
-        //         options.push({
-        //             text: "Unfollow",
-        //             icon: closeCircle,
-        //             role: "edit",
-        //             handler: ()=>unfollowUser()
-        //         })
-        //     }
-        //     else if (result.private){
-        //         //richiedi
-        //         options.push({
-        //             text: "Send friendship request",
-        //             icon: send,
-        //             role: "edit",
-        //             handler: ()=>makeFriendshipRequest()
-        //         })
-        //     }
-        //     else{
-        //         //segui
-        //         options.push({
-        //             text: "Follow",
-        //             icon: addCircle,
-        //             role: "edit",
-        //             handler: ()=>followUser()
-        //         })
-        //     }
-
-        //     if (result.isBlocked){
-        //         //sblocca
-        //         options.push({
-        //             text: "Unlock user",
-        //             icon: lockOpen,
-        //             role: "edit",
-        //             handler: ()=>{}
-        //         })
-        //     }
-        //     else{
-        //         //blocca
-        //         options.push({
-        //             text: "Lock user",
-        //             icon: lockClosed,
-        //             role: "edit",
-        //             handler: ()=>{}
-        //         })
-        //     }
-
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
 
         checkIsFollowing()
-        //Controllo se sto seguendo l'utente che sto visualizzando ora
-        // fetch("/profilestats/isfollowing",{
-        //     method: "POST",
-        //     headers:{
-        //         "Content-Type": "Application/JSON"
-        //     },
-        //     body: JSON.stringify({
-        //         userFollowedId: userId
-        //     })
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     setIsFolllowing(result.stato)
-        //     console.log(isFollowing)
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
 
         getUserStats()
-        //recupero i dati dell'utente 
-        // fetch("/profilestats/getuserstats",{
-        //     method: "POST",
-        //     headers:{
-        //         "Content-Type": "Application/JSON"
-        //     },
-        //     body: JSON.stringify({
-        //         userUsername: userUsername
-        //     })
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     console.log(result)
-        //     setUserView(result.data)
-        //     setLoading(false)
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
 
         checkIsFollowingBack()
-        // fetch("/profilestats/isfollowingback",{
-        //     method: "POST",
-        //     headers:{
-        //         "Content-Type": "Application/JSON"
-        //     },
-        //     body: JSON.stringify({
-        //         userFollowedId: userId
-        //     })
-        // })
-        // .then(result=>result.json())
-        // .then(result=>{
-        //     console.log(result)
-        //     setIsFollowingBack(result.stato)
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
 
-
-        //aggiungo questo utente alle visualizzazioni recenti
         addRecentUser()
-        // fetch("/people/recentsearch",{
-        //     method: "POST",
-        //     headers:{
-        //         "Content-Type": "Application/JSON"
-        //     },
-        //     body: JSON.stringify({
-        //         username: userUsername
-        //     })
-        // })
     },[reload])
 
 

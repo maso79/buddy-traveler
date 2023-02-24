@@ -93,16 +93,14 @@ const Diary: React.FC=()=>{
                                                     <IonCol size='12'>
                                                         <IonImg src={path} className="diary-card-picture" alt="Placeholder" />
                                                         <IonCard className='diary-about'>
-                                                            <IonCardHeader>
-                                                                <IonCardSubtitle>
-                                                                </IonCardSubtitle>
-                                                                <IonCardTitle>
-                                                                    About this diary
-                                                                </IonCardTitle>
-                                                            </IonCardHeader>
                                                             <IonCardContent className='diary-info'>
                                                                 <IonGrid>
                                                                     <IonRow>
+                                                                        <IonCol size='12'>
+                                                                            <IonText>
+                                                                                <h2>About this diary</h2>
+                                                                            </IonText>
+                                                                        </IonCol>
                                                                         <IonCol size='4' className='text-center'>
                                                                             <IonIcon icon={business} size="large" />
                                                                             <p>{diary.destination}</p>
@@ -140,7 +138,7 @@ const Diary: React.FC=()=>{
                                             <IonGrid>
                                                 <IonRow>
                                                     <IonCol size='12'>
-                                                        
+
                                                     </IonCol>
                                                 </IonRow>
                                             </IonGrid>
