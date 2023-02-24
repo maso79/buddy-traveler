@@ -133,16 +133,11 @@ ion-segment-button.ios::part(indicator-background) {
 }
 
 .diary-card{
-    display: flex;
-    border-radius: 15px !important;
+    background-color: rgb(180, 206, 143, .4) !important;
 }
 
 .diary-card-picture{
-    width: 50%;
-    height: 100%;
-    
-    border-top-left-radius: 15px !important;
-    border-bottom-left-radius: 15px !important;
+    border-radius: 15px !important;
 }
 
 .diary-card-content{
@@ -162,12 +157,22 @@ ion-segment-button.ios::part(indicator-background) {
     border-bottom-right-radius: 15px !important;
 }
 
+
+.diary-title{
+    padding-left: 4%;
+}
+
+.diary-info{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
 .bold{
     font-weight: bold !important;
     font-weight: 700 !important;
 }
 
-.people-recent-card{
+.people-recent-card,.diary-about{
     background-color: #F3F3F3 !important;
     color: #383838 !important;
 }

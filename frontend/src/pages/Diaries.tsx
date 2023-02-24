@@ -76,47 +76,17 @@ const Diaries: React.FC=()=>{
                                         <IonLabel>2023</IonLabel>
                                     </IonItemDivider>
                                     {
-                                            diaries.map((diary, i) => (
-                                            <div key={i}>
-                                                
-                                                    {
-                                                        i%2===0 &&
-                                                        <div className='spazio-lato diary-card bt-padding-top'>
-                                                            <IonImg src={placeholder} className="diary-card-picture diary-card-left"  />
-                                                            <div className="diary-card-content spazio-lato">
-                                                                <h4 className='bold'>{diary.name}</h4>
-                                                                <h5>Location: {diary.destination}</h5>
-                                                                <small>From {new Date(diary.startDate).toLocaleString("it-IT",{dateStyle: "short"})} to {new Date(diary.endDate).toLocaleString("it-IT",{dateStyle: "short"})}</small>
-                                                            </div>
-                                                        </div>
-
-                                                    }
-                                                    {
-                                                        i%2===1 &&
-                                                        <>
-                                                            <IonCol size='6'>
-                                                                <IonGrid>
-                                                                    <IonRow>
-                                                                        <IonCol size='12'>
-                                                                            <IonText><h3>{diary.name}</h3></IonText>
-                                                                        </IonCol>
-                                                                        <IonCol size='12'>
-                                                                            <IonText><h4>{diary.destination}</h4></IonText>
-                                                                        </IonCol>
-                                                                        <IonCol size='12'>
-                                                                            <IonText>From {new Date(""+diary.startDate).toLocaleDateString()} to {new Date(""+diary.endDate).toLocaleDateString()}</IonText>
-                                                                        </IonCol>
-                                                                    </IonRow>
-                                                                </IonGrid>
-                                                            </IonCol>
-                                                            <IonCol size='6'>
-                                                                <IonImg src={diary.imageName !== "" ? ""+diary.imageName : placeholder} className="diary-card-picture" />
-                                                            </IonCol>
-                                                        </>
-
-                                                    }
-                                                
-                                            </div>
+                                        diaries.map((diary, i) => (
+                                            <CardDiaryList
+                                                _id={diary._id}
+                                                name={diary.name}
+                                                destination={diary.destination}
+                                                startDate={diary.startDate}
+                                                endDate={diary.endDate}
+                                                thumbnail={diary.imageName}
+                                                setModalDiaries={setModalDiaries}
+                                                i={i}
+                                            />
                                         ))
                                     }
                                 </IonCardContent>

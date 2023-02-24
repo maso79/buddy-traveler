@@ -44,6 +44,7 @@ import Following from './pages/Following';
 import PeopleUserView from './pages/PeopleUserView';
 import serverFetchNative from './logic/serverFetchNative';
 import navbarIcons from './logic/navbarIcons';
+import Diary from './pages/Diary';
 
 setupIonicReact();
 
@@ -114,6 +115,9 @@ const App: React.FC = () => {
                       </Route>
                       <Route exact path="/diaries">
                         <Diaries />
+                      </Route>
+                      <Route exact path="/diary/:diary_id">
+                        <Diary />
                       </Route>
                       <Route exact path="/people">
                         <People />

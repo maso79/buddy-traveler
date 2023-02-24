@@ -17,13 +17,17 @@ router.post("/createone", (req, res) => {
     imageName: "",
     startDate,
     endDate,
-    userId: req.session.userId
+    userId: req.session.userId,
+    private: true
   })
+
+  console.log("creato")
 
   result.save()
     .then(() => {
       res.status(200).json({ stato: "success" })
     }).catch(err => {
+      console.log(err)
       res.status(400).json({ stato: "Error: " + err })
     })
 })
